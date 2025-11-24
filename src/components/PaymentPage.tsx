@@ -135,7 +135,11 @@ function Frame2() {
         <g id="Frame 1707478908">
           <rect fill="var(--fill-0, white)" height="29" rx="7.5" width="29" x="0.5" y="0.5" />
           <rect height="29" rx="7.5" stroke="var(--stroke-0, #D9D9D9)" width="29" x="0.5" y="0.5" />
-          <path d={svgPaths.p4ee5080} fill="var(--fill-0, #FF0000)" id="path2" />
+          {/* Airtel Logo - Red */}
+          <g transform="translate(8, 8)">
+            <path d="M7 3L10.5 11H3.5L7 3Z" fill="#E31E24" />
+            <circle cx="7" cy="12" r="0.8" fill="#E31E24" />
+          </g>
         </g>
       </svg>
     </div>
@@ -149,7 +153,12 @@ function Frame4() {
         <g id="Frame 1707478910">
           <rect fill="var(--fill-0, white)" height="29" rx="7.5" width="29" x="0.5" y="0.5" />
           <rect height="29" rx="7.5" stroke="var(--stroke-0, #D9D9D9)" width="29" x="0.5" y="0.5" />
-          <path d={svgPaths.pec23280} fill="var(--fill-0, #02A024)" id="path3" />
+          {/* Zamtel Logo - Green */}
+          <g transform="translate(8, 8)">
+            <path d="M3 4H11L3 12H11" stroke="#00A651" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+            <circle cx="2" cy="4" r="1" fill="#00A651" />
+            <circle cx="12" cy="12" r="1" fill="#00A651" />
+          </g>
         </g>
       </svg>
     </div>
@@ -163,7 +172,12 @@ function Frame3() {
         <g id="Frame 1707478909">
           <rect fill="var(--fill-0, white)" height="29" rx="7.5" width="29" x="0.5" y="0.5" />
           <rect height="29" rx="7.5" stroke="var(--stroke-0, #D9D9D9)" width="29" x="0.5" y="0.5" />
-          <path d={svgPaths.p116ac00} fill="var(--fill-0, black)" id="path1" />
+          {/* MTN Logo - Yellow */}
+          <g transform="translate(7, 8)">
+            <ellipse cx="3" cy="6" rx="2.5" ry="3" fill="#FFCC00" />
+            <ellipse cx="8" cy="6" rx="2.5" ry="3" fill="#FFCC00" />
+            <ellipse cx="13" cy="6" rx="2.5" ry="3" fill="#FFCC00" />
+          </g>
         </g>
       </svg>
     </div>

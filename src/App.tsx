@@ -24,44 +24,11 @@ import { loadLencoScript, logTroubleshootingInfo } from "./utils/lencoPayment";
 import { SchoolLogo } from "./components/SchoolLogo";
 
 // Import school logos from assets folder
-// Note: These will work in both dev and production
-// Place your logo files in /assets/logos/ directory
-let chimiluteLogo: string | null = null;
-let julaniLogo: string | null = null;
-let crestedCraneLogo: string | null = null;
-let maarifLogo: string | null = null;
-let twalumbuLogo: string | null = null;
-
-// Try to import logos - will fallback to null if not found
-try {
-  chimiluteLogo = new URL('/assets/logos/chimilute-logo.png', import.meta.url).href;
-} catch (e) {
-  console.log('Chimilute logo not found - using fallback');
-}
-
-try {
-  julaniLogo = new URL('/assets/logos/julani-logo.png', import.meta.url).href;
-} catch (e) {
-  console.log('Julani logo not found - using fallback');
-}
-
-try {
-  crestedCraneLogo = new URL('/assets/logos/crested-crane-logo.png', import.meta.url).href;
-} catch (e) {
-  console.log('Crested Crane logo not found - using fallback');
-}
-
-try {
-  maarifLogo = new URL('/assets/logos/maarif-logo.png', import.meta.url).href;
-} catch (e) {
-  console.log('Maarif logo not found - using fallback');
-}
-
-try {
-  twalumbuLogo = new URL('/assets/logos/twalumbu-logo.png', import.meta.url).href;
-} catch (e) {
-  console.log('Twalumbu logo not found - using fallback');
-}
+import chimiluteLogo from "./assets/logos/chimilute-logo.png";
+import julaniLogo from "./assets/logos/julani-logo.png";
+import crestedCraneLogo from "./assets/logos/crested-crane-logo.png";
+import maarifLogo from "./assets/logos/maarif-logo.png";
+import twalumbuLogo from "./assets/logos/twalumbu-logo.png";
 
 // Mock schools data - in a real app, this would come from an API
 const SCHOOLS = [
