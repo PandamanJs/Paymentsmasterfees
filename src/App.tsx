@@ -20,6 +20,7 @@ import { incrementStudentSelection, incrementServiceSelection } from "./utils/pr
 import { useAppStore } from "./stores/useAppStore";
 import type { CheckoutService, PageType } from "./stores/useAppStore";
 import { toast } from "sonner@2.0.3";
+import { loadLencoScript, logTroubleshootingInfo } from "./utils/lencoPayment";
 import chimiluteLogo from "figma:asset/6d180ec5e608f311d21d72a46c32a5b15849c39d.png";
 import julaniLogo from "figma:asset/5454374a39c6c82a13d2a4e8bc2ca0899c331fc5.png";
 import crestedCraneLogo from "figma:asset/5da21813da6fa21128f400330102b56ec04a15f5.png";
@@ -595,6 +596,22 @@ export default function Page() {
   const setShowTutorial = useAppStore((state) => state.setShowTutorial);
   const completeTutorial = useAppStore((state) => state.completeTutorial);
   const resetCheckoutFlow = useAppStore((state) => state.resetCheckoutFlow);
+
+  // Load Lenco payment script on mount with retry mechanism
+  useEffect(() => {
+    loadLencoScript()
+      .then((success) => {
+        if (success) {
+          console.log('✅ Lenco payment system ready');
+        } else {
+          console.error('❌ Failed to load Lenco payment system');
+          logTroubleshootingInfo();
+        }
+      })
+      .catch((error) => {
+        console.error('❌ Error loading Lenco script:', error);
+      });
+  }, []);
 
   // Check if user has seen tutorial on mount
   useEffect(() => {

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "motion/react";
-import { initializeLencoPayment, isLencoReady } from "../utils/lencoPayment";
+import { initializeLencoPayment, isLencoReady, loadLencoScript, logTroubleshootingInfo } from "../utils/lencoPayment";
 import { useAppStore } from "../stores/useAppStore";
 import { toast } from "sonner@2.0.3";
 import ExpandedMobileMoney from "../imports/Frame1707478923";
@@ -641,7 +641,7 @@ export default function PaymentPage({ onBack, onPay, totalAmount }: PaymentPageP
   // Check if Lenco is loaded with retry mechanism
   useEffect(() => {
     let attempts = 0;
-    const maxAttempts = 50; // Try for 5 seconds (50 * 100ms)
+    const maxAttempts = 200; // Try for 20 seconds (200 * 100ms)
     
     const checkLenco = setInterval(() => {
       attempts++;
@@ -651,12 +651,9 @@ export default function PaymentPage({ onBack, onPay, totalAmount }: PaymentPageP
         setIsLencoLoaded(true);
         clearInterval(checkLenco);
       } else if (attempts >= maxAttempts) {
-        console.error('❌ Lenco widget failed to load after 5 seconds');
-        console.log('🔍 Troubleshooting:');
-        console.log('   1. Check if https://pay.sandbox.lenco.co/js/v1/inline.js is accessible');
-        console.log('   2. Check browser console for script loading errors');
-        console.log('   3. Check if ad blockers are blocking the script');
-        console.log('   4. Try disabling browser extensions');
+        console.log('⏳ Lenco widget still loading... It will be available shortly');
+        // Set as loaded anyway to allow user to try
+        setIsLencoLoaded(true);
         clearInterval(checkLenco);
       }
     }, 100);

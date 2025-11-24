@@ -3,6 +3,7 @@
  * 
  * Handles payment processing through Lenco's payment gateway
  * Supports both card and mobile money payments
+ * Includes retry mechanism and detailed error handling
  */
 
 // Extend the Window interface to include LencoPay
@@ -57,6 +58,155 @@ export interface LencoPaymentData {
   amount: number;
   schoolName: string;
   services: Array<{ name: string; amount: number }>;
+}
+
+/**
+ * Load Lenco script dynamically with retry mechanism
+ * Uses exponential backoff for retries
+ * 
+ * @param retryCount - Current retry attempt
+ * @param maxRetries - Maximum number of retries
+ * @returns Promise that resolves when script is loaded
+ */
+export async function loadLencoScript(retryCount = 0, maxRetries = 3): Promise<boolean> {
+  return new Promise((resolve) => {
+    // Check if already loaded
+    if (window.LencoPay) {
+      console.log('✅ Lenco widget already loaded');
+      resolve(true);
+      return;
+    }
+
+    // Check if script tag already exists
+    const existingScript = document.querySelector('script[src*="lenco.co"]');
+    if (existingScript) {
+      console.log('🔄 Lenco script tag exists, waiting for load...');
+      
+      // Wait up to 10 seconds for the script to load
+      let attempts = 0;
+      const checkInterval = setInterval(() => {
+        attempts++;
+        if (window.LencoPay) {
+          console.log('✅ Lenco widget loaded successfully');
+          clearInterval(checkInterval);
+          resolve(true);
+        } else if (attempts >= 100) { // 10 seconds
+          console.warn('⚠️ Lenco script exists but widget not available after 10s');
+          clearInterval(checkInterval);
+          
+          // Try retry if we have attempts left
+          if (retryCount < maxRetries) {
+            const delay = Math.pow(2, retryCount) * 1000; // Exponential backoff
+            console.log(`🔄 Retrying Lenco load in ${delay}ms (attempt ${retryCount + 1}/${maxRetries})`);
+            setTimeout(() => {
+              // Remove existing script and try again
+              existingScript.remove();
+              loadLencoScript(retryCount + 1, maxRetries).then(resolve);
+            }, delay);
+          } else {
+            console.error('❌ Lenco widget failed to load after all retries');
+            resolve(false);
+          }
+        }
+      }, 100);
+      return;
+    }
+
+    console.log(`📦 Loading Lenco payment widget (attempt ${retryCount + 1}/${maxRetries + 1})...`);
+    
+    // Create and load script
+    const script = document.createElement('script');
+    script.src = 'https://pay.sandbox.lenco.co/js/v1/inline.js';
+    script.crossOrigin = 'anonymous';
+    script.async = false;
+    
+    script.onload = () => {
+      // Wait a bit for the widget to initialize
+      setTimeout(() => {
+        if (window.LencoPay) {
+          console.log('✅ Lenco widget loaded successfully');
+          resolve(true);
+        } else {
+          console.warn('⚠️ Script loaded but LencoPay not available');
+          if (retryCount < maxRetries) {
+            const delay = Math.pow(2, retryCount) * 1000;
+            console.log(`🔄 Retrying in ${delay}ms...`);
+            setTimeout(() => {
+              script.remove();
+              loadLencoScript(retryCount + 1, maxRetries).then(resolve);
+            }, delay);
+          } else {
+            resolve(false);
+          }
+        }
+      }, 500);
+    };
+    
+    script.onerror = (error) => {
+      console.error('❌ Failed to load Lenco script:', error);
+      
+      if (retryCount < maxRetries) {
+        const delay = Math.pow(2, retryCount) * 1000; // Exponential backoff: 1s, 2s, 4s
+        console.log(`🔄 Retrying in ${delay}ms (attempt ${retryCount + 1}/${maxRetries})...`);
+        
+        setTimeout(() => {
+          script.remove();
+          loadLencoScript(retryCount + 1, maxRetries).then(resolve);
+        }, delay);
+      } else {
+        console.error('❌ Lenco script failed to load after all retries');
+        logTroubleshootingInfo();
+        resolve(false);
+      }
+    };
+    
+    document.head.appendChild(script);
+  });
+}
+
+/**
+ * Log detailed troubleshooting information
+ */
+export function logTroubleshootingInfo(): void {
+  console.group('🔍 Lenco Payment Troubleshooting Information');
+  
+  // Check network connectivity
+  console.log('📡 Network Status:', navigator.onLine ? 'Online' : 'Offline');
+  
+  // Check if script tag exists
+  const scriptTags = document.querySelectorAll('script[src*="lenco"]');
+  console.log('📜 Lenco Script Tags Found:', scriptTags.length);
+  scriptTags.forEach((tag, index) => {
+    console.log(`   Script ${index + 1}:`, (tag as HTMLScriptElement).src);
+  });
+  
+  // Check window.LencoPay
+  console.log('🪟 window.LencoPay:', window.LencoPay ? 'Available ✅' : 'Not Available ❌');
+  
+  // Check environment
+  const publicKey = import.meta.env.VITE_LENCO_PUBLIC_KEY;
+  console.log('🔑 Public Key Configured:', publicKey ? 'Yes ✅' : 'No ❌');
+  if (publicKey) {
+    console.log('   Key Preview:', publicKey.substring(0, 20) + '...');
+  }
+  
+  // Check browser extensions
+  console.log('🔌 Possible Issues:');
+  console.log('   1. Ad blocker or privacy extension blocking payment scripts');
+  console.log('   2. CORS or Content Security Policy restrictions');
+  console.log('   3. Lenco sandbox service temporarily unavailable');
+  console.log('   4. Network firewall blocking payment gateway domains');
+  console.log('   5. Browser in private/incognito mode with strict settings');
+  
+  // Recommendations
+  console.log('💡 Troubleshooting Steps:');
+  console.log('   1. Disable ad blockers and privacy extensions');
+  console.log('   2. Check browser console Network tab for failed requests');
+  console.log('   3. Try in a different browser or incognito mode');
+  console.log('   4. Verify Lenco sandbox is operational at status.lenco.co');
+  console.log('   5. Contact Lenco support with your public key');
+  
+  console.groupEnd();
 }
 
 /**
