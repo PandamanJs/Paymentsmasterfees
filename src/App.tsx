@@ -23,12 +23,13 @@ import { toast } from "sonner@2.0.3";
 import { loadLencoScript, logTroubleshootingInfo } from "./utils/lencoPayment";
 import { SchoolLogo } from "./components/SchoolLogo";
 
-// Import school logos from assets folder
-import chimiluteLogo from "./assets/logos/chimilute-logo.png";
-import julaniLogo from "./assets/logos/julani-logo.png";
-import crestedCraneLogo from "./assets/logos/crested-crane-logo.png";
-import maarifLogo from "./assets/logos/maarif-logo.png";
-import twalumbuLogo from "./assets/logos/twalumbu-logo.png";
+// School logos - These paths will work once you upload the PNG files
+// For now, using null to show the initials fallback
+const chimiluteLogo = null; // Upload: chimilute-logo.png
+const julaniLogo = null; // Upload: julani-logo.png
+const crestedCraneLogo = null; // Upload: crested-crane-logo.png
+const maarifLogo = null; // Upload: maarif-logo.png
+const twalumbuLogo = null; // Upload: twalumbu-logo.png
 
 // Mock schools data - in a real app, this would come from an API
 const SCHOOLS = [
