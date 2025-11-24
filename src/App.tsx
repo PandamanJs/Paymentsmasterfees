@@ -21,17 +21,54 @@ import { useAppStore } from "./stores/useAppStore";
 import type { CheckoutService, PageType } from "./stores/useAppStore";
 import { toast } from "sonner@2.0.3";
 import { loadLencoScript, logTroubleshootingInfo } from "./utils/lencoPayment";
-import chimiluteLogo from "figma:asset/6d180ec5e608f311d21d72a46c32a5b15849c39d.png";
-import julaniLogo from "figma:asset/5454374a39c6c82a13d2a4e8bc2ca0899c331fc5.png";
-import crestedCraneLogo from "figma:asset/5da21813da6fa21128f400330102b56ec04a15f5.png";
-import maarifLogo from "figma:asset/14e103bdb926a80d9f27d93b19086b97e7c47135.png";
+import { SchoolLogo } from "./components/SchoolLogo";
+
+// Import school logos from assets folder
+// Note: These will work in both dev and production
+// Place your logo files in /assets/logos/ directory
+let chimiluteLogo: string | null = null;
+let julaniLogo: string | null = null;
+let crestedCraneLogo: string | null = null;
+let maarifLogo: string | null = null;
+let twalumbuLogo: string | null = null;
+
+// Try to import logos - will fallback to null if not found
+try {
+  chimiluteLogo = new URL('/assets/logos/chimilute-logo.png', import.meta.url).href;
+} catch (e) {
+  console.log('Chimilute logo not found - using fallback');
+}
+
+try {
+  julaniLogo = new URL('/assets/logos/julani-logo.png', import.meta.url).href;
+} catch (e) {
+  console.log('Julani logo not found - using fallback');
+}
+
+try {
+  crestedCraneLogo = new URL('/assets/logos/crested-crane-logo.png', import.meta.url).href;
+} catch (e) {
+  console.log('Crested Crane logo not found - using fallback');
+}
+
+try {
+  maarifLogo = new URL('/assets/logos/maarif-logo.png', import.meta.url).href;
+} catch (e) {
+  console.log('Maarif logo not found - using fallback');
+}
+
+try {
+  twalumbuLogo = new URL('/assets/logos/twalumbu-logo.png', import.meta.url).href;
+} catch (e) {
+  console.log('Twalumbu logo not found - using fallback');
+}
 
 // Mock schools data - in a real app, this would come from an API
 const SCHOOLS = [
   { 
     id: 1, 
     name: "Twalumbu Educational Center",
-    logo: null,
+    logo: twalumbuLogo,
   },
   { 
     id: 2, 
