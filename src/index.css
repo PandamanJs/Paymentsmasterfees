@@ -1711,10 +1711,6 @@
     max-width: 800px;
   }
 
-  .max-w-none {
-    max-width: none;
-  }
-
   .min-w-0 {
     min-width: calc(var(--spacing) * 0);
   }
@@ -2464,10 +2460,6 @@
 
   .p-6 {
     padding: calc(var(--spacing) * 6);
-  }
-
-  .p-\[6px\] {
-    padding: 6px;
   }
 
   .p-\[8px\] {

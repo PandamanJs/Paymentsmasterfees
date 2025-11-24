@@ -254,43 +254,8 @@ function Frame7() {
       <div className="flex flex-row items-center justify-center size-full">
         <div className="box-border content-stretch flex gap-[10px] items-center justify-center px-[10px] py-0 relative w-full">
           <div className="basis-0 flex flex-col font-['IBM_Plex_Sans_Devanagari:Regular',sans-serif] grow justify-center leading-[0] min-h-px min-w-px not-italic relative shrink-0 text-[8px] text-black tracking-[-0.08px]">
-            <p className="leading-[12px]">Pay with your Visa or Mastercard credit or debit card.</p>
+            <p className="leading-[12px]">Pay with your credit or debit card.</p>
           </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function Frame6() {
-  return (
-    <div className="bg-white box-border content-stretch flex flex-col gap-[10px] items-center justify-center p-[6px] relative rounded-[8px] shrink-0 size-[30px]">
-      <div aria-hidden="true" className="absolute border border-[#d9d9d9] border-solid inset-0 pointer-events-none rounded-[8px]" />
-      <div className="relative shrink-0 size-[20px]" data-name="Visa">
-        <img alt="" className="absolute inset-0 max-w-none object-50%-50% object-contain pointer-events-none size-full" src={imgVisa} />
-      </div>
-    </div>
-  );
-}
-
-function Frame12() {
-  return (
-    <div className="bg-white box-border content-stretch flex flex-col gap-[10px] items-center justify-center p-[6px] relative rounded-[8px] shrink-0 size-[30px]">
-      <div aria-hidden="true" className="absolute border border-[#d9d9d9] border-solid inset-0 pointer-events-none rounded-[8px]" />
-      <div className="relative shrink-0 size-[18px]" data-name="Mastercard Logo">
-        <img alt="" className="absolute inset-0 max-w-none object-50%-50% object-contain pointer-events-none size-full" src={imgMastercardLogo} />
-      </div>
-    </div>
-  );
-}
-
-function Frame13() {
-  return (
-    <div className="relative shrink-0 w-full">
-      <div className="flex flex-row items-center size-full">
-        <div className="box-border content-stretch flex gap-[4px] items-center p-[10px] relative w-full">
-          <Frame6 />
-          <Frame12 />
         </div>
       </div>
     </div>
@@ -302,7 +267,6 @@ function Frame14() {
     <div className="basis-0 content-stretch flex flex-col grow items-start min-h-px min-w-px relative self-stretch shrink-0">
       <Frame1 />
       <Frame7 />
-      <Frame13 />
     </div>
   );
 }
