@@ -5,6 +5,10 @@ import { useAppStore } from "../stores/useAppStore";
 import { toast } from "sonner@2.0.3";
 import ExpandedMobileMoney from "../imports/Frame1707478923";
 import ExpandedCardPayment from "../imports/Frame1707478923-18-800";
+import MobileMoneyProviders from "../imports/Frame1707478911";
+import AnimatedPath1 from "../imports/Path60-156-647";
+import AnimatedPathStroke from "../imports/Path60Stroke-156-656";
+import AnimatedPath2 from "../imports/Path60-156-665";
 import imgVisa from "figma:asset/1f8bb25a1b5f5bd54da90c9c6ed22e37e8ea0e08.png";
 import imgMastercardLogo from "figma:asset/b4ecaef28ab74a96d96cfaf9b70d374fa01fed41.png";
 
@@ -128,71 +132,11 @@ function Frame8() {
   );
 }
 
-function Frame2() {
-  return (
-    <div className="relative shrink-0 size-[30px]">
-      <svg className="block size-full" fill="none" preserveAspectRatio="none" viewBox="0 0 30 30">
-        <g id="Frame 1707478908">
-          <rect fill="var(--fill-0, white)" height="29" rx="7.5" width="29" x="0.5" y="0.5" />
-          <rect height="29" rx="7.5" stroke="var(--stroke-0, #D9D9D9)" width="29" x="0.5" y="0.5" />
-          {/* Airtel Logo - Red */}
-          <g transform="translate(8, 8)">
-            <path d="M7 3L10.5 11H3.5L7 3Z" fill="#E31E24" />
-            <circle cx="7" cy="12" r="0.8" fill="#E31E24" />
-          </g>
-        </g>
-      </svg>
-    </div>
-  );
-}
-
-function Frame4() {
-  return (
-    <div className="relative shrink-0 size-[30px]">
-      <svg className="block size-full" fill="none" preserveAspectRatio="none" viewBox="0 0 30 30">
-        <g id="Frame 1707478910">
-          <rect fill="var(--fill-0, white)" height="29" rx="7.5" width="29" x="0.5" y="0.5" />
-          <rect height="29" rx="7.5" stroke="var(--stroke-0, #D9D9D9)" width="29" x="0.5" y="0.5" />
-          {/* Zamtel Logo - Green */}
-          <g transform="translate(8, 8)">
-            <path d="M3 4H11L3 12H11" stroke="#00A651" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" fill="none" />
-            <circle cx="2" cy="4" r="1" fill="#00A651" />
-            <circle cx="12" cy="12" r="1" fill="#00A651" />
-          </g>
-        </g>
-      </svg>
-    </div>
-  );
-}
-
-function Frame3() {
-  return (
-    <div className="relative shrink-0 size-[30px]">
-      <svg className="block size-full" fill="none" preserveAspectRatio="none" viewBox="0 0 30 30">
-        <g id="Frame 1707478909">
-          <rect fill="var(--fill-0, white)" height="29" rx="7.5" width="29" x="0.5" y="0.5" />
-          <rect height="29" rx="7.5" stroke="var(--stroke-0, #D9D9D9)" width="29" x="0.5" y="0.5" />
-          {/* MTN Logo - Yellow */}
-          <g transform="translate(7, 8)">
-            <ellipse cx="3" cy="6" rx="2.5" ry="3" fill="#FFCC00" />
-            <ellipse cx="8" cy="6" rx="2.5" ry="3" fill="#FFCC00" />
-            <ellipse cx="13" cy="6" rx="2.5" ry="3" fill="#FFCC00" />
-          </g>
-        </g>
-      </svg>
-    </div>
-  );
-}
-
 function Frame5() {
   return (
     <div className="relative shrink-0 w-full">
       <div className="flex flex-row items-center size-full">
-        <div className="box-border content-stretch flex gap-[4px] items-center p-[10px] relative w-full">
-          <Frame2 />
-          <Frame4 />
-          <Frame3 />
-        </div>
+        <MobileMoneyProviders />
       </div>
     </div>
   );
@@ -414,9 +358,9 @@ function Frame17({ totalAmount }: { totalAmount: number }) {
       {/* Decorative animated paths */}
       <div className="absolute flex h-[calc(1px*((var(--transform-inner-width)*0.9998781681060791)+(var(--transform-inner-height)*0.015611708164215088)))] items-center justify-center right-[20px] top-[20px] w-[calc(1px*((var(--transform-inner-height)*0.9998781681060791)+(var(--transform-inner-width)*0.015611708164215088)))]" style={{ "--transform-inner-width": "77.734375", "--transform-inner-height": "39.03125" } as React.CSSProperties}>
         <div className="flex-none rotate-[270.895deg]">
-          <div className="h-[39.042px] relative w-[77.746px]" data-name="path60">
+          <div className="h-[39.042px] relative w-[77.746px]">
             <motion.div 
-              className="absolute inset-[-32.02%_-16.08%]"
+              className="w-full h-full"
               animate={{
                 x: [100, -100],
                 opacity: [0, 1, 1, 0],
@@ -428,31 +372,23 @@ function Frame17({ totalAmount }: { totalAmount: number }) {
                 times: [0, 0.1, 0.9, 1],
               }}
             >
-              <svg className="block size-full" fill="none" preserveAspectRatio="none" viewBox="0 0 103 65">
-                <path d={svgPaths.p1c1f0680} id="path60" stroke="var(--stroke-0, #E0F7D4)" strokeLinecap="round" strokeLinejoin="round" strokeWidth="25" />
-              </svg>
+              <AnimatedPath1 />
             </motion.div>
           </div>
         </div>
       </div>
       <div className="absolute flex h-[calc(1px*((var(--transform-inner-width)*0.9937769770622253)+(var(--transform-inner-height)*0.11138830333948135)))] items-center justify-center right-[0px] top-0 w-[calc(1px*((var(--transform-inner-height)*0.9937769770622253)+(var(--transform-inner-width)*0.11138830333948135)))]" style={{ "--transform-inner-width": "102.734375", "--transform-inner-height": "64.03125" } as React.CSSProperties}>
         <div className="flex-none rotate-[263.605deg]">
-          <div className="h-[64.042px] relative w-[102.745px]" data-name="path60 (Stroke)">
-            <div 
-              className="absolute inset-[-0.78%_-0.49%]"
-            >
-              <svg className="block size-full" fill="none" preserveAspectRatio="none" viewBox="0 0 104 66">
-                <path d={svgPaths.p32888500} id="path60 (Stroke)" stroke="var(--stroke-0, #003630)" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </div>
+          <div className="h-[64.042px] relative w-[102.745px]">
+            <AnimatedPathStroke />
           </div>
         </div>
       </div>
       <div className="absolute flex h-[calc(1px*((var(--transform-inner-width)*0.9519173502922058)+(var(--transform-inner-height)*0.3063550889492035)))] items-center justify-center right-[40px] top-0 w-[calc(1px*((var(--transform-inner-height)*0.9519173502922058)+(var(--transform-inner-width)*0.3063550889492035)))]" style={{ "--transform-inner-width": "77.734375", "--transform-inner-height": "39.03125" } as React.CSSProperties}>
         <div className="flex-none rotate-[252.16deg]">
-          <div className="h-[39.042px] relative w-[77.746px]" data-name="path60">
+          <div className="h-[39.042px] relative w-[77.746px]">
             <motion.div 
-              className="absolute inset-[-32.02%_-16.08%]"
+              className="w-full h-full"
               animate={{
                 x: [100, -100],
                 opacity: [0, 1, 1, 0],
@@ -465,9 +401,7 @@ function Frame17({ totalAmount }: { totalAmount: number }) {
                 delay: 1,
               }}
             >
-              <svg className="block size-full" fill="none" preserveAspectRatio="none" viewBox="0 0 103 65">
-                <path d={svgPaths.p1c1f0680} id="path60" stroke="var(--stroke-0, #E0F7D4)" strokeLinecap="round" strokeLinejoin="round" strokeWidth="25" />
-              </svg>
+              <AnimatedPath2 />
             </motion.div>
           </div>
         </div>
@@ -634,6 +568,13 @@ export default function PaymentPage({ onBack, onPay, totalAmount }: PaymentPageP
   const [isMobileMoneyExpanded, setIsMobileMoneyExpanded] = useState(false);
   const [isCardPaymentExpanded, setIsCardPaymentExpanded] = useState(false);
   const [isLencoLoaded, setIsLencoLoaded] = useState(false);
+  const [lencoLoadError, setLencoLoadError] = useState(false);
+  const [isRetrying, setIsRetrying] = useState(false);
+  const [lencoPublicKey, setLencoPublicKey] = useState<string | null>(null);
+  
+  // Simulation state
+  const [isSimulatingPayment, setIsSimulatingPayment] = useState(false);
+  const [simulationProgress, setSimulationProgress] = useState(0);
   
   // Mobile Money state
   const [mobileNumber, setMobileNumber] = useState('');
@@ -652,6 +593,41 @@ export default function PaymentPage({ onBack, onPay, totalAmount }: PaymentPageP
   // Store state
   const { userName, userPhone, selectedSchool, checkoutServices } = useAppStore();
 
+  // Fetch Lenco public key from server on mount
+  useEffect(() => {
+    const fetchPublicKey = async () => {
+      try {
+        const { projectId, publicAnonKey } = await import('../utils/supabase/info.tsx');
+        const response = await fetch(
+          `https://${projectId}.supabase.co/functions/v1/make-server-f6550ac6/lenco-public-key`,
+          {
+            headers: {
+              'Authorization': `Bearer ${publicAnonKey}`,
+            },
+          }
+        );
+        
+        if (!response.ok) {
+          throw new Error('Failed to fetch Lenco public key');
+        }
+        
+        const data = await response.json();
+        if (data.success && data.publicKey) {
+          console.log('✅ Fetched Lenco public key from server');
+          setLencoPublicKey(data.publicKey);
+        } else {
+          console.error('❌ No public key in server response');
+          setLencoLoadError(true);
+        }
+      } catch (error) {
+        console.error('❌ Error fetching Lenco public key:', error);
+        setLencoLoadError(true);
+      }
+    };
+    
+    fetchPublicKey();
+  }, []);
+
   // Check if Lenco is loaded with retry mechanism
   useEffect(() => {
     let attempts = 0;
@@ -663,17 +639,39 @@ export default function PaymentPage({ onBack, onPay, totalAmount }: PaymentPageP
       if (isLencoReady()) {
         console.log('✅ Lenco payment widget loaded successfully');
         setIsLencoLoaded(true);
+        setLencoLoadError(false);
         clearInterval(checkLenco);
       } else if (attempts >= maxAttempts) {
-        console.log('⏳ Lenco widget still loading... It will be available shortly');
-        // Set as loaded anyway to allow user to try
-        setIsLencoLoaded(true);
+        console.error('❌ Lenco widget failed to load after 20 seconds');
+        setLencoLoadError(true);
         clearInterval(checkLenco);
+        logTroubleshootingInfo();
       }
     }, 100);
     
     return () => clearInterval(checkLenco);
   }, []);
+
+  // Manual retry function
+  const handleRetryLenco = async () => {
+    setIsRetrying(true);
+    setLencoLoadError(false);
+    
+    console.log('🔄 Manually retrying Lenco script load...');
+    const success = await loadLencoScript(0, 3);
+    
+    if (success) {
+      setIsLencoLoaded(true);
+      setLencoLoadError(false);
+      toast.success('Payment system loaded successfully!');
+    } else {
+      setLencoLoadError(true);
+      toast.error('Failed to load payment system. Please check your connection and disable any ad blockers.');
+      logTroubleshootingInfo();
+    }
+    
+    setIsRetrying(false);
+  };
 
   const handleMobileMoneyClick = () => {
     setIsMobileMoneyExpanded(!isMobileMoneyExpanded);
@@ -761,80 +759,36 @@ export default function PaymentPage({ onBack, onPay, totalAmount }: PaymentPageP
       return;
     }
 
-    // Check if Lenco is ready
-    if (!isLencoReady()) {
-      console.warn('⚠️ Lenco widget not loaded - check if script is blocked or loading');
-      toast.error('Payment system is loading. Please try again in a moment.');
-      return;
-    }
-
-    // Get Lenco public key from environment
-    const lencoPublicKey = import.meta.env.VITE_LENCO_PUBLIC_KEY;
+    setIsSimulatingPayment(true);
+    setSimulationProgress(0);
     
-    if (!lencoPublicKey || lencoPublicKey === 'pk_sandbox_your_public_key_here') {
-      console.error('❌ LENCO_PUBLIC_KEY not configured in .env file');
-      console.log('📝 Please add your Lenco public key to the .env file:');
-      console.log('   VITE_LENCO_PUBLIC_KEY=pk_sandbox_your_actual_key');
-      toast.error('Payment system not configured. Please add your Lenco API key to .env file.');
-      return;
-    }
-
-    console.log('🔑 Using Lenco public key:', lencoPublicKey.substring(0, 20) + '...');
-
-    // Generate user email from phone if not available
-    const userEmail = `${userPhone}@masterfees.app`;
-
-    // Prepare services for payment data
-    const services = checkoutServices.map(service => ({
-      name: service.description,
-      amount: service.amount,
-    }));
-
-    console.log('💳 Initializing Lenco payment with:');
-    console.log('   Amount: K' + (totalAmount + (totalAmount * 0.02)).toFixed(2));
-    console.log('   Customer:', userName || 'Guest User');
-    console.log('   Phone:', userPhone || mobileNumber);
-    console.log('   Email:', userEmail);
-    console.log('   School:', selectedSchool || 'School');
-    console.log('   Services:', services.length);
-
-    // Initialize Lenco payment
-    try {
-      initializeLencoPayment(
-        {
-          userName: userName || 'Guest User',
-          userPhone: userPhone || mobileNumber,
-          userEmail: userEmail,
-          amount: totalAmount + (totalAmount * 0.02), // Including service fee
-          schoolName: selectedSchool || 'School',
-          services: services,
-        },
-        lencoPublicKey,
-        (reference) => {
-          // Payment successful callback
-          console.log('✅ Payment successful with reference:', reference);
-          toast.success('Payment initiated successfully!');
-          onPay(reference);
-        },
-        () => {
-          // Payment closed callback
-          console.log('❌ Payment window closed by user');
-          toast.info('Payment cancelled');
-        },
-        () => {
-          // Payment confirmation pending callback
-          console.log('⏳ Payment confirmation pending');
-          toast.info('Your payment is being confirmed. Please wait...');
-          // Still proceed to processing page
-          onPay('PENDING');
+    // Show processing toast
+    toast.loading('Processing payment...', { id: 'payment-sim' });
+    
+    // Simulate payment progress
+    const progressInterval = setInterval(() => {
+      setSimulationProgress(prev => {
+        if (prev >= 100) {
+          clearInterval(progressInterval);
+          return 100;
         }
-      );
+        return prev + 10;
+      });
+    }, 200);
+    
+    // Complete payment after 2 seconds
+    setTimeout(() => {
+      clearInterval(progressInterval);
+      setSimulationProgress(100);
       
-      console.log('🚀 Lenco payment widget opened');
-    } catch (error) {
-      console.error('💥 Error initializing payment:', error);
-      toast.error(error instanceof Error ? error.message : 'Failed to initialize payment');
-    }
+      // Generate payment reference
+      const paymentReference = `TXN${Date.now()}${Math.random().toString(36).substring(2, 8).toUpperCase()}`;
+      
+      toast.success('Payment successful!', { id: 'payment-sim' });
+      
+      setIsSimulatingPayment(false);
+      onPay(paymentReference);
+    }, 2000);
   };
 
   return (
@@ -848,6 +802,18 @@ export default function PaymentPage({ onBack, onPay, totalAmount }: PaymentPageP
             <div className="flex items-center gap-2 text-yellow-800 text-sm">
               <div className="animate-spin rounded-full h-4 w-4 border-2 border-yellow-600 border-t-transparent"></div>
               <span>Loading payment system...</span>
+            </div>
+          </div>
+        )}
+        
+        {/* Lenco Load Error Indicator */}
+        {lencoLoadError && (
+          <div className="absolute top-[66px] left-0 right-0 bg-red-50 border-b border-red-200 px-4 py-2 z-50">
+            <div className="flex items-center gap-2 text-red-800 text-sm">
+              <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+              </svg>
+              <span>Failed to load payment system. <button className="text-blue-500 underline" onClick={handleRetryLenco} disabled={isRetrying}>Retry</button></span>
             </div>
           </div>
         )}

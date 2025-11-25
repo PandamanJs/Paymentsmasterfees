@@ -57,6 +57,40 @@ app.get("/make-server-f6550ac6/health", (c) => {
 });
 
 /**
+ * Get Lenco Public Key Endpoint
+ * 
+ * Returns the Lenco public key for frontend payment initialization
+ * The public key is safe to expose to clients
+ * 
+ * @route GET /make-server-f6550ac6/lenco-public-key
+ * @returns JSON object with publicKey
+ */
+app.get("/make-server-f6550ac6/lenco-public-key", (c) => {
+  try {
+    const publicKey = Deno.env.get("LENCO_PUBLIC_KEY");
+    
+    if (!publicKey) {
+      console.error("❌ LENCO_PUBLIC_KEY not configured in environment");
+      return c.json({ 
+        success: false, 
+        error: "Lenco public key not configured" 
+      }, 500);
+    }
+    
+    return c.json({ 
+      success: true, 
+      publicKey 
+    });
+  } catch (error) {
+    console.error("Error fetching Lenco public key:", error);
+    return c.json({ 
+      success: false, 
+      error: "Failed to fetch public key" 
+    }, 500);
+  }
+});
+
+/**
  * Save Payment Transaction Endpoint
  * 
  * Saves a completed payment transaction to the key-value store

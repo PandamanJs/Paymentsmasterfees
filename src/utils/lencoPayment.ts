@@ -116,7 +116,7 @@ export async function loadLencoScript(retryCount = 0, maxRetries = 3): Promise<b
     
     // Create and load script
     const script = document.createElement('script');
-    script.src = 'https://pay.sandbox.lenco.co/js/v1/inline.js';
+    script.src = 'https://pay.sandbox.lenco.co/js/v1/inline.js'; // Sandbox URL for demo payments
     script.crossOrigin = 'anonymous';
     script.async = false;
     
@@ -183,12 +183,8 @@ export function logTroubleshootingInfo(): void {
   // Check window.LencoPay
   console.log('🪟 window.LencoPay:', window.LencoPay ? 'Available ✅' : 'Not Available ❌');
   
-  // Check environment
-  const publicKey = import.meta.env.VITE_LENCO_PUBLIC_KEY;
-  console.log('🔑 Public Key Configured:', publicKey ? 'Yes ✅' : 'No ❌');
-  if (publicKey) {
-    console.log('   Key Preview:', publicKey.substring(0, 20) + '...');
-  }
+  // Note about public key
+  console.log('🔑 Public Key: Fetched from server endpoint');
   
   // Check browser extensions
   console.log('🔌 Possible Issues:');

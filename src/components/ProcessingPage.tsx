@@ -128,82 +128,19 @@ export default function ProcessingPage({ onProcessingComplete, paymentData }: Pr
   const paymentReference = useAppStore((state) => state.paymentReference);
   const [verificationStatus, setVerificationStatus] = useState<string>("Verifying payment...");
   
-  // Check if in test mode (no backend)
-  const isTestMode = import.meta.env.VITE_TEST_MODE === 'true';
-
-  // Process payment with Lenco verification
+  // Process payment in demo mode
   useEffect(() => {
     const processPayment = async () => {
       try {
-        // TEST MODE: Skip backend verification
-        if (isTestMode) {
-          console.log('🧪 TEST MODE: Simulating payment verification');
-          setVerificationStatus("Processing payment...");
-          await new Promise(resolve => setTimeout(resolve, 2500));
-          
-          // Simulate successful payment for testing
-          setVerificationStatus("Payment successful!");
-          console.log('✅ TEST MODE: Payment reference:', paymentReference || 'MOCK_' + Date.now());
-          
-          await new Promise(resolve => setTimeout(resolve, 1000));
-          onProcessingComplete(true);
-          return;
-        }
+        setVerificationStatus("Processing payment...");
+        await new Promise(resolve => setTimeout(resolve, 2500));
         
-        // PRODUCTION MODE: Full backend verification
-        // If no reference, it's a test/mock payment
-        if (!paymentReference || paymentReference === "PENDING") {
-          setVerificationStatus("Processing payment...");
-          await new Promise(resolve => setTimeout(resolve, 2000));
-          
-          // For demo purposes, simulate success
-          // In production, this should always verify with Lenco
-          const isSuccess = Math.random() > 0.2; // 80% success rate for testing
-          
-          if (isSuccess && paymentData) {
-            // Save mock payment to backend
-            await savePaymentToBackend(paymentData, "MOCK_" + Date.now(), null);
-          }
-          
-          onProcessingComplete(isSuccess);
-          return;
-        }
-
-        // Verify payment with Lenco
-        setVerificationStatus("Verifying with Lenco...");
+        // Simulate successful payment
+        setVerificationStatus("Payment successful!");
         
-        // Wait a bit for payment to be processed by Lenco
-        await new Promise(resolve => setTimeout(resolve, 2000));
-        
-        // Verify the payment
-        const verificationResult = await verifyLencoPayment(paymentReference);
-        
-        if (verificationResult.success) {
-          setVerificationStatus("Payment verified successfully!");
-          
-          // Save verified payment to backend
-          if (paymentData) {
-            const saveResult = await savePaymentToBackend(
-              paymentData, 
-              paymentReference, 
-              verificationResult.data
-            );
-            
-            if (!saveResult.success) {
-              console.warn("Payment verified but failed to save to history:", saveResult.error);
-              // We still consider the payment successful even if history save fails
-            }
-          }
-          
-          onProcessingComplete(true);
-        } else {
-          setVerificationStatus("Payment verification failed");
-          console.error("Payment verification failed:", verificationResult.error);
-          
-          // Wait a bit before showing failure
-          await new Promise(resolve => setTimeout(resolve, 1000));
-          onProcessingComplete(false);
-        }
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        onProcessingComplete(true);
+        return;
       } catch (error) {
         console.error("Error processing payment:", error);
         setVerificationStatus("An error occurred");
@@ -213,7 +150,7 @@ export default function ProcessingPage({ onProcessingComplete, paymentData }: Pr
     };
 
     processPayment();
-  }, [onProcessingComplete, paymentData, paymentReference, isTestMode]);
+  }, [onProcessingComplete, paymentData, paymentReference]);
 
   return (
     <div className="bg-white min-h-screen flex flex-col">
