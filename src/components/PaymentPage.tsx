@@ -762,9 +762,6 @@ export default function PaymentPage({ onBack, onPay, totalAmount }: PaymentPageP
     setIsSimulatingPayment(true);
     setSimulationProgress(0);
     
-    // Show processing toast
-    toast.loading('Processing payment...', { id: 'payment-sim' });
-    
     // Simulate payment progress
     const progressInterval = setInterval(() => {
       setSimulationProgress(prev => {
@@ -783,8 +780,6 @@ export default function PaymentPage({ onBack, onPay, totalAmount }: PaymentPageP
       
       // Generate payment reference
       const paymentReference = `TXN${Date.now()}${Math.random().toString(36).substring(2, 8).toUpperCase()}`;
-      
-      toast.success('Payment successful!', { id: 'payment-sim' });
       
       setIsSimulatingPayment(false);
       onPay(paymentReference);
