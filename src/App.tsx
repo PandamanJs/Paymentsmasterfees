@@ -21,42 +21,28 @@ import { useAppStore } from "./stores/useAppStore";
 import type { CheckoutService, PageType } from "./stores/useAppStore";
 import { toast } from "sonner@2.0.3";
 import { loadLencoScript, logTroubleshootingInfo } from "./utils/lencoPayment";
-import { SchoolLogo } from "./components/SchoolLogo";
-
-// School logos - These paths will work once you upload the PNG files
-// For now, using null to show the initials fallback
-const chimiluteLogo = null; // Upload: chimilute-logo.png
-const julaniLogo = null; // Upload: julani-logo.png
-const crestedCraneLogo = null; // Upload: crested-crane-logo.png
-const maarifLogo = null; // Upload: maarif-logo.png
-const twalumbuLogo = null; // Upload: twalumbu-logo.png
 
 // Mock schools data - in a real app, this would come from an API
 const SCHOOLS = [
   { 
     id: 1, 
     name: "Twalumbu Educational Center",
-    logo: twalumbuLogo,
   },
   { 
     id: 2, 
     name: "Chimilute Trust Academy",
-    logo: chimiluteLogo,
   },
   { 
     id: 3, 
     name: "Julani School",
-    logo: julaniLogo,
   },
   { 
     id: 4, 
     name: "Crested Crane Academy",
-    logo: crestedCraneLogo,
   },
   { 
     id: 5, 
     name: "International Maarif School",
-    logo: maarifLogo,
   },
 ];
 
@@ -197,13 +183,6 @@ function TextInput({ onSchoolSelect, selectedSchool }: { onSchoolSelect: (school
               className="w-full text-left px-[20px] py-[14px] font-['IBM_Plex_Sans:Regular',sans-serif] text-black hover:bg-[rgba(149,227,108,0.08)] active:bg-[rgba(149,227,108,0.15)] transition-all duration-150 touch-manipulation border-b border-[rgba(0,0,0,0.04)] last:border-b-0 flex items-center gap-[12px]"
               style={{ fontSize: '16px', letterSpacing: '-0.01em' }}
             >
-              {school.logo && (
-                <img 
-                  src={school.logo} 
-                  alt={`${school.name} logo`}
-                  className="w-[32px] h-[32px] object-contain rounded-[6px] flex-shrink-0"
-                />
-              )}
               <span className="flex-1">{school.name}</span>
             </motion.button>
           ))}
