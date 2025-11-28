@@ -950,8 +950,8 @@ export const SCHOOL_DATABASE: Record<string, SchoolData> = {
         primarySchool: "African Christian University",
         students: [
           {
-            name: "Thandiwe Zulu",
-            id: "ACU001",
+            name: "Chanda Zulu",
+            id: "ACU2023047",
             grade: "Year 2 - Business Administration",
             balances: 1,
             schoolName: "African Christian University"
@@ -964,15 +964,15 @@ export const SCHOOL_DATABASE: Record<string, SchoolData> = {
         primarySchool: "African Christian University",
         students: [
           {
-            name: "Emmanuel Musonda",
-            id: "ACU002",
+            name: "Mwape Musonda",
+            id: "ACU2022019",
             grade: "Year 3 - Computer Science",
             balances: 2,
             schoolName: "African Christian University"
           },
           {
-            name: "Ruth Musonda",
-            id: "ACU003",
+            name: "Natasha Musonda",
+            id: "ACU2024083",
             grade: "Year 1 - Education",
             balances: 1,
             schoolName: "African Christian University"

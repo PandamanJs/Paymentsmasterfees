@@ -12,7 +12,7 @@ function Header({ onBack }: { onBack: () => void }) {
   return (
     <div className="h-[66px] w-full relative bg-white/95 backdrop-blur-[20px]">
       <div aria-hidden="true" className="absolute border-[#e5e7eb] border-[0px_0px_1.5px] border-solid inset-0 pointer-events-none" />
-      <div className="absolute left-[94px] top-[17px] flex items-center gap-[16px]">
+      <div className="absolute left-1/2 translate-x-[-50%] top-[17px] flex items-center gap-[16px]">
         <Logo />
         <p className="font-['IBM_Plex_Sans_Devanagari:Bold',sans-serif] leading-[normal] not-italic text-[20px] text-[#003630] text-nowrap whitespace-pre tracking-[-0.3px]">master-fees</p>
       </div>
@@ -194,15 +194,15 @@ export default function ReceiptsPage({ onBack, onNext }: ReceiptsPageProps) {
 
   return (
     <div className="bg-gradient-to-br from-[#f9fafb] via-white to-[#f5f7f9] h-screen w-full overflow-hidden flex items-center justify-center">
-      <div className="relative w-full max-w-[393px] md:max-w-[500px] lg:max-w-[600px] h-screen mx-auto" data-name="Receipts Page">
+      <div className="relative w-full max-w-[450px] md:max-w-[500px] lg:max-w-[600px] h-screen mx-auto" data-name="Receipts Page">
         <Header onBack={onBack} />
-        <div className="absolute left-[44px] top-[110px]">
+        <div className="absolute left-1/2 translate-x-[-50%] top-[110px] w-full px-[24px]">
           <div className="inline-flex items-center gap-[8px] mb-[4px]">
             <div className="w-[3px] h-[24px] bg-gradient-to-b from-[#95e36c] to-[#003630] rounded-full" />
             <p className="font-['IBM_Plex_Sans_Devanagari:Bold',sans-serif] text-[22px] text-[#003630] tracking-[-0.4px]">Checkout</p>
           </div>
         </div>
-        <div className="absolute bg-white box-border content-stretch flex flex-col gap-[20px] items-start left-[23px] pb-[30px] pt-[24px] px-[25px] rounded-[20px] top-[160px] w-[346px] border-[1.5px] border-[#e5e7eb] shadow-[0px_8px_24px_rgba(0,0,0,0.06)]">
+        <div className="absolute bg-white box-border content-stretch flex flex-col gap-[20px] items-start left-1/2 translate-x-[-50%] pb-[30px] pt-[24px] px-[25px] rounded-[20px] top-[160px] w-[346px] border-[1.5px] border-[#e5e7eb] shadow-[0px_8px_24px_rgba(0,0,0,0.06)]">
           <div className="h-[19.8px] relative shrink-0 w-[18px]" data-name="Vector">
             <svg className="block size-full" fill="none" preserveAspectRatio="none" viewBox="0 0 18 20">
               <path d={svgPaths.pabc1740} fill="var(--fill-0, black)" id="Vector" />

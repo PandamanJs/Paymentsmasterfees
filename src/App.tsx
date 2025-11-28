@@ -1,20 +1,9 @@
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import svgPaths from "./imports/svg-s534f8yrof";
-import SearchPage from "./components/SearchPage";
-import SchoolDetailsPage from "./components/SchoolDetailsPage";
-import ServicesPage from "./components/ServicesPage";
-import HistoryPage, { type PaymentData } from "./components/HistoryPage";
-import AllReceipts from "./components/AllReceipts";
-import PayForSchoolFees from "./components/PayForSchoolFees";
-import AddServicesPage from "./components/AddServicesPage";
-import CheckoutPage from "./components/CheckoutPage";
-import PaymentPage from "./components/PaymentPage";
-import ProcessingPage from "./components/ProcessingPage";
-import PaymentFailedPage from "./components/PaymentFailedPage";
-import PaymentSuccessPage from "./components/PaymentSuccessPage";
-import DownloadReceiptPage from "./components/DownloadReceiptPage";
-import Tutorial from "./components/Tutorial";
+import lazyLoadWithTracking from "./utils/lazyLoad";
+import performanceMonitor from "./utils/performanceMonitor";
+import type { PaymentData } from "./components/HistoryPage";
 import { Toaster } from "./components/ui/sonner";
 import { getStudentsByPhone } from "./data/students";
 import { incrementStudentSelection, incrementServiceSelection } from "./utils/preferences";
@@ -25,6 +14,79 @@ import chimiluteLogo from "figma:asset/6d180ec5e608f311d21d72a46c32a5b15849c39d.
 import julaniLogo from "figma:asset/5454374a39c6c82a13d2a4e8bc2ca0899c331fc5.png";
 import crestedCraneLogo from "figma:asset/5da21813da6fa21128f400330102b56ec04a15f5.png";
 import maarifLogo from "figma:asset/14e103bdb926a80d9f27d93b19086b97e7c47135.png";
+
+// Lazy load page components for better performance
+// Core pages are loaded immediately, secondary pages are lazy loaded
+// Note: Using "Lazy" prefix to avoid conflicts with locally defined components
+const LazySearchPage = lazyLoadWithTracking(
+  () => import("./components/SearchPage"),
+  { componentName: "SearchPage", preload: true }
+);
+
+const LazySchoolDetailsPage = lazyLoadWithTracking(
+  () => import("./components/SchoolDetailsPage"),
+  { componentName: "SchoolDetailsPage", preload: true }
+);
+
+const LazyServicesPage = lazyLoadWithTracking(
+  () => import("./components/ServicesPage"),
+  { componentName: "ServicesPage" }
+);
+
+const LazyHistoryPage = lazyLoadWithTracking(
+  () => import("./components/HistoryPage"),
+  { componentName: "HistoryPage" }
+);
+
+const LazyAllReceipts = lazyLoadWithTracking(
+  () => import("./components/AllReceipts"),
+  { componentName: "AllReceipts" }
+);
+
+const LazyPayForSchoolFees = lazyLoadWithTracking(
+  () => import("./components/PayForSchoolFees"),
+  { componentName: "PayForSchoolFees" }
+);
+
+const LazyAddServicesPage = lazyLoadWithTracking(
+  () => import("./components/AddServicesPage"),
+  { componentName: "AddServicesPage" }
+);
+
+const LazyCheckoutPage = lazyLoadWithTracking(
+  () => import("./components/CheckoutPage"),
+  { componentName: "CheckoutPage" }
+);
+
+const LazyPaymentPage = lazyLoadWithTracking(
+  () => import("./components/PaymentPage"),
+  { componentName: "PaymentPage" }
+);
+
+const LazyProcessingPage = lazyLoadWithTracking(
+  () => import("./components/ProcessingPage"),
+  { componentName: "ProcessingPage" }
+);
+
+const LazyPaymentFailedPage = lazyLoadWithTracking(
+  () => import("./components/PaymentFailedPage"),
+  { componentName: "PaymentFailedPage" }
+);
+
+const LazyPaymentSuccessPage = lazyLoadWithTracking(
+  () => import("./components/PaymentSuccessPage"),
+  { componentName: "PaymentSuccessPage" }
+);
+
+const LazyDownloadReceiptPage = lazyLoadWithTracking(
+  () => import("./components/DownloadReceiptPage"),
+  { componentName: "DownloadReceiptPage" }
+);
+
+const LazyTutorial = lazyLoadWithTracking(
+  () => import("./components/Tutorial"),
+  { componentName: "Tutorial" }
+);
 
 // Mock schools data - in a real app, this would come from an API
 const SCHOOLS = [
@@ -556,7 +618,7 @@ function Frame4() {
 function SearchPage({ onProceed, selectedSchool, onSchoolSelect }: { onProceed: () => void; selectedSchool: string | null; onSchoolSelect: (school: string) => void }) {
   return (
     <div className="bg-white min-h-screen w-full flex justify-center">
-      <div className="bg-white w-full max-w-[393px] md:max-w-[500px] lg:max-w-[600px] min-h-screen flex flex-col" data-name="Page 3">
+      <div className="bg-white w-full max-w-[450px] md:max-w-[500px] lg:max-w-[600px] min-h-screen flex flex-col" data-name="Page 3">
         <Frame4 />
         <div className="flex-1 flex flex-col justify-between py-[24px] sm:py-[48px]">
           <Frame3 
@@ -578,46 +640,51 @@ export default function Page() {
   const navigationLockRef = useRef<boolean>(false);
   
   // Security: Protect against console manipulation (production only)
+  // Defer initialization to avoid blocking initial render
   useEffect(() => {
-    // Store original console methods for potential restore
-    const originalConsole = {
-      log: window.console.log,
-      warn: window.console.warn,
-      error: window.console.error,
-    };
-    
-    if (process.env.NODE_ENV === 'production') {
-      // Disable console methods in production to prevent manipulation
-      const noop = () => {};
-      try {
-        window.console.log = noop;
-        window.console.warn = noop;
-        window.console.error = noop;
-      } catch (e) {
-        // Some browsers don't allow console override, fail silently
-      }
-    }
-    
-    // Detect if DevTools is opened (best effort)
-    const detectDevTools = () => {
-      try {
-        const threshold = 160;
-        if (window.outerWidth - window.innerWidth > threshold || 
-            window.outerHeight - window.innerHeight > threshold) {
-          // DevTools potentially open
-          if (process.env.NODE_ENV === 'development') {
-            originalConsole.log('[Security] Developer tools detected');
-          }
-          // In production, you might want to take additional security measures
+    // Use setTimeout to defer non-critical security setup
+    const timeoutId = setTimeout(() => {
+      // Store original console methods for potential restore
+      const originalConsole = {
+        log: window.console.log,
+        warn: window.console.warn,
+        error: window.console.error,
+      };
+      
+      if (process.env.NODE_ENV === 'production') {
+        // Disable console methods in production to prevent manipulation
+        const noop = () => {};
+        try {
+          window.console.log = noop;
+          window.console.warn = noop;
+          window.console.error = noop;
+        } catch (e) {
+          // Some browsers don't allow console override, fail silently
         }
-      } catch (e) {
-        // Fail silently if detection fails
       }
-    };
+      
+      // Detect if DevTools is opened (best effort)
+      const detectDevTools = () => {
+        try {
+          const threshold = 160;
+          if (window.outerWidth - window.innerWidth > threshold || 
+              window.outerHeight - window.innerHeight > threshold) {
+            // DevTools potentially open
+            if (process.env.NODE_ENV === 'development') {
+              originalConsole.log('[Security] Developer tools detected');
+            }
+            // In production, you might want to take additional security measures
+          }
+        } catch (e) {
+          // Fail silently if detection fails
+        }
+      };
+      
+      window.addEventListener('resize', detectDevTools);
+    }, 100); // Defer by 100ms to allow initial render to complete
     
-    window.addEventListener('resize', detectDevTools);
     return () => {
-      window.removeEventListener('resize', detectDevTools);
+      clearTimeout(timeoutId);
     };
   }, []);
   
@@ -712,6 +779,9 @@ export default function Page() {
 
   // Navigation helper to push to history and update page
   const navigateToPage = (page: PageType, replaceHistory = false) => {
+    // Track page transition for performance monitoring
+    const endTracking = performanceMonitor.trackPageTransition(currentPage, page);
+    
     setNavigationDirection('forward');
     const state = { page };
     if (replaceHistory) {
@@ -720,6 +790,11 @@ export default function Page() {
       window.history.pushState(state, '', `#${page}`);
     }
     useAppStore.setState({ currentPage: page });
+    
+    // End tracking after a short delay to capture render time
+    setTimeout(() => {
+      endTracking();
+    }, 100);
   };
 
   // Initialize history on mount
@@ -1102,7 +1177,7 @@ export default function Page() {
             animate="animate"
             exit="exit"
           >
-            <DownloadReceiptPage
+            <LazyDownloadReceiptPage
               totalAmount={paymentAmount}
               schoolName={selectedSchool || "Twalumbu Educational Center"}
               services={checkoutServices}
@@ -1119,7 +1194,7 @@ export default function Page() {
             animate="animate"
             exit="exit"
           >
-            <PaymentSuccessPage
+            <LazyPaymentSuccessPage
               onViewReceipts={handleViewReceiptsFromSuccess}
             />
           </motion.div>
@@ -1133,7 +1208,7 @@ export default function Page() {
             animate="animate"
             exit="exit"
           >
-            <PaymentFailedPage
+            <LazyPaymentFailedPage
               onTryAgain={handleTryAgain}
               onBack={handleBackToServices}
             />
@@ -1148,7 +1223,7 @@ export default function Page() {
             animate="animate"
             exit="exit"
           >
-            <ProcessingPage
+            <LazyProcessingPage
               onProcessingComplete={handleProcessingComplete}
               paymentData={{
                 userPhone,
@@ -1173,7 +1248,7 @@ export default function Page() {
             animate="animate"
             exit="exit"
           >
-            <PaymentPage
+            <LazyPaymentPage
               onBack={handleBackToCheckout}
               onPay={handlePaymentComplete}
               totalAmount={paymentAmount}
@@ -1189,7 +1264,7 @@ export default function Page() {
             animate="animate"
             exit="exit"
           >
-            <CheckoutPage
+            <LazyCheckoutPage
               services={checkoutServices}
               onBack={handleBackToAddServices}
               onProceed={handleCheckoutProceed}
@@ -1205,7 +1280,7 @@ export default function Page() {
             animate="animate"
             exit="exit"
           >
-            <AddServicesPage
+            <LazyAddServicesPage
               selectedStudentIds={selectedStudentIds}
               userPhone={userPhone}
               schoolName={selectedSchool || ""}
@@ -1224,7 +1299,7 @@ export default function Page() {
             animate="animate"
             exit="exit"
           >
-            <PayForSchoolFees
+            <LazyPayForSchoolFees
               onBack={handleBackToServices}
               onSelectServices={handleSelectServices}
               students={getStudentsByPhone(userPhone)}
@@ -1241,7 +1316,7 @@ export default function Page() {
             animate="animate"
             exit="exit"
           >
-            <AllReceipts
+            <LazyAllReceipts
               onBack={handleBackToHistory}
               studentName={receiptStudentName}
               studentId={receiptStudentId}
@@ -1258,7 +1333,7 @@ export default function Page() {
             animate="animate"
             exit="exit"
           >
-            <HistoryPage 
+            <LazyHistoryPage 
               userName={userName}
               userPhone={userPhone}
               onBack={handleBackToServices}
@@ -1275,7 +1350,7 @@ export default function Page() {
             animate="animate"
             exit="exit"
           >
-            <ServicesPage 
+            <LazyServicesPage 
               userName={userName}
               schoolName={selectedSchool || undefined}
               onBack={handleBackToDetails}
@@ -1294,7 +1369,7 @@ export default function Page() {
             animate="animate"
             exit="exit"
           >
-            <SchoolDetailsPage 
+            <LazySchoolDetailsPage 
               schoolName={selectedSchool} 
               onProceed={handleProceedToServices}
               onBack={handleBackToSearch}
@@ -1319,7 +1394,7 @@ export default function Page() {
         )}
       </AnimatePresence>
       <Toaster />
-      {showTutorial && <Tutorial onComplete={handleTutorialComplete} />}
+      {showTutorial && <LazyTutorial onComplete={handleTutorialComplete} />}
     </>
   );
 }

@@ -22,7 +22,7 @@ function Header({ onBack }: { onBack: () => void }) {
   return (
     <div className="h-[66px] w-full relative bg-white/95 backdrop-blur-[20px]">
       <div aria-hidden="true" className="absolute border-[#e5e7eb] border-[0px_0px_1.5px] border-solid inset-0 pointer-events-none" />
-      <div className="absolute left-[94px] top-[17px] flex items-center gap-[16px]">
+      <div className="absolute left-1/2 translate-x-[-50%] top-[17px] flex items-center gap-[16px]">
         <Logo />
         <p className="font-['IBM_Plex_Sans_Devanagari:Bold',sans-serif] leading-[normal] not-italic text-[20px] text-[#003630] text-nowrap whitespace-pre tracking-[-0.3px]">master-fees</p>
       </div>
@@ -189,12 +189,12 @@ function Frame8() {
 
 function ServiceItem({ studentName, description, amount }: { studentName: string; description: string; amount: number }) {
   return (
-    <div className="box-border content-stretch flex items-center justify-between pl-[5px] pr-0 py-0 relative shrink-0 w-full">
+    <div className="box-border content-stretch flex items-center justify-between pl-[5px] pr-0 py-[2px] relative shrink-0 w-full min-h-[24px]">
       <Frame8 />
-      <p className="font-['IBM_Plex_Sans_Devanagari:Light',sans-serif] h-[23px] leading-[24px] not-italic relative shrink-0 text-[12px] text-black tracking-[-0.12px] flex-1 px-2">
+      <p className="font-['IBM_Plex_Sans_Devanagari:Light',sans-serif] leading-[1.5] not-italic relative text-[12px] text-black tracking-[-0.12px] flex-1 px-2 min-w-0 truncate">
         {studentName}'s {description}
       </p>
-      <p className="font-['IBM_Plex_Sans_Devanagari:Regular',sans-serif] leading-[24px] not-italic relative shrink-0 text-[12px] text-black text-right tracking-[-0.12px]">
+      <p className="font-['IBM_Plex_Sans_Devanagari:Regular',sans-serif] leading-[24px] not-italic relative shrink-0 text-[12px] text-black text-right tracking-[-0.12px] whitespace-nowrap ml-2">
         K{amount.toLocaleString()}
       </p>
     </div>
@@ -348,9 +348,9 @@ export default function CheckoutPage({ services, onBack, onProceed }: CheckoutPa
 
   return (
     <div className="bg-gradient-to-br from-[#f9fafb] via-white to-[#f5f7f9] h-screen w-full overflow-hidden flex justify-center">
-      <div className="relative w-full max-w-[393px] md:max-w-[500px] lg:max-w-[600px] h-screen" data-name="Checkout page 1">
+      <div className="relative w-full max-w-[450px] md:max-w-[500px] lg:max-w-[600px] h-screen" data-name="Checkout page 1">
         <Header onBack={onBack} />
-        <div className="absolute left-[44px] top-[100px]">
+        <div className="absolute left-1/2 translate-x-[-50%] top-[100px] w-full px-[24px]">
           <div className="inline-flex items-center gap-[8px] mb-[4px]">
             <div className="w-[3px] h-[24px] bg-gradient-to-b from-[#95e36c] to-[#003630] rounded-full" />
             <p className="font-['IBM_Plex_Sans_Devanagari:Bold',sans-serif] text-[22px] text-[#003630] tracking-[-0.4px]">Checkout</p>

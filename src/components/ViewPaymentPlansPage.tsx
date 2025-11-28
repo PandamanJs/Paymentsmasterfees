@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import headerSvgPaths from "../imports/svg-4boykq1z8d";
+import { getInstitutionType } from "../data/schoolData";
 
 interface PaymentPlan {
   id: string;
@@ -27,7 +28,7 @@ interface ViewPaymentPlansPageProps {
 function Header({ onBack }: { onBack: () => void }) {
   return (
     <div className="relative h-[66px] w-full border-b-[1.5px] border-[#e5e7eb] bg-white/95 backdrop-blur-[20px]">
-      <div className="absolute left-[20px] top-[17px] flex items-center gap-[16px]">
+      <div className="absolute left-1/2 translate-x-[-50%] top-[17px] flex items-center gap-[16px]">
         <button
           onClick={onBack}
           className="w-[32px] h-[32px] rounded-full hover:bg-[#f3f4f6] transition-all flex items-center justify-center touch-manipulation active:scale-95"
@@ -252,10 +253,118 @@ function PaymentPlanCard({
 }
 
 /**
- * Main Payment Plans Page
+ * Main Payment Plans / Credit Facility Page
  */
 export default function ViewPaymentPlansPage({ onBack, schoolName }: ViewPaymentPlansPageProps) {
-  // Professional payment plans data - Per Term
+  // Determine institution type
+  const institutionType = getInstitutionType(schoolName);
+  const isUniversity = institutionType === 'university';
+  
+  // Credit facilities for universities
+  const creditFacilities: PaymentPlan[] = [
+    {
+      id: "full-semester",
+      planCode: "CF-FS-2025",
+      name: "Full Semester Credit",
+      description: "Complete tuition coverage for entire semester with flexible repayment",
+      installments: 1,
+      frequency: "one-time",
+      totalAmount: 0,
+      perInstallment: 0,
+      effectiveDate: "Upon Approval",
+      dueDate: "End of Semester",
+      terms: [
+        "Application processed within 48 hours upon submission",
+        "Credit approval based on academic standing and financial assessment",
+        "Zero-interest repayment plan available for qualifying students",
+        "Repayment begins 30 days after semester ends",
+        "No collateral required for amounts under K30,000",
+        "Automatic enrollment in financial literacy program"
+      ]
+    },
+    {
+      id: "semester-installment",
+      planCode: "CF-SI-2025",
+      name: "Semester Installment Credit",
+      description: "Structured credit facility with monthly repayment during semester",
+      installments: 4,
+      frequency: "month",
+      totalAmount: 0,
+      perInstallment: 0,
+      effectiveDate: "Upon Approval",
+      dueDate: "Monthly",
+      terms: [
+        "Monthly repayment schedule begins immediately after approval",
+        "Flexible repayment amounts adjusted to student's financial capacity",
+        "Grace period of 2 weeks for each monthly payment",
+        "Interest rate capped at 5% per annum for verified students",
+        "Option to defer one payment per semester in case of emergencies",
+        "Early repayment incentives available - up to 3% discount"
+      ]
+    },
+    {
+      id: "emergency-credit",
+      planCode: "CF-EC-2025",
+      name: "Emergency Education Credit",
+      description: "Fast-track credit for urgent tuition needs with expedited approval",
+      installments: 2,
+      frequency: "payment",
+      totalAmount: 0,
+      perInstallment: 0,
+      effectiveDate: "24-48 Hours",
+      dueDate: "Within Semester",
+      terms: [
+        "Approval within 24-48 hours for qualifying emergencies",
+        "Maximum credit limit: K15,000 per semester",
+        "Two equal installments: mid-semester and end-of-semester",
+        "Requires brief written explanation of emergency circumstances",
+        "Compassionate terms with minimal documentation",
+        "Dedicated support from student financial services team"
+      ]
+    },
+    {
+      id: "academic-excellence",
+      planCode: "CF-AE-2025",
+      name: "Academic Excellence Credit",
+      description: "Preferential credit facility for students with strong academic records",
+      installments: 3,
+      frequency: "month",
+      totalAmount: 0,
+      perInstallment: 0,
+      effectiveDate: "Upon Approval",
+      dueDate: "End of Semester",
+      terms: [
+        "Available for students maintaining GPA of 3.0 or above",
+        "Zero-interest financing for entire academic year",
+        "Priority approval process - decisions within 24 hours",
+        "Flexible repayment terms up to 12 months post-graduation",
+        "Option to convert to scholarship for exceptional performance",
+        "Renewable each semester with maintained academic standing"
+      ]
+    },
+    {
+      id: "partial-coverage",
+      planCode: "CF-PC-2025",
+      name: "Partial Coverage Credit",
+      description: "Supplementary credit to cover the gap between available funds and tuition",
+      installments: 0,
+      frequency: "flexible",
+      totalAmount: 0,
+      perInstallment: 0,
+      effectiveDate: "Upon Approval",
+      dueDate: "Flexible",
+      terms: [
+        "Designed to bridge the gap when partial payment is available",
+        "Minimum credit amount: K2,000 per semester",
+        "Custom repayment schedule based on individual circumstances",
+        "Combined with existing payment sources and scholarships",
+        "Ideal for students with part-time employment",
+        "Monthly, bi-weekly, or custom payment intervals available"
+      ]
+    }
+  ];
+  
+  // Professional payment plans data - Per Term (for schools)
   const paymentPlans: PaymentPlan[] = [
     {
       id: "full",
@@ -356,7 +465,7 @@ export default function ViewPaymentPlansPage({ onBack, schoolName }: ViewPayment
 
   return (
     <div className="bg-gradient-to-br from-[#f9fafb] via-white to-[#f5f7f9] h-screen w-full overflow-hidden flex items-center justify-center">
-      <div className="relative w-full max-w-[393px] md:max-w-[500px] lg:max-w-[600px] h-screen mx-auto bg-gradient-to-br from-[#f9fafb] via-white to-[#f5f7f9] flex flex-col">
+      <div className="relative w-full max-w-[450px] md:max-w-[500px] lg:max-w-[600px] h-screen mx-auto bg-gradient-to-br from-[#f9fafb] via-white to-[#f5f7f9] flex flex-col">
         <Header onBack={onBack} />
 
         {/* Hero Section */}
@@ -367,21 +476,24 @@ export default function ViewPaymentPlansPage({ onBack, schoolName }: ViewPayment
             transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
           >
             <h1 className="font-['IBM_Plex_Sans_Devanagari:Bold',sans-serif] text-[24px] text-[#003630] tracking-[-0.5px] mb-[4px]">
-              Term 1 Payment Plans
+              {isUniversity ? "Credit Facilities" : "Term 1 Payment Plans"}
             </h1>
             <p className="font-['IBM_Plex_Sans_Devanagari:Medium',sans-serif] text-[13px] text-[#003630] mb-[2px]">
               {schoolName}
             </p>
             <p className="font-['IBM_Plex_Sans_Devanagari:Regular',sans-serif] text-[12px] text-[#9ca3af] leading-[1.5]">
-              Term 1: January - April 2025 (3.5 months) • Tuition: K10,000
+              {isUniversity 
+                ? "Flexible financing options to support your academic journey"
+                : "Term 1: January - April 2025 (3.5 months) • Tuition: K10,000"
+              }
             </p>
           </motion.div>
         </div>
 
-        {/* Payment Plans List */}
+        {/* Payment Plans / Credit Facilities List */}
         <div className="flex-1 overflow-y-auto px-[24px] py-[20px]">
           <div className="space-y-[16px] pb-[24px]">
-            {paymentPlans.map((plan, index) => (
+            {(isUniversity ? creditFacilities : paymentPlans).map((plan, index) => (
               <PaymentPlanCard
                 key={plan.id}
                 plan={plan}
@@ -401,10 +513,13 @@ export default function ViewPaymentPlansPage({ onBack, schoolName }: ViewPayment
             </svg>
             <div>
               <p className="font-['IBM_Plex_Sans_Devanagari:Medium',sans-serif] text-[11px] text-[#003630] mb-[2px]">
-                Questions about payment plans?
+                {isUniversity ? "Need help with credit facility application?" : "Questions about payment plans?"}
               </p>
               <p className="font-['IBM_Plex_Sans_Devanagari:Regular',sans-serif] text-[10px] text-[#9ca3af] leading-[1.5]">
-                Contact the bursar's office at bursar@school.edu or +260 XXX XXX XXX
+                {isUniversity 
+                  ? "Contact Student Financial Services at sfs@acu.ac.zm or +260 211 XXX XXX"
+                  : "Contact the bursar's office at bursar@school.edu or +260 XXX XXX XXX"
+                }
               </p>
             </div>
           </div>

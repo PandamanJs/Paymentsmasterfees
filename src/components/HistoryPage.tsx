@@ -81,7 +81,7 @@ function Header({ onBack }: { onBack: () => void }) {
   return (
     <div className="relative size-full">
       <div aria-hidden="true" className="absolute border-[#e6e6e6] border-[0px_0px_1px] border-solid inset-0 pointer-events-none" />
-      <div className="absolute left-[94px] top-[17px] flex items-center gap-[16px]">
+      <div className="absolute left-1/2 translate-x-[-50%] top-[17px] flex items-center gap-[16px]">
         <Logo />
         <p className="font-['IBM_Plex_Sans_Devanagari:Bold',sans-serif] leading-[normal] not-italic text-[20px] text-black text-nowrap whitespace-pre">master-fees</p>
       </div>
@@ -221,7 +221,7 @@ function PaymentPopup({
       
       {/* Bottom Sheet Popup */}
       <motion.div
-        className="fixed bottom-0 left-0 right-0 z-50 mx-auto max-w-[393px]"
+        className="fixed bottom-0 left-0 right-0 z-50 mx-auto max-w-[450px]"
         initial={{ y: "100%", opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         exit={{ y: "100%", opacity: 0 }}
@@ -342,7 +342,7 @@ function FilterPopup({
 
       {/* Bottom Sheet Style Popup */}
       <motion.div
-        className="fixed bottom-0 left-0 right-0 z-50 mx-auto max-w-[393px]"
+        className="fixed bottom-0 left-0 right-0 z-50 mx-auto max-w-[450px]"
         initial={{ y: "100%", opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         exit={{ y: "100%", opacity: 0 }}
@@ -924,7 +924,7 @@ export default function HistoryPage({ userName, userPhone, onBack, onViewAllRece
 
   return (
     <div className="bg-white min-h-screen w-full overflow-hidden flex items-center justify-center">
-      <div className="relative w-full max-w-[393px] md:max-w-[500px] lg:max-w-[600px] min-h-screen mx-auto">
+      <div className="relative w-full max-w-[450px] md:max-w-[500px] lg:max-w-[600px] min-h-screen mx-auto">
         
         {/* Header */}
         <div className="relative h-[60px] w-full">

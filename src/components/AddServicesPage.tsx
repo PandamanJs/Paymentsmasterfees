@@ -34,7 +34,7 @@ function Header({ onBack }: { onBack: () => void }) {
   return (
     <div className="h-[66px] w-full relative">
       <div aria-hidden="true" className="absolute border-[#e6e6e6] border-[0px_0px_1px] border-solid inset-0 pointer-events-none" />
-      <div className="absolute left-[94px] top-[17px] flex items-center gap-[16px]">
+      <div className="absolute left-1/2 translate-x-[-50%] top-[17px] flex items-center gap-[16px]">
         <Logo />
         <p className="font-['IBM_Plex_Sans_Devanagari:Bold',sans-serif] leading-[normal] not-italic text-[20px] text-black text-nowrap whitespace-pre">master-fees</p>
       </div>
@@ -93,7 +93,7 @@ function ChildPill({ name, id, isActive, onClick }: { name: string; id: string; 
           </div>
         </div>
       </button>
-      {isActive && <div className="absolute bg-[#95e36c] h-[3px] left-[9px] top-[43px] w-[87px]" />}
+      {isActive && <div className="absolute bg-[#95e36c] h-[3px] left-1/2 translate-x-[-50%] top-[43px] w-[87px]" />}
     </div>
   );
 }
@@ -190,22 +190,22 @@ function ServiceTable({ services, onRemoveItem }: { services: Service[]; onRemov
           {services.map((service, index) => (
             <motion.div 
               key={service.id} 
-              className="box-border content-stretch flex h-[36px] items-start pl-[5px] pr-[56px] py-0 w-full relative group hover:bg-gradient-to-r hover:from-[rgba(149,227,108,0.03)] hover:to-transparent transition-all duration-200"
+              className="box-border content-stretch flex min-h-[40px] items-center pl-[5px] pr-[56px] py-[6px] w-full relative group hover:bg-gradient-to-r hover:from-[rgba(149,227,108,0.03)] hover:to-transparent transition-all duration-200"
               initial={{ opacity: 0, x: -10 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: index * 0.05, duration: 0.2, ease: "easeOut" }}
             >
-              <div className="box-border content-stretch flex gap-[10px] h-full items-center p-[10px] relative shrink-0 flex-1">
-                <div className="content-stretch flex flex-col h-[26px] items-start justify-center leading-[0] not-italic relative shrink-0">
-                  <div className="flex flex-col font-['IBM_Plex_Sans_Devanagari:Medium',sans-serif] h-[15px] justify-center relative shrink-0 text-[12px] text-black">
-                    <p className="leading-[1.4]">{service.description.replace(/\s*\(Per term\)/i, '')}</p>
+              <div className="box-border content-stretch flex gap-[10px] items-center px-[10px] py-[4px] relative shrink-0 flex-1 min-w-0">
+                <div className="content-stretch flex flex-col items-start justify-center leading-[0] not-italic relative flex-1 min-w-0">
+                  <div className="flex flex-col font-['IBM_Plex_Sans_Devanagari:Medium',sans-serif] justify-center relative w-full text-[12px] text-black">
+                    <p className="leading-[1.4] truncate">{service.description.replace(/\s*\(Per term\)/i, '')}</p>
                   </div>
-                  <div className="flex flex-col font-['Inter:Light',sans-serif] font-light justify-center relative shrink-0 text-[#003049] text-[8px] tracking-[-0.08px]">
+                  <div className="flex flex-col font-['Inter:Light',sans-serif] font-light justify-center relative text-[#003049] text-[8px] tracking-[-0.08px] mt-[2px]">
                     <p className="leading-[12px]">Invoice No. {service.invoiceNo}</p>
                   </div>
                 </div>
               </div>
-              <div className="box-border content-stretch flex gap-[10px] h-full items-start justify-end pb-[10px] pt-[2px] px-[10px] relative shrink-0 w-[100px]">
+              <div className="box-border content-stretch flex gap-[10px] items-center justify-end px-[10px] py-[4px] relative shrink-0 w-[100px]">
                 <div className="flex flex-col font-['IBM_Plex_Sans_Devanagari:Medium',sans-serif] justify-center leading-[0] not-italic relative shrink-0 text-[12px] text-black text-nowrap">
                   <p className="leading-[1.4] whitespace-pre">K{service.amount.toLocaleString()}</p>
                 </div>
@@ -750,7 +750,7 @@ export default function AddServicesPage({ selectedStudentIds, userPhone, schoolN
 
   return (
     <div className="bg-white h-screen w-full overflow-hidden flex items-center justify-center">
-      <div className="relative w-full max-w-[393px] md:max-w-[500px] lg:max-w-[600px] h-screen mx-auto shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] flex flex-col">
+      <div className="relative w-full max-w-[450px] md:max-w-[500px] lg:max-w-[600px] h-screen mx-auto shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] flex flex-col">
         <Header onBack={onBack} />
         
         <div className="flex-1 flex flex-col px-[24px] pt-[12px] pb-[8px] overflow-hidden">

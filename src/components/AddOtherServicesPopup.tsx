@@ -51,7 +51,7 @@ function PremiumDropdown({
 }) {
   return (
     <div className="w-full">
-      <label className="block font-['IBM_Plex_Sans_Devanagari:SemiBold',sans-serif] text-[11px] text-[#6b7280] tracking-[1px] uppercase mb-[10px] pl-[4px]">
+      <label className="block font-['IBM_Plex_Sans_Devanagari:SemiBold',sans-serif] text-[10px] text-[#6b7280] tracking-[0.8px] uppercase mb-[8px] pl-[4px]">
         {label}
       </label>
       <div className="relative group">
@@ -59,7 +59,7 @@ function PremiumDropdown({
         <select
           value={value}
           onChange={(e) => onChange(e.target.value)}
-          className="w-full h-[48px] px-[16px] pr-[44px] bg-[#f9fafb] border-[1.5px] border-[#e5e7eb] rounded-[12px] font-['IBM_Plex_Sans_Devanagari:Medium',sans-serif] text-[14px] text-[#003630] appearance-none cursor-pointer hover:bg-white hover:border-[#d1d5db] focus:bg-white focus:border-[#95e36c] focus:outline-none focus:ring-0 transition-all touch-manipulation shadow-sm tracking-[-0.2px]"
+          className="w-full h-[42px] px-[14px] pr-[40px] bg-[#f9fafb] border-[1.5px] border-[#e5e7eb] rounded-[10px] font-['IBM_Plex_Sans_Devanagari:Medium',sans-serif] text-[13px] text-[#003630] appearance-none cursor-pointer hover:bg-white hover:border-[#d1d5db] focus:bg-white focus:border-[#95e36c] focus:outline-none focus:ring-0 transition-all touch-manipulation shadow-sm tracking-[-0.2px]"
           onClick={(e) => e.stopPropagation()}
         >
           {options.map((option) => (
@@ -70,9 +70,9 @@ function PremiumDropdown({
         </select>
         
         {/* Custom Arrow Icon */}
-        <div className="absolute right-[16px] top-1/2 -translate-y-1/2 pointer-events-none transition-transform group-hover:translate-y-[-calc(50%-1px)]">
-          <div className="w-[20px] h-[20px] bg-white rounded-[6px] border border-[#e5e7eb] flex items-center justify-center shadow-sm">
-            <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+        <div className="absolute right-[14px] top-1/2 -translate-y-1/2 pointer-events-none transition-transform group-hover:translate-y-[-calc(50%-1px)]">
+          <div className="w-[18px] h-[18px] bg-white rounded-[5px] border border-[#e5e7eb] flex items-center justify-center shadow-sm">
+            <svg width="10" height="10" viewBox="0 0 12 12" fill="none">
               <path d="M3 4.5L6 7.5L9 4.5" stroke="#6b7280" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           </div>
@@ -111,8 +111,8 @@ function UniformSelector({
   const individualItems = subItems.filter(item => item.id !== "uniform-complete");
 
   return (
-    <div className="space-y-[14px]">
-      <label className="block font-['IBM_Plex_Sans_Devanagari:SemiBold',sans-serif] text-[11px] text-[#6b7280] tracking-[1px] uppercase pl-[4px]">
+    <div className="space-y-[10px]">
+      <label className="block font-['IBM_Plex_Sans_Devanagari:SemiBold',sans-serif] text-[10px] text-[#6b7280] tracking-[0.8px] uppercase pl-[4px]">
         Select Items
       </label>
       
@@ -123,7 +123,7 @@ function UniformSelector({
           className="w-full group touch-manipulation active:scale-[0.98] transition-transform"
         >
           <div className={`
-            relative rounded-[14px] p-[16px] transition-all duration-200
+            relative rounded-[12px] p-[12px] transition-all duration-200
             ${selectedItems.includes(completeSet.id)
               ? 'bg-gradient-to-br from-[#95e36c] to-[#7dd054] shadow-[0px_4px_16px_rgba(149,227,108,0.25)]'
               : 'bg-white border-[1.5px] border-[#e5e7eb] hover:border-[#d1d5db] shadow-sm'
@@ -132,16 +132,16 @@ function UniformSelector({
             {/* Sparkle decoration for selected state */}
             {selectedItems.includes(completeSet.id) && (
               <>
-                <div className="absolute top-[12px] right-[12px] w-[6px] h-[6px] bg-white/40 rounded-full" />
-                <div className="absolute top-[20px] right-[20px] w-[4px] h-[4px] bg-white/30 rounded-full" />
+                <div className="absolute top-[10px] right-[10px] w-[5px] h-[5px] bg-white/40 rounded-full" />
+                <div className="absolute top-[16px] right-[16px] w-[3px] h-[3px] bg-white/30 rounded-full" />
               </>
             )}
             
             <div className="flex items-center justify-between">
-              <div className="flex items-center gap-[14px]">
+              <div className="flex items-center gap-[10px]">
                 {/* Custom Radio/Checkbox */}
                 <div className={`
-                  w-[24px] h-[24px] rounded-full flex items-center justify-center transition-all shadow-sm
+                  w-[20px] h-[20px] rounded-full flex items-center justify-center transition-all shadow-sm
                   ${selectedItems.includes(completeSet.id)
                     ? 'bg-white'
                     : 'bg-[#f5f7f9] border-[1.5px] border-[#e5e7eb]'
@@ -156,8 +156,8 @@ function UniformSelector({
                         stiffness: 500,
                         damping: 25
                       }}
-                      width="14" 
-                      height="11" 
+                      width="12" 
+                      height="10" 
                       viewBox="0 0 14 11" 
                       fill="none"
                     >
@@ -167,12 +167,12 @@ function UniformSelector({
                 </div>
                 
                 <div className="text-left">
-                  <p className={`font-['IBM_Plex_Sans_Devanagari:Bold',sans-serif] text-[14px] tracking-[-0.2px] mb-[2px] ${
+                  <p className={`font-['IBM_Plex_Sans_Devanagari:Bold',sans-serif] text-[13px] tracking-[-0.2px] mb-[2px] ${
                     selectedItems.includes(completeSet.id) ? 'text-white' : 'text-[#003630]'
                   }`}>
                     {completeSet.name}
                   </p>
-                  <p className={`font-['Inter:Regular',sans-serif] text-[11px] tracking-[-0.1px] ${
+                  <p className={`font-['Inter:Regular',sans-serif] text-[10px] tracking-[-0.1px] ${
                     selectedItems.includes(completeSet.id) ? 'text-white/80' : 'text-[#6b7280]'
                   }`}>
                     All items included • Best value
@@ -180,17 +180,17 @@ function UniformSelector({
                 </div>
               </div>
               
-              <div className={`px-[12px] py-[8px] rounded-[10px] ${
+              <div className={`px-[10px] py-[6px] rounded-[8px] ${
                 selectedItems.includes(completeSet.id)
                   ? 'bg-white/20 backdrop-blur-sm'
                   : 'bg-[#f5f7f9]'
               }`}>
-                <p className={`font-['IBM_Plex_Sans_Devanagari:Bold',sans-serif] text-[15px] tracking-[-0.2px] ${
+                <p className={`font-['IBM_Plex_Sans_Devanagari:Bold',sans-serif] text-[13px] tracking-[-0.2px] ${
                   selectedItems.includes(completeSet.id) ? 'text-white' : 'text-[#003630]'
                 }`}>
                   {completeSet.amount}
                 </p>
-                <p className={`font-['IBM_Plex_Sans_Devanagari:Medium',sans-serif] text-[10px] tracking-[-0.1px] text-center ${
+                <p className={`font-['IBM_Plex_Sans_Devanagari:Medium',sans-serif] text-[9px] tracking-[-0.1px] text-center ${
                   selectedItems.includes(completeSet.id) ? 'text-white/70' : 'text-[#9ca3af]'
                 }`}>
                   ZMW
@@ -202,19 +202,19 @@ function UniformSelector({
       )}
       
       {/* Divider with Unique Style */}
-      <div className="relative py-[8px]">
+      <div className="relative py-[6px]">
         <div className="absolute inset-0 flex items-center">
           <div className="w-full h-[1px] bg-gradient-to-r from-transparent via-[#e5e7eb] to-transparent" />
         </div>
         <div className="relative flex justify-center">
-          <span className="px-[16px] py-[4px] bg-[#fafbfc] rounded-[8px] border border-[#f0f1f3] font-['IBM_Plex_Sans_Devanagari:Medium',sans-serif] text-[10px] text-[#9ca3af] uppercase tracking-[1px]">
+          <span className="px-[12px] py-[3px] bg-[#fafbfc] rounded-[6px] border border-[#f0f1f3] font-['IBM_Plex_Sans_Devanagari:Medium',sans-serif] text-[9px] text-[#9ca3af] uppercase tracking-[0.8px]">
             Or Choose Items
           </span>
         </div>
       </div>
       
       {/* Individual Items - Premium Grid */}
-      <div className="grid grid-cols-2 gap-[10px] max-h-[240px] overflow-y-auto pr-[4px] scrollbar-thin scrollbar-thumb-[#e5e7eb] scrollbar-track-transparent">
+      <div className="grid grid-cols-2 gap-[8px] max-h-[240px] overflow-y-auto pr-[4px] scrollbar-thin scrollbar-thumb-[#e5e7eb] scrollbar-track-transparent">
         {individualItems.map((item, index) => {
           const isItemSelected = selectedItems.includes(item.id);
           return (
@@ -227,7 +227,7 @@ function UniformSelector({
               className="group touch-manipulation active:scale-[0.97] transition-transform"
             >
               <div className={`
-                relative rounded-[12px] p-[14px] transition-all duration-200
+                relative rounded-[10px] p-[10px] transition-all duration-200
                 ${isItemSelected
                   ? 'bg-gradient-to-br from-[#e0f7d4] to-[#d0f0c0] border-[1.5px] border-[#95e36c]/50 shadow-sm'
                   : 'bg-white border-[1.5px] border-[#e5e7eb] hover:border-[#d1d5db] shadow-sm'
@@ -235,13 +235,13 @@ function UniformSelector({
               `}>
                 {/* Selection indicator dot */}
                 {isItemSelected && (
-                  <div className="absolute top-[10px] right-[10px] w-[6px] h-[6px] bg-[#95e36c] rounded-full" />
+                  <div className="absolute top-[8px] right-[8px] w-[5px] h-[5px] bg-[#95e36c] rounded-full" />
                 )}
                 
-                <div className="flex flex-col gap-[10px]">
+                <div className="flex flex-col gap-[8px]">
                   {/* Checkbox */}
                   <div className={`
-                    w-[20px] h-[20px] rounded-[7px] flex items-center justify-center transition-all
+                    w-[18px] h-[18px] rounded-[6px] flex items-center justify-center transition-all
                     ${isItemSelected
                       ? 'bg-[#95e36c] shadow-[0px_2px_6px_rgba(149,227,108,0.3)]'
                       : 'bg-[#f5f7f9] border-[1.5px] border-[#e5e7eb]'
@@ -256,8 +256,8 @@ function UniformSelector({
                           stiffness: 500,
                           damping: 25
                         }}
-                        width="12" 
-                        height="10" 
+                        width="10" 
+                        height="8" 
                         viewBox="0 0 12 10" 
                         fill="none"
                       >
@@ -268,20 +268,20 @@ function UniformSelector({
                   
                   {/* Item Details */}
                   <div className="text-left">
-                    <p className={`font-['IBM_Plex_Sans_Devanagari:${isItemSelected ? 'Bold' : 'Medium'}',sans-serif] text-[12px] text-[#003630] tracking-[-0.1px] leading-[1.3] mb-[6px]`}>
+                    <p className={`font-['IBM_Plex_Sans_Devanagari:${isItemSelected ? 'Bold' : 'Medium'}',sans-serif] text-[11px] text-[#003630] tracking-[-0.1px] leading-[1.3] mb-[4px]`}>
                       {item.name}
                     </p>
                     <div className={`
-                      inline-flex items-baseline gap-[4px] px-[10px] py-[4px] rounded-[8px]
+                      inline-flex items-baseline gap-[3px] px-[8px] py-[3px] rounded-[6px]
                       ${isItemSelected
                         ? 'bg-white/60 backdrop-blur-sm'
                         : 'bg-[#f5f7f9]'
                       }
                     `}>
-                      <p className="font-['IBM_Plex_Sans_Devanagari:Bold',sans-serif] text-[13px] text-[#003630] tracking-[-0.1px] leading-[1]">
+                      <p className="font-['IBM_Plex_Sans_Devanagari:Bold',sans-serif] text-[11px] text-[#003630] tracking-[-0.1px] leading-[1]">
                         {item.amount}
                       </p>
-                      <p className="font-['IBM_Plex_Sans_Devanagari:Medium',sans-serif] text-[9px] text-[#6b7280] tracking-[-0.1px]">
+                      <p className="font-['IBM_Plex_Sans_Devanagari:Medium',sans-serif] text-[8px] text-[#6b7280] tracking-[-0.1px]">
                         ZMW
                       </p>
                     </div>
@@ -364,7 +364,7 @@ function ServiceCheckbox({
         className="w-full text-left group touch-manipulation active:scale-[0.99] transition-transform"
       >
         <div className={`
-          relative rounded-[16px] transition-all duration-200
+          relative rounded-[12px] transition-all duration-200
           ${isSelected 
             ? 'bg-gradient-to-br from-white via-[#fafbfc] to-white border-[1.5px] border-[#95e36c] shadow-[0px_2px_12px_rgba(149,227,108,0.15)]' 
             : 'bg-white border-[1.5px] border-[#e5e7eb] hover:border-[#d1d5db] shadow-sm'
@@ -374,7 +374,7 @@ function ServiceCheckbox({
           {isSelected && (
             <motion.div
               layoutId={`selection-${service.id}`}
-              className="absolute left-0 top-[12px] bottom-[12px] w-[4px] bg-gradient-to-b from-[#95e36c] to-[#7dd054] rounded-r-full"
+              className="absolute left-0 top-[8px] bottom-[8px] w-[3px] bg-gradient-to-b from-[#95e36c] to-[#7dd054] rounded-r-full"
               initial={{ scaleY: 0 }}
               animate={{ scaleY: 1 }}
               transition={{ 
@@ -385,11 +385,11 @@ function ServiceCheckbox({
             />
           )}
           
-          <div className="px-[20px] py-[18px] flex items-start gap-[16px]">
+          <div className="px-[14px] py-[12px] flex items-start gap-[12px]">
             {/* Unique Checkbox Design */}
             <div className="mt-[2px] flex-shrink-0">
               <div className={`
-                w-[24px] h-[24px] rounded-[8px] flex items-center justify-center transition-all duration-200
+                w-[20px] h-[20px] rounded-[7px] flex items-center justify-center transition-all duration-200
                 ${isSelected 
                   ? 'bg-[#95e36c] shadow-[0px_2px_8px_rgba(149,227,108,0.4)]' 
                   : 'bg-[#f5f7f9] border-[1.5px] border-[#e5e7eb]'
@@ -404,8 +404,8 @@ function ServiceCheckbox({
                       stiffness: 500,
                       damping: 25
                     }}
-                    width="14" 
-                    height="11" 
+                    width="12" 
+                    height="10" 
                     viewBox="0 0 14 11" 
                     fill="none"
                   >
@@ -418,40 +418,40 @@ function ServiceCheckbox({
                     />
                   </motion.svg>
                 ) : (
-                  <div className="w-[10px] h-[10px] rounded-[3px] bg-white/60" />
+                  <div className="w-[8px] h-[8px] rounded-[3px] bg-white/60" />
                 )}
               </div>
             </div>
             
             {/* Service Details */}
             <div className="flex-1 min-w-0">
-              <p className={`font-['IBM_Plex_Sans_Devanagari:${isSelected ? 'Bold' : 'SemiBold'}',sans-serif] text-[15px] text-[#003630] tracking-[-0.2px] mb-[6px] leading-[1.3]`}>
+              <p className={`font-['IBM_Plex_Sans_Devanagari:${isSelected ? 'Bold' : 'SemiBold'}',sans-serif] text-[13px] text-[#003630] tracking-[-0.2px] mb-[4px] leading-[1.3]`}>
                 {service.name}
               </p>
-              <p className="font-['Inter:Regular',sans-serif] text-[12px] text-[#6b7280] tracking-[-0.1px] mb-[12px] leading-[1.5]">
+              <p className="font-['Inter:Regular',sans-serif] text-[11px] text-[#6b7280] tracking-[-0.1px] mb-[8px] leading-[1.4]">
                 {service.description}
               </p>
               
               {/* Price and Category Tags */}
-              <div className="flex items-center gap-[10px] flex-wrap">
+              <div className="flex items-center gap-[8px] flex-wrap">
                 {/* Price Badge */}
                 <div className={`
-                  inline-flex items-baseline gap-[6px] px-[14px] py-[8px] rounded-[10px] transition-all
+                  inline-flex items-baseline gap-[4px] px-[10px] py-[6px] rounded-[8px] transition-all
                   ${isSelected
                     ? 'bg-gradient-to-r from-[#e0f7d4] to-[#d0f0c0] border border-[#95e36c]/20'
                     : 'bg-[#f5f7f9] border border-[#e5e7eb]'
                   }
                 `}>
-                  <p className="font-['IBM_Plex_Sans_Devanagari:Bold',sans-serif] text-[15px] text-[#003630] tracking-[-0.2px] leading-[1]">
+                  <p className="font-['IBM_Plex_Sans_Devanagari:Bold',sans-serif] text-[13px] text-[#003630] tracking-[-0.2px] leading-[1]">
                     {displayAmount.toLocaleString()}
                   </p>
-                  <p className="font-['IBM_Plex_Sans_Devanagari:Medium',sans-serif] text-[11px] text-[#6b7280] tracking-[-0.1px]">
+                  <p className="font-['IBM_Plex_Sans_Devanagari:Medium',sans-serif] text-[10px] text-[#6b7280] tracking-[-0.1px]">
                     ZMW
                   </p>
                 </div>
                 
                 {/* Category Badge */}
-                <span className="inline-flex items-center px-[12px] py-[6px] bg-white/60 backdrop-blur-sm border border-[#e5e7eb] rounded-[8px] text-[10px] font-['IBM_Plex_Sans_Devanagari:SemiBold',sans-serif] text-[#6b7280] uppercase tracking-[0.8px]">
+                <span className="inline-flex items-center px-[8px] py-[4px] bg-white/60 backdrop-blur-sm border border-[#e5e7eb] rounded-[6px] text-[9px] font-['IBM_Plex_Sans_Devanagari:SemiBold',sans-serif] text-[#6b7280] uppercase tracking-[0.6px]">
                   {service.category}
                 </span>
               </div>
@@ -474,7 +474,7 @@ function ServiceCheckbox({
           className="overflow-hidden"
           onClick={(e) => e.stopPropagation()}
         >
-          <div className="px-[20px] pb-[20px] pt-[16px] space-y-[16px] bg-gradient-to-b from-[#fafbfc]/50 to-transparent">
+          <div className="px-[14px] pb-[14px] pt-[12px] space-y-[12px] bg-gradient-to-b from-[#fafbfc]/50 to-transparent">
             {/* Uniform Items Selector */}
             {isUniform && service.subItems && onUniformItemsChange && (
               <UniformSelector
@@ -487,23 +487,23 @@ function ServiceCheckbox({
             {/* Payment Period Selector - Unique Segmented Design */}
             {!isUniform && hasPaymentPeriods && onPaymentPeriodChange && (
               <div className="w-full">
-                <label className="block font-['IBM_Plex_Sans_Devanagari:SemiBold',sans-serif] text-[11px] text-[#6b7280] tracking-[1px] uppercase mb-[12px] pl-[4px]">
+                <label className="block font-['IBM_Plex_Sans_Devanagari:SemiBold',sans-serif] text-[10px] text-[#6b7280] tracking-[0.8px] uppercase mb-[10px] pl-[4px]">
                   Payment Frequency
                 </label>
-                <div className="relative bg-[#f5f7f9]/80 backdrop-blur-sm rounded-[14px] p-[4px] border border-[#e5e7eb]/50">
-                  <div className="grid grid-cols-3 gap-[4px] relative">
+                <div className="relative bg-[#f5f7f9]/80 backdrop-blur-sm rounded-[12px] p-[3px] border border-[#e5e7eb]/50">
+                  <div className="grid grid-cols-3 gap-[3px] relative">
                     {service.paymentPeriods?.map((p) => {
                       const isActive = (paymentPeriod || 'term') === p.period;
                       return (
                         <button
                           key={p.period}
                           onClick={() => onPaymentPeriodChange(p.period)}
-                          className="relative z-10 py-[12px] px-[8px] rounded-[10px] transition-all touch-manipulation active:scale-95"
+                          className="relative z-10 py-[10px] px-[6px] rounded-[9px] transition-all touch-manipulation active:scale-95"
                         >
                           {isActive && (
                             <motion.div
                               layoutId={`period-${service.id}`}
-                              className="absolute inset-0 bg-white rounded-[10px] shadow-[0px_2px_8px_rgba(0,0,0,0.06),0px_1px_2px_rgba(0,0,0,0.04)]"
+                              className="absolute inset-0 bg-white rounded-[9px] shadow-[0px_2px_8px_rgba(0,0,0,0.06),0px_1px_2px_rgba(0,0,0,0.04)]"
                               transition={{ 
                                 type: "spring", 
                                 stiffness: 500, 
@@ -512,12 +512,12 @@ function ServiceCheckbox({
                             />
                           )}
                           <div className="relative z-10">
-                            <p className={`font-['IBM_Plex_Sans_Devanagari:${isActive ? 'Bold' : 'Medium'}',sans-serif] text-[12px] tracking-[-0.1px] text-center leading-tight mb-[4px] transition-colors ${
+                            <p className={`font-['IBM_Plex_Sans_Devanagari:${isActive ? 'Bold' : 'Medium'}',sans-serif] text-[11px] tracking-[-0.1px] text-center leading-tight mb-[3px] transition-colors ${
                               isActive ? 'text-[#003630]' : 'text-[#9ca3af]'
                             }`}>
                               {p.period === 'term' ? (isUniversity ? 'Semester' : 'Term') : p.period === 'week' ? 'Weekly' : 'Daily'}
                             </p>
-                            <p className={`font-['IBM_Plex_Sans_Devanagari:SemiBold',sans-serif] text-[10px] tracking-[-0.1px] text-center transition-colors ${
+                            <p className={`font-['IBM_Plex_Sans_Devanagari:SemiBold',sans-serif] text-[9px] tracking-[-0.1px] text-center transition-colors ${
                               isActive ? 'text-[#6b7280]' : 'text-[#cbd5e0]'
                             }`}>
                               K{p.amount}
@@ -533,11 +533,11 @@ function ServiceCheckbox({
             
             {/* Dropdowns Container - Unique Card Style */}
             {!isUniform && (
-              <div className="relative overflow-hidden rounded-[14px] bg-white border-[1.5px] border-[#e5e7eb] shadow-sm">
+              <div className="relative overflow-hidden rounded-[12px] bg-white border-[1.5px] border-[#e5e7eb] shadow-sm">
                 {/* Decorative Corner Element */}
-                <div className="absolute top-0 right-0 w-[60px] h-[60px] bg-gradient-to-br from-[#95e36c]/5 to-transparent rounded-bl-[30px]" />
+                <div className="absolute top-0 right-0 w-[48px] h-[48px] bg-gradient-to-br from-[#95e36c]/5 to-transparent rounded-bl-[24px]" />
                 
-                <div className="relative p-[16px] space-y-[14px]">
+                <div className="relative p-[12px] space-y-[12px]">
                   {/* Term/Semester Dropdown */}
                   <PremiumDropdown
                     label={isUniversity ? "Academic Semester" : "Academic Term"}
@@ -865,27 +865,27 @@ export default function AddOtherServicesPopup({ onClose, onDone, schoolName }: A
           <div className="h-[2px] bg-gradient-to-r from-transparent via-[#95e36c]/60 to-transparent" />
           
           {/* Header with Unique Design */}
-          <div className="relative px-[24px] pt-[24px] pb-[20px] border-b border-[#f0f1f3]">
+          <div className="relative px-[16px] pt-[16px] pb-[12px] border-b border-[#f0f1f3]">
             {/* Background Pattern */}
-            <div className="absolute top-0 right-0 w-[120px] h-[120px] bg-gradient-to-br from-[#95e36c]/5 to-transparent rounded-bl-[60px] pointer-events-none" />
+            <div className="absolute top-0 right-0 w-[80px] h-[80px] bg-gradient-to-br from-[#95e36c]/5 to-transparent rounded-bl-[40px] pointer-events-none" />
             
             <div className="relative flex items-start justify-between">
               <div className="flex-1">
-                <div className="flex items-center gap-[10px] mb-[8px]">
-                  <div className="w-[3px] h-[24px] bg-gradient-to-b from-[#95e36c] to-[#7dd054] rounded-full" />
-                  <h2 className="font-['IBM_Plex_Sans_Devanagari:Bold',sans-serif] text-[26px] text-[#003630] tracking-[-0.6px] leading-[1.1]">
+                <div className="flex items-center gap-[8px] mb-[4px]">
+                  <div className="w-[3px] h-[18px] bg-gradient-to-b from-[#95e36c] to-[#7dd054] rounded-full" />
+                  <h2 className="font-['IBM_Plex_Sans_Devanagari:Bold',sans-serif] text-[20px] text-[#003630] tracking-[-0.5px] leading-[1.1]">
                     Services
                   </h2>
                 </div>
-                <p className="font-['Inter:Regular',sans-serif] text-[13px] text-[#6b7280] tracking-[-0.1px] leading-[1.4] ml-[13px]">
+                <p className="font-['Inter:Regular',sans-serif] text-[11px] text-[#6b7280] tracking-[-0.1px] leading-[1.4] ml-[11px]">
                   Customize and add services to your payment
                 </p>
               </div>
               <button
                 onClick={onClose}
-                className="w-[38px] h-[38px] flex items-center justify-center rounded-full bg-[#f5f7f9]/70 backdrop-blur-sm border border-[#e5e7eb]/60 hover:bg-[#e5e7eb]/90 active:scale-90 transition-all touch-manipulation shadow-sm ml-[12px]"
+                className="w-[32px] h-[32px] flex items-center justify-center rounded-full bg-[#f5f7f9]/70 backdrop-blur-sm border border-[#e5e7eb]/60 hover:bg-[#e5e7eb]/90 active:scale-90 transition-all touch-manipulation shadow-sm ml-[8px]"
               >
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
                   <path d="M12 4L4 12M4 4L12 12" stroke="#6b7280" strokeWidth="2.5" strokeLinecap="round" />
                 </svg>
               </button>
@@ -901,10 +901,10 @@ export default function AddOtherServicesPopup({ onClose, onDone, schoolName }: A
                   stiffness: 500,
                   damping: 25
                 }}
-                className="mt-[16px] inline-flex items-center gap-[8px] px-[14px] py-[8px] bg-gradient-to-r from-[#e0f7d4] to-[#d0f0c0] rounded-[12px] border border-[#95e36c]/30"
+                className="mt-[10px] inline-flex items-center gap-[6px] px-[10px] py-[6px] bg-gradient-to-r from-[#e0f7d4] to-[#d0f0c0] rounded-[10px] border border-[#95e36c]/30"
               >
-                <div className="w-[6px] h-[6px] bg-[#95e36c] rounded-full animate-pulse" />
-                <span className="font-['IBM_Plex_Sans_Devanagari:SemiBold',sans-serif] text-[12px] text-[#003630] tracking-[-0.1px]">
+                <div className="w-[5px] h-[5px] bg-[#95e36c] rounded-full animate-pulse" />
+                <span className="font-['IBM_Plex_Sans_Devanagari:SemiBold',sans-serif] text-[10px] text-[#003630] tracking-[-0.1px]">
                   {selectedCount} selected
                 </span>
               </motion.div>
@@ -934,20 +934,20 @@ export default function AddOtherServicesPopup({ onClose, onDone, schoolName }: A
             ))}
             
             {allServices.length === 0 && (
-              <div className="py-[60px] px-[32px] text-center">
-                <div className="relative inline-block mb-[20px]">
+              <div className="py-[48px] px-[24px] text-center">
+                <div className="relative inline-block mb-[16px]">
                   <div className="absolute inset-0 bg-gradient-to-br from-[#95e36c]/20 to-[#7dd054]/10 blur-xl rounded-full" />
-                  <div className="relative w-[72px] h-[72px] bg-gradient-to-br from-[#f5f7f9] to-[#e5e7eb] rounded-[20px] flex items-center justify-center border-[1.5px] border-white shadow-[0px_4px_16px_rgba(0,0,0,0.06)]">
-                    <div className="absolute inset-[8px] bg-white rounded-[14px]" />
-                    <svg className="relative z-10" width="32" height="32" viewBox="0 0 32 32" fill="none">
+                  <div className="relative w-[56px] h-[56px] bg-gradient-to-br from-[#f5f7f9] to-[#e5e7eb] rounded-[16px] flex items-center justify-center border-[1.5px] border-white shadow-[0px_4px_16px_rgba(0,0,0,0.06)]">
+                    <div className="absolute inset-[6px] bg-white rounded-[12px]" />
+                    <svg className="relative z-10" width="26" height="26" viewBox="0 0 32 32" fill="none">
                       <path d="M16 10V16M16 22H16.01M28 16C28 22.6274 22.6274 28 16 28C9.37258 28 4 22.6274 4 16C4 9.37258 9.37258 4 16 4C22.6274 4 28 9.37258 28 16Z" stroke="#95e36c" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                     </svg>
                   </div>
                 </div>
-                <h3 className="font-['IBM_Plex_Sans_Devanagari:Bold',sans-serif] text-[17px] text-[#003630] mb-[8px] tracking-[-0.3px]">
+                <h3 className="font-['IBM_Plex_Sans_Devanagari:Bold',sans-serif] text-[15px] text-[#003630] mb-[6px] tracking-[-0.3px]">
                   No Services Available
                 </h3>
-                <p className="font-['Inter:Regular',sans-serif] text-[13px] text-[#6b7280] leading-[20px] max-w-[280px] mx-auto tracking-[-0.1px]">
+                <p className="font-['Inter:Regular',sans-serif] text-[12px] text-[#6b7280] leading-[18px] max-w-[260px] mx-auto tracking-[-0.1px]">
                   There are currently no additional services available for this school.
                 </p>
               </div>
@@ -955,7 +955,7 @@ export default function AddOtherServicesPopup({ onClose, onDone, schoolName }: A
           </div>
 
           {/* Premium Footer with Floating Summary */}
-          <div className="relative border-t border-[#f0f1f3] px-[24px] pt-[20px] pb-[28px] bg-gradient-to-t from-white via-[#fafbfc]/50 to-transparent">
+          <div className="relative border-t border-[#f0f1f3] px-[16px] pt-[14px] pb-[20px] bg-gradient-to-t from-white via-[#fafbfc]/50 to-transparent">
             {/* Floating Summary Card */}
             {selectedCount > 0 && (
               <motion.div
@@ -966,31 +966,31 @@ export default function AddOtherServicesPopup({ onClose, onDone, schoolName }: A
                   stiffness: 300,
                   damping: 25
                 }}
-                className="mb-[16px] relative"
+                className="mb-[12px] relative"
               >
                 <div className="absolute inset-0 bg-gradient-to-br from-[#95e36c]/5 to-[#7dd054]/5 rounded-[16px] blur-lg" />
-                <div className="relative bg-white/80 backdrop-blur-sm rounded-[16px] p-[20px] border-[1.5px] border-[#e5e7eb] shadow-[0px_4px_16px_rgba(0,0,0,0.04)]">
+                <div className="relative bg-white/80 backdrop-blur-sm rounded-[12px] p-[12px] border-[1.5px] border-[#e5e7eb] shadow-[0px_4px_16px_rgba(0,0,0,0.04)]">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="font-['IBM_Plex_Sans_Devanagari:Medium',sans-serif] text-[11px] text-[#9ca3af] tracking-[1px] uppercase mb-[6px]">
+                      <p className="font-['IBM_Plex_Sans_Devanagari:Medium',sans-serif] text-[9px] text-[#9ca3af] tracking-[0.8px] uppercase mb-[4px]">
                         Total Amount
                       </p>
-                      <div className="flex items-baseline gap-[6px]">
-                        <p className="font-['IBM_Plex_Sans_Devanagari:Bold',sans-serif] text-[28px] text-[#003630] tracking-[-0.8px] leading-[1]">
+                      <div className="flex items-baseline gap-[4px]">
+                        <p className="font-['IBM_Plex_Sans_Devanagari:Bold',sans-serif] text-[22px] text-[#003630] tracking-[-0.6px] leading-[1]">
                           {totalAmount.toLocaleString()}
                         </p>
-                        <p className="font-['IBM_Plex_Sans_Devanagari:SemiBold',sans-serif] text-[14px] text-[#6b7280] tracking-[-0.2px]">
+                        <p className="font-['IBM_Plex_Sans_Devanagari:SemiBold',sans-serif] text-[12px] text-[#6b7280] tracking-[-0.2px]">
                           ZMW
                         </p>
                       </div>
                     </div>
                     <div className="text-right">
-                      <div className="inline-flex items-center justify-center w-[48px] h-[48px] bg-gradient-to-br from-[#95e36c] to-[#7dd054] rounded-[14px] shadow-[0px_4px_12px_rgba(149,227,108,0.3)]">
-                        <p className="font-['IBM_Plex_Sans_Devanagari:Bold',sans-serif] text-[20px] text-white leading-[1]">
+                      <div className="inline-flex items-center justify-center w-[36px] h-[36px] bg-gradient-to-br from-[#95e36c] to-[#7dd054] rounded-[10px] shadow-[0px_4px_12px_rgba(149,227,108,0.3)]">
+                        <p className="font-['IBM_Plex_Sans_Devanagari:Bold',sans-serif] text-[16px] text-white leading-[1]">
                           {selectedCount}
                         </p>
                       </div>
-                      <p className="font-['IBM_Plex_Sans_Devanagari:Medium',sans-serif] text-[10px] text-[#9ca3af] mt-[6px] tracking-[0.3px]">
+                      <p className="font-['IBM_Plex_Sans_Devanagari:Medium',sans-serif] text-[8px] text-[#9ca3af] mt-[4px] tracking-[0.3px]">
                         SERVICES
                       </p>
                     </div>
@@ -1003,7 +1003,7 @@ export default function AddOtherServicesPopup({ onClose, onDone, schoolName }: A
             <button 
               onClick={handleDone}
               disabled={selectedCount === 0}
-              className="relative w-full h-[56px] rounded-[16px] transition-all touch-manipulation disabled:cursor-not-allowed group overflow-hidden"
+              className="relative w-full h-[48px] rounded-[12px] transition-all touch-manipulation disabled:cursor-not-allowed group overflow-hidden"
             >
               {/* Button Background */}
               <div className={`absolute inset-0 transition-all duration-300 ${
@@ -1023,16 +1023,16 @@ export default function AddOtherServicesPopup({ onClose, onDone, schoolName }: A
               )}
               
               {/* Button Content */}
-              <div className="relative z-10 flex items-center justify-center gap-[10px] h-full group-active:scale-[0.97] transition-transform">
-                <span className={`font-['IBM_Plex_Sans_Devanagari:Bold',sans-serif] text-[15px] tracking-[-0.2px] transition-colors ${
+              <div className="relative z-10 flex items-center justify-center gap-[8px] h-full group-active:scale-[0.97] transition-transform">
+                <span className={`font-['IBM_Plex_Sans_Devanagari:Bold',sans-serif] text-[14px] tracking-[-0.2px] transition-colors ${
                   selectedCount === 0 ? 'text-[#9ca3af]' : 'text-white'
                 }`}>
                   {selectedCount > 0 ? `Add to Payment` : 'Select Services to Continue'}
                 </span>
                 {selectedCount > 0 && (
                   <motion.svg 
-                    width="18" 
-                    height="18" 
+                    width="16" 
+                    height="16" 
                     viewBox="0 0 18 18" 
                     fill="none"
                     initial={{ x: -5, opacity: 0 }}

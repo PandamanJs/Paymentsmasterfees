@@ -58,7 +58,7 @@ function Header({ onBack }: { onBack: () => void }) {
   return (
     <div className="h-[66px] w-full relative bg-white/95 backdrop-blur-[20px]">
       <div aria-hidden="true" className="absolute border-[#e5e7eb] border-[0px_0px_1.5px] border-solid inset-0 pointer-events-none" />
-      <div className="absolute left-[94px] top-[17px] flex items-center gap-[16px]">
+      <div className="absolute left-1/2 translate-x-[-50%] top-[17px] flex items-center gap-[16px]">
         <Logo />
         <p className="font-['IBM_Plex_Sans_Devanagari:Bold',sans-serif] leading-[normal] not-italic text-[20px] text-[#003630] text-nowrap whitespace-pre tracking-[-0.3px]">master-fees</p>
       </div>
@@ -173,7 +173,7 @@ function StudentCard({
       onClick={onToggle}
       whileHover={{ scale: 1.01, y: -2 }}
       whileTap={{ scale: 0.99 }}
-      className={`absolute box-border content-stretch flex gap-[9px] h-[77px] items-center left-[28px] overflow-clip p-[20px] rounded-[16px] w-[333px] touch-manipulation transition-all ${
+      className={`absolute box-border content-stretch flex gap-[9px] h-[77px] items-center left-1/2 translate-x-[-50%] overflow-clip p-[20px] rounded-[16px] w-[333px] max-w-[calc(100%-56px)] touch-manipulation transition-all ${
         isSelected 
           ? 'bg-white border-[1.5px] border-[#95e36c] shadow-[0px_8px_24px_rgba(149,227,108,0.25)]' 
           : 'bg-white border-[1.5px] border-[#e5e7eb] hover:border-[#d1d5db] shadow-sm hover:shadow-md'
@@ -365,7 +365,7 @@ export default function PayForSchoolFees({
 
   return (
     <div className="bg-gradient-to-br from-[#f9fafb] to-[#f5f7f9] min-h-screen w-full flex items-center justify-center" data-name="Pay for school fees page 1">
-      <div className="relative w-full max-w-[393px] md:max-w-[500px] lg:max-w-[600px] h-screen mx-auto bg-gradient-to-br from-[#f9fafb] to-[#f5f7f9] flex flex-col overflow-hidden">
+      <div className="relative w-full max-w-[450px] md:max-w-[500px] lg:max-w-[600px] h-screen mx-auto bg-gradient-to-br from-[#f9fafb] to-[#f5f7f9] flex flex-col overflow-hidden">
         {/* Header - Fixed height */}
         <div className="flex-shrink-0">
           <Header onBack={onBack} />

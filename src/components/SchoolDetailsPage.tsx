@@ -82,7 +82,7 @@ function Header({ onBack, schoolName }: { onBack: () => void; schoolName: string
   return (
     <div className="h-[66px] w-full relative bg-white/95 backdrop-blur-[20px]">
       <div aria-hidden="true" className="absolute border-[#e5e7eb] border-[0px_0px_1.5px] border-solid inset-0 pointer-events-none" />
-      <div className="absolute left-[94px] top-[17px] flex items-center gap-[16px]">
+      <div className="absolute left-1/2 translate-x-[-50%] top-[17px] flex items-center gap-[16px]">
         <Logo />
         <p className="font-['IBM_Plex_Sans_Devanagari:Bold',sans-serif] leading-[normal] not-italic text-[20px] text-[#003630] text-nowrap whitespace-pre tracking-[-0.3px]">master-fees</p>
       </div>
@@ -269,7 +269,7 @@ interface InputSectionProps {
 
 function InputSection({ onValidationChange }: InputSectionProps) {
   return (
-    <div className="absolute left-[48px] top-[318px] w-[297px]">
+    <div className="absolute left-1/2 translate-x-[-50%] top-[318px] w-full max-w-[450px] px-[24px]">
       <div className="flex flex-col gap-[12px] items-center">
         <p className="font-['IBM_Plex_Sans:Regular',sans-serif] leading-[normal] not-italic text-[12px] text-black text-center w-full">
           Enter your registered phone number or the Student ID number to proceed.
@@ -290,44 +290,48 @@ function ProceedButton({ onClick, disabled }: ProceedButtonProps) {
     <button 
       onClick={onClick}
       disabled={disabled}
-      className={`absolute left-[48px] top-[433px] w-[297px] h-[52px] rounded-[16px] overflow-hidden touch-manipulation ${
+      className={`absolute left-1/2 translate-x-[-50%] top-[433px] w-full max-w-[450px] px-[24px] h-[52px] touch-manipulation ${
         disabled ? 'cursor-not-allowed' : 'group'
       }`}
       data-name="Button"
     >
-      {/* Background */}
-      <div className={`absolute inset-0 transition-colors ${
-        disabled 
-          ? 'bg-[#d1d5db]' 
-          : 'bg-[#003630] group-hover:bg-[#004d45]'
-      }`} />
-      
-      {/* Shine Effect */}
-      {!disabled && (
-        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
-      )}
-      
-      {/* Shadow */}
-      <div className={`absolute inset-0 transition-shadow ${
-        disabled
-          ? 'shadow-sm'
-          : 'shadow-[0px_6px_20px_rgba(0,54,48,0.25)] group-active:shadow-[0px_2px_8px_rgba(0,54,48,0.2)]'
-      }`} />
-      
-      {/* Content */}
-      <div className={`relative z-10 flex items-center justify-center gap-[10px] h-full transition-transform ${
-        !disabled && 'group-active:scale-[0.97]'
+      <div className={`w-full h-full rounded-[16px] overflow-hidden relative ${
+        disabled ? 'cursor-not-allowed' : ''
       }`}>
-        <p className={`font-['IBM_Plex_Sans_Devanagari:Bold',sans-serif] text-[16px] tracking-[-0.3px] ${
-          disabled ? 'text-white/60' : 'text-white'
-        }`}>
-          Proceed
-        </p>
+        {/* Background */}
+        <div className={`absolute inset-0 transition-colors ${
+          disabled 
+            ? 'bg-[#d1d5db]' 
+            : 'bg-[#003630] group-hover:bg-[#004d45]'
+        }`} />
+        
+        {/* Shine Effect */}
         {!disabled && (
-          <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-            <path d="M6.75 13.5L11.25 9L6.75 4.5" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
         )}
+        
+        {/* Shadow */}
+        <div className={`absolute inset-0 transition-shadow ${
+          disabled
+            ? 'shadow-sm'
+            : 'shadow-[0px_6px_20px_rgba(0,54,48,0.25)] group-active:shadow-[0px_2px_8px_rgba(0,54,48,0.2)]'
+        }`} />
+        
+        {/* Content */}
+        <div className={`relative z-10 flex items-center justify-center gap-[10px] h-full transition-transform ${
+          !disabled && 'group-active:scale-[0.97]'
+        }`}>
+          <p className={`font-['IBM_Plex_Sans_Devanagari:Bold',sans-serif] text-[16px] tracking-[-0.3px] ${
+            disabled ? 'text-white/60' : 'text-white'
+          }`}>
+            Proceed
+          </p>
+          {!disabled && (
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+              <path d="M6.75 13.5L11.25 9L6.75 4.5" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          )}
+        </div>
       </div>
     </button>
   );
@@ -335,7 +339,7 @@ function ProceedButton({ onClick, disabled }: ProceedButtonProps) {
 
 function Footer() {
   return (
-    <div className="absolute flex flex-col font-['IBM_Plex_Sans_Devanagari:Regular',sans-serif] gap-[3px] items-center leading-[normal] left-[105px] not-italic text-[#bdbdbd] text-[10px] text-center top-[502px] w-[183px]">
+    <div className="absolute flex flex-col font-['IBM_Plex_Sans_Devanagari:Regular',sans-serif] gap-[3px] items-center leading-[normal] left-1/2 translate-x-[-50%] not-italic text-[#bdbdbd] text-[10px] text-center top-[502px] w-[183px]">
       <p className="w-full whitespace-pre-wrap">
         <span>{`view the `}</span>
         <span className="[text-decoration-skip-ink:none] [text-underline-position:from-font] decoration-solid underline">terms</span>
@@ -352,7 +356,7 @@ function DecorativeShapes() {
   return (
     <>
       <motion.div 
-        className="absolute flex h-[calc(1px*((var(--transform-inner-width)*0.6466665863990784)+(var(--transform-inner-height)*0.7384596467018127)))] items-center justify-center left-[11px] top-[683.17px] w-[calc(1px*((var(--transform-inner-height)*0.6742976903915405)+(var(--transform-inner-width)*0.762772798538208)))]" 
+        className="absolute flex h-[calc(1px*((var(--transform-inner-width)*0.6466665863990784)+(var(--transform-inner-height)*0.7384596467018127)))] items-center justify-center left-[calc(3%)] top-[683.17px] w-[calc(1px*((var(--transform-inner-height)*0.6742976903915405)+(var(--transform-inner-width)*0.762772798538208)))]" 
         style={{ "--transform-inner-width": "115.9375", "--transform-inner-height": "57.9375" } as React.CSSProperties}
         initial={{ opacity: 0 }}
         animate={{
@@ -389,7 +393,7 @@ function DecorativeShapes() {
         </div>
       </motion.div>
       <motion.div 
-        className="absolute flex h-[calc(1px*((var(--transform-inner-width)*0.6466665863990784)+(var(--transform-inner-height)*0.7384596467018127)))] items-center justify-center left-[49px] top-[587.77px] w-[calc(1px*((var(--transform-inner-height)*0.6742976903915405)+(var(--transform-inner-width)*0.762772798538208)))]" 
+        className="absolute flex h-[calc(1px*((var(--transform-inner-width)*0.6466665863990784)+(var(--transform-inner-height)*0.7384596467018127)))] items-center justify-center left-[calc(12%)] top-[587.77px] w-[calc(1px*((var(--transform-inner-height)*0.6742976903915405)+(var(--transform-inner-width)*0.762772798538208)))]" 
         style={{ "--transform-inner-width": "150.375", "--transform-inner-height": "92.234375" } as React.CSSProperties}
         initial={{ opacity: 0 }}
         animate={{
@@ -426,7 +430,7 @@ function DecorativeShapes() {
         </div>
       </motion.div>
       <motion.div 
-        className="absolute flex h-[calc(1px*((var(--transform-inner-width)*0.6466665863990784)+(var(--transform-inner-height)*0.7384596467018127)))] items-center justify-center left-[144px] top-[734.24px] w-[calc(1px*((var(--transform-inner-height)*0.6742976903915405)+(var(--transform-inner-width)*0.762772798538208)))]" 
+        className="absolute flex h-[calc(1px*((var(--transform-inner-width)*0.6466665863990784)+(var(--transform-inner-height)*0.7384596467018127)))] items-center justify-center left-[calc(37%)] top-[734.24px] w-[calc(1px*((var(--transform-inner-height)*0.6742976903915405)+(var(--transform-inner-width)*0.762772798538208)))]" 
         style={{ "--transform-inner-width": "115.9375", "--transform-inner-height": "57.9375" } as React.CSSProperties}
         initial={{ opacity: 0 }}
         animate={{
@@ -493,7 +497,7 @@ export default function SchoolDetailsPage({ schoolName, onProceed, onBack }: Sch
 
   return (
     <div className="bg-gradient-to-br from-[#f9fafb] via-white to-[#f5f7f9] min-h-screen w-full flex justify-center">
-      <div className="bg-gradient-to-br from-[#f9fafb] via-white to-[#f5f7f9] relative w-full max-w-[393px] md:max-w-[500px] lg:max-w-[600px] h-screen overflow-hidden" data-name="Page 1">
+      <div className="bg-gradient-to-br from-[#f9fafb] via-white to-[#f5f7f9] relative w-full max-w-[450px] md:max-w-[500px] lg:max-w-[600px] h-screen overflow-hidden" data-name="Page 1">
         <Header onBack={onBack} schoolName={schoolName} />
         <SchoolTitle schoolName={schoolName} isUniversity={isUniversity} />
         <InputSection onValidationChange={handleValidationChange} />

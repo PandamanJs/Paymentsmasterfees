@@ -22,7 +22,7 @@ function Header({ onBack }: { onBack: () => void }) {
   return (
     <div className="h-[66px] w-full relative">
       <div aria-hidden="true" className="absolute border-[#e6e6e6] border-[0px_0px_1px] border-solid inset-0 pointer-events-none" />
-      <div className="absolute left-[94px] top-[17px] flex items-center gap-[16px]">
+      <div className="absolute left-1/2 translate-x-[-50%] top-[17px] flex items-center gap-[16px]">
         <Logo />
         <p className="font-['IBM_Plex_Sans_Devanagari:Bold',sans-serif] leading-[normal] not-italic text-[20px] text-black text-nowrap whitespace-pre">master-fees</p>
       </div>
@@ -231,7 +231,7 @@ function Frame20({ total }: { total: number }) {
         </div>
         <p className="font-['IBM_Plex_Sans_Devanagari:Bold',sans-serif] leading-[24px] min-w-full not-italic relative shrink-0 text-[16px] text-[#003630] tracking-[-0.2px] w-[min-content]">Credit Payment</p>
         <Group total={total} />
-        <div className="absolute flex h-[calc(1px*((var(--transform-inner-width)*0.9998781681060791)+(var(--transform-inner-height)*0.015611708164215088)))] items-center justify-center left-[190px] top-[-16px] w-[calc(1px*((var(--transform-inner-height)*0.9998781681060791)+(var(--transform-inner-width)*0.015611708164215088)))]" style={{ "--transform-inner-width": "77.734375", "--transform-inner-height": "39.03125" } as React.CSSProperties}>
+        <div className="absolute flex h-[calc(1px*((var(--transform-inner-width)*0.9998781681060791)+(var(--transform-inner-height)*0.015611708164215088)))] items-center justify-center right-[calc(40%)] top-[-16px] w-[calc(1px*((var(--transform-inner-height)*0.9998781681060791)+(var(--transform-inner-width)*0.015611708164215088)))]" style={{ "--transform-inner-width": "77.734375", "--transform-inner-height": "39.03125" } as React.CSSProperties}>
           <div className="flex-none rotate-[270.895deg]">
             <div className="h-[39.042px] relative w-[77.746px]" data-name="path60">
               <div className="absolute inset-[-32.02%_-16.08%]">
@@ -242,7 +242,7 @@ function Frame20({ total }: { total: number }) {
             </div>
           </div>
         </div>
-        <div className="absolute flex h-[calc(1px*((var(--transform-inner-width)*0.9937769770622253)+(var(--transform-inner-height)*0.11138830333948135)))] items-center justify-center left-[227.19px] top-[-34.81px] w-[calc(1px*((var(--transform-inner-height)*0.9937769770622253)+(var(--transform-inner-width)*0.11138830333948135)))]" style={{ "--transform-inner-width": "102.734375", "--transform-inner-height": "64.03125" } as React.CSSProperties}>
+        <div className="absolute flex h-[calc(1px*((var(--transform-inner-width)*0.9937769770622253)+(var(--transform-inner-height)*0.11138830333948135)))] items-center justify-center right-[calc(30%)] top-[-34.81px] w-[calc(1px*((var(--transform-inner-height)*0.9937769770622253)+(var(--transform-inner-width)*0.11138830333948135)))]" style={{ "--transform-inner-width": "102.734375", "--transform-inner-height": "64.03125" } as React.CSSProperties}>
           <div className="flex-none rotate-[263.605deg]">
             <div className="h-[64.042px] relative w-[102.745px]" data-name="path60 (Stroke)">
               <div className="absolute inset-[-0.78%_-0.49%]">
@@ -253,7 +253,7 @@ function Frame20({ total }: { total: number }) {
             </div>
           </div>
         </div>
-        <div className="absolute flex h-[calc(1px*((var(--transform-inner-width)*0.9519173502922058)+(var(--transform-inner-height)*0.3063550889492035)))] items-center justify-center left-[290px] top-[-35px] w-[calc(1px*((var(--transform-inner-height)*0.9519173502922058)+(var(--transform-inner-width)*0.3063550889492035)))]" style={{ "--transform-inner-width": "77.734375", "--transform-inner-height": "39.03125" } as React.CSSProperties}>
+        <div className="absolute flex h-[calc(1px*((var(--transform-inner-width)*0.9519173502922058)+(var(--transform-inner-height)*0.3063550889492035)))] items-center justify-center right-[calc(15%)] top-[-35px] w-[calc(1px*((var(--transform-inner-height)*0.9519173502922058)+(var(--transform-inner-width)*0.3063550889492035)))]" style={{ "--transform-inner-width": "77.734375", "--transform-inner-height": "39.03125" } as React.CSSProperties}>
           <div className="flex-none rotate-[252.16deg]">
             <div className="h-[39.042px] relative w-[77.746px]" data-name="path60">
               <div className="absolute inset-[-32.02%_-16.08%]">
@@ -376,12 +376,21 @@ function Group1({
           
           {/* Swipe Instruction Banner */}
           {totalStudents > 1 && (
-            <div className="bg-gradient-to-r from-[#95e36c]/10 via-[#95e36c]/5 to-[#95e36c]/10 rounded-lg px-3 py-2 mb-3 flex items-center justify-center gap-2 border border-[#95e36c]/20">
-              <ChevronLeft className="w-3 h-3 text-[#003630] animate-pulse" style={{ animationDuration: '1.5s' }} />
-              <span className="font-['IBM_Plex_Sans_Devanagari:Regular',sans-serif] text-[10px] text-[#003630]">
-                Swipe to view other students
-              </span>
-              <ChevronRight className="w-3 h-3 text-[#003630] animate-pulse" style={{ animationDuration: '1.5s' }} />
+            <div className="relative">
+              <div className="bg-gradient-to-r from-[#95e36c]/20 via-[#95e36c]/10 to-[#95e36c]/20 rounded-[12px] px-4 py-[10px] mb-3 flex items-center justify-center gap-2 border-[1.5px] border-[#95e36c]/30 shadow-[0px_2px_8px_rgba(149,227,108,0.15)] backdrop-blur-sm">
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent animate-pulse rounded-[12px]" style={{ animationDuration: '2s' }}></div>
+                <ChevronLeft className="w-4 h-4 text-[#003630] relative z-10" style={{ animation: 'bounce-horizontal 1.5s ease-in-out infinite' }} />
+                <span className="font-['IBM_Plex_Sans_Devanagari:Medium',sans-serif] text-[11px] text-[#003630] tracking-[-0.1px] relative z-10">
+                  Swipe to view other students
+                </span>
+                <ChevronRight className="w-4 h-4 text-[#003630] relative z-10" style={{ animation: 'bounce-horizontal 1.5s ease-in-out infinite', animationDelay: '0.75s' }} />
+              </div>
+              <style>{`
+                @keyframes bounce-horizontal {
+                  0%, 100% { transform: translateX(0); }
+                  50% { transform: translateX(4px); }
+                }
+              `}</style>
             </div>
           )}
           
@@ -413,11 +422,25 @@ function Group1({
                   
                   <div 
                     ref={containerRef}
-                    className="overflow-hidden relative"
+                    className="overflow-hidden relative rounded-[14px]"
                     onTouchStart={handleTouchStart}
                     onTouchMove={handleTouchMove}
                     onTouchEnd={handleTouchEnd}
                   >
+                    {/* Left Edge Indicator */}
+                    {currentSlide > 0 && (
+                      <div className="absolute left-0 top-0 bottom-0 w-[32px] bg-gradient-to-r from-[#95e36c]/20 to-transparent z-10 pointer-events-none flex items-center justify-start pl-1">
+                        <ChevronLeft className="w-5 h-5 text-[#003630] drop-shadow-[0px_2px_4px_rgba(255,255,255,0.9)] animate-pulse" style={{ animationDuration: '2s' }} />
+                      </div>
+                    )}
+                    
+                    {/* Right Edge Indicator */}
+                    {currentSlide < totalStudents - 1 && (
+                      <div className="absolute right-0 top-0 bottom-0 w-[32px] bg-gradient-to-l from-[#95e36c]/20 to-transparent z-10 pointer-events-none flex items-center justify-end pr-1">
+                        <ChevronRight className="w-5 h-5 text-[#003630] drop-shadow-[0px_2px_4px_rgba(255,255,255,0.9)] animate-pulse" style={{ animationDuration: '2s' }} />
+                      </div>
+                    )}
+                    
                     <div 
                       className="flex transition-transform duration-300 ease-out"
                       style={{ transform: `translateX(-${currentSlide * 100}%)` }}
@@ -548,7 +571,7 @@ export default function CheckoutPage2({ services, onBack, onProceed }: CheckoutP
 
   return (
     <div className="bg-white h-screen w-full overflow-hidden flex justify-center">
-      <div className="flex flex-col w-full max-w-[393px] h-screen shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)]" data-name="Checkout page 2">
+      <div className="flex flex-col w-full max-w-[450px] h-screen shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)]" data-name="Checkout page 2">
         <Header onBack={onBack} />
         <div className="flex-1 min-h-0">
           <Group1 

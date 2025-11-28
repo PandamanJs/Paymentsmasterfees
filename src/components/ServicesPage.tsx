@@ -53,7 +53,7 @@ function Header({ onBack }: { onBack: () => void }) {
   return (
     <div className="relative size-full">
       <div aria-hidden="true" className="absolute border-[#e6e6e6] border-[0px_0px_1px] border-solid inset-0 pointer-events-none" />
-      <div className="absolute left-[94px] top-[17px] flex items-center gap-[16px]">
+      <div className="absolute left-1/2 translate-x-[-50%] top-[17px] flex items-center gap-[16px]">
         <Logo />
         <p className="font-['IBM_Plex_Sans_Devanagari:Bold',sans-serif] leading-[normal] not-italic text-[20px] text-black text-nowrap whitespace-pre">master-fees</p>
       </div>
@@ -65,7 +65,7 @@ function DecorativeShapes() {
   return (
     <>
       <motion.div 
-        className="absolute flex h-[calc(1px*((var(--transform-inner-width)*0.6322111487388611)+(var(--transform-inner-height)*0.7254649996757507)))] items-center justify-center left-[31.14px] bottom-[80px] w-[calc(1px*((var(--transform-inner-height)*0.6882590651512146)+(var(--transform-inner-width)*0.7747961282730103)))]" 
+        className="absolute flex h-[calc(1px*((var(--transform-inner-width)*0.6322111487388611)+(var(--transform-inner-height)*0.7254649996757507)))] items-center justify-center left-[calc(8%)] bottom-[80px] w-[calc(1px*((var(--transform-inner-height)*0.6882590651512146)+(var(--transform-inner-width)*0.7747961282730103)))]" 
         style={{ "--transform-inner-width": "122.546875", "--transform-inner-height": "60.953125" } as React.CSSProperties}
         initial={{ opacity: 0 }}
         animate={{
@@ -103,7 +103,7 @@ function DecorativeShapes() {
       </motion.div>
       
       <motion.div 
-        className="absolute flex h-[calc(1px*((var(--transform-inner-width)*0.6322111487388611)+(var(--transform-inner-height)*0.7254649996757507)))] items-center justify-center left-[51.54px] bottom-[180px] w-[calc(1px*((var(--transform-inner-height)*0.6882590651512146)+(var(--transform-inner-width)*0.7747961282730103)))]" 
+        className="absolute flex h-[calc(1px*((var(--transform-inner-width)*0.6322111487388611)+(var(--transform-inner-height)*0.7254649996757507)))] items-center justify-center left-[calc(13%)] bottom-[180px] w-[calc(1px*((var(--transform-inner-height)*0.6882590651512146)+(var(--transform-inner-width)*0.7747961282730103)))]" 
         style={{ "--transform-inner-width": "158.96875", "--transform-inner-height": "97.015625" } as React.CSSProperties}
         initial={{ opacity: 0 }}
         animate={{
@@ -141,7 +141,7 @@ function DecorativeShapes() {
       </motion.div>
       
       <motion.div 
-        className="absolute flex h-[calc(1px*((var(--transform-inner-width)*0.6322111487388611)+(var(--transform-inner-height)*0.7254649996757507)))] items-center justify-center left-[245.89px] bottom-[60px] w-[calc(1px*((var(--transform-inner-height)*0.6882590651512146)+(var(--transform-inner-width)*0.7747961282730103)))]" 
+        className="absolute flex h-[calc(1px*((var(--transform-inner-width)*0.6322111487388611)+(var(--transform-inner-height)*0.7254649996757507)))] items-center justify-center right-[calc(8%)] bottom-[60px] w-[calc(1px*((var(--transform-inner-height)*0.6882590651512146)+(var(--transform-inner-width)*0.7747961282730103)))]" 
         style={{ "--transform-inner-width": "122.546875", "--transform-inner-height": "60.953125" } as React.CSSProperties}
         initial={{ opacity: 0 }}
         animate={{
@@ -184,9 +184,11 @@ function DecorativeShapes() {
 function PageGroup1({ onBack }: { onBack: () => void }) {
   return (
     <div className="absolute contents left-0 top-0">
-      <p className="absolute font-['IBM_Plex_Sans_Devanagari:Regular',sans-serif] h-[46.277px] leading-[1.5] left-[51.54px] not-italic text-[12px] text-black top-[219.31px] tracking-[-0.12px] w-[317.836px]">Which one of our services would you like us to help you with today?</p>
+      <div className="absolute left-1/2 top-[219.31px] translate-x-[-50%] w-full max-w-[450px] px-[24px]">
+        <p className="font-['IBM_Plex_Sans_Devanagari:Regular',sans-serif] leading-[1.5] not-italic text-[12px] text-black tracking-[-0.12px]">Which one of our services would you like us to help you with today?</p>
+      </div>
       <DecorativeShapes />
-      <div className="absolute box-border h-[66px] left-1/2 top-0 translate-x-[-50%] w-[393px]">
+      <div className="absolute box-border h-[66px] left-1/2 top-0 translate-x-[-50%] w-full max-w-[500px]">
         <Header onBack={onBack} />
       </div>
     </div>
@@ -206,7 +208,7 @@ function Frame2({ onPayFees, isUniversity }: { onPayFees?: () => void; isUnivers
     <div className="content-stretch flex gap-[15px] h-[44px] items-start relative shrink-0 w-full animate-fade-in" style={{ animationDelay: '100ms' }}>
       <button
         onClick={onPayFees}
-        className="btn-dark box-border content-stretch flex gap-[8px] items-center justify-center overflow-clip px-[24px] py-[10px] relative shrink-0 w-[297px] touch-manipulation" 
+        className="btn-dark box-border content-stretch flex gap-[8px] items-center justify-center overflow-clip px-[24px] py-[10px] relative shrink-0 w-full touch-manipulation" 
         data-name="Button"
       >
         <p className="font-['IBM_Plex_Sans_Devanagari:Medium',sans-serif] leading-[24px] not-italic relative shrink-0 text-[15px] text-nowrap text-white tracking-[-0.15px] whitespace-pre">{isUniversity ? 'Pay Tuition' : 'Pay for School Fees'}</p>
@@ -253,7 +255,7 @@ function Frame4({ onSelectService }: { onSelectService: (service: string) => voi
 
 function Frame6({ onSelectService, onViewHistory, onPayFees, isUniversity }: { onSelectService: (service: string) => void; onViewHistory: () => void; onPayFees?: () => void; isUniversity?: boolean }) {
   return (
-    <div className="absolute content-stretch flex flex-col gap-[24px] h-[171px] items-start left-[49px] top-[300px] w-[297px]">
+    <div className="absolute content-stretch flex flex-col gap-[24px] items-start left-1/2 translate-x-[-50%] top-[300px] w-full max-w-[450px] px-[24px]">
       <Frame2 onPayFees={onPayFees} isUniversity={isUniversity} />
       <Frame3 onViewHistory={onViewHistory} />
       <Frame4 onSelectService={onSelectService} />
@@ -286,16 +288,16 @@ export default function ServicesPage({ userName, schoolName, onBack, onSelectSer
     return (
       <ViewPaymentPlansPage 
         onBack={handleBackFromPaymentPlans}
-        schoolName="International School" 
+        schoolName={schoolName || "International School"} 
       />
     );
   }
 
   return (
     <div className="bg-white min-h-screen w-full overflow-hidden flex items-center justify-center" data-name="Page 2">
-      <div className="relative w-full max-w-[393px] md:max-w-[500px] lg:max-w-[600px] h-screen mx-auto">
+      <div className="relative w-full max-w-[450px] md:max-w-[500px] lg:max-w-[600px] h-screen mx-auto">
         <PageGroup2 onBack={onBack} />
-        <div className="absolute font-['Inter:Regular',sans-serif] font-normal h-[33px] leading-[0.5] left-[48px] not-italic text-[18px] text-black top-[164px] tracking-[-0.18px] w-[279px]">
+        <div className="absolute font-['Inter:Regular',sans-serif] font-normal leading-[0.5] left-1/2 translate-x-[-50%] not-italic text-[18px] text-black top-[164px] tracking-[-0.18px] w-full max-w-[450px] px-[24px]">
           <p className="font-['IBM_Plex_Sans_Devanagari:Light',sans-serif] mb-[14px]">{greeting}, </p>
           <p className="font-['Agrandir:Grand_Heavy',sans-serif] text-[#003630]">{userName}</p>
         </div>
