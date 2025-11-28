@@ -52,7 +52,6 @@ interface AppState {
   // Checkout State
   checkoutServices: CheckoutService[];
   paymentAmount: number;
-  paymentReference: string;
   
   // Receipt State
   receiptStudentName: string;
@@ -62,6 +61,10 @@ interface AppState {
   // Tutorial State
   showTutorial: boolean;
   hasSeenTutorial: boolean;
+  
+  // Security State - Track payment completion for navigation security
+  lastCompletedPaymentTimestamp: number | null;
+  paymentInProgress: boolean;
   
   // Navigation Actions
   navigateToPage: (page: PageType, direction?: 'forward' | 'back') => void;
@@ -85,7 +88,6 @@ interface AppState {
   removeCheckoutService: (serviceId: string) => void;
   clearCheckoutServices: () => void;
   setPaymentAmount: (amount: number) => void;
-  setPaymentReference: (reference: string) => void;
   
   // Receipt Actions
   setReceiptStudent: (name: string, id: string) => void;
@@ -94,6 +96,11 @@ interface AppState {
   // Tutorial Actions
   setShowTutorial: (show: boolean) => void;
   completeTutorial: () => void;
+  
+  // Security Actions
+  markPaymentComplete: () => void;
+  startPaymentProcess: () => void;
+  clearPaymentSecurity: () => void;
   
   // Reset Actions
   resetCheckoutFlow: () => void;
@@ -116,12 +123,13 @@ export const useAppStore = create<AppState>()(
       selectedStudentIds: [],
       checkoutServices: [],
       paymentAmount: 0,
-      paymentReference: '',
       receiptStudentName: '',
       receiptStudentId: '',
       receiptPaymentData: {},
       showTutorial: false,
       hasSeenTutorial: false,
+      lastCompletedPaymentTimestamp: null,
+      paymentInProgress: false,
       
       // Navigation Actions
       navigateToPage: (page, direction = 'forward') => {
@@ -174,8 +182,6 @@ export const useAppStore = create<AppState>()(
       
       setPaymentAmount: (amount) => set({ paymentAmount: amount }),
       
-      setPaymentReference: (reference) => set({ paymentReference: reference }),
-      
       // Receipt Actions
       setReceiptStudent: (name, id) => set({ 
         receiptStudentName: name, 
@@ -192,12 +198,27 @@ export const useAppStore = create<AppState>()(
         hasSeenTutorial: true 
       }),
       
+      // Security Actions
+      markPaymentComplete: () => set({ 
+        lastCompletedPaymentTimestamp: Date.now(),
+        paymentInProgress: false,
+      }),
+      
+      startPaymentProcess: () => set({ 
+        paymentInProgress: true 
+      }),
+      
+      clearPaymentSecurity: () => set({ 
+        lastCompletedPaymentTimestamp: null,
+        paymentInProgress: false,
+      }),
+      
       // Reset Actions
       resetCheckoutFlow: () => set({
         selectedStudentIds: [],
         checkoutServices: [],
         paymentAmount: 0,
-        paymentReference: '',
+        paymentInProgress: false,
       }),
       
       resetAll: () => set({
@@ -209,10 +230,11 @@ export const useAppStore = create<AppState>()(
         selectedStudentIds: [],
         checkoutServices: [],
         paymentAmount: 0,
-        paymentReference: '',
         receiptStudentName: '',
         receiptStudentId: '',
         receiptPaymentData: {},
+        lastCompletedPaymentTimestamp: null,
+        paymentInProgress: false,
       }),
     }),
     {
@@ -249,7 +271,6 @@ export const useUserInfo = () => useAppStore((state) => ({
 export const useCheckoutData = () => useAppStore((state) => ({
   checkoutServices: state.checkoutServices,
   paymentAmount: state.paymentAmount,
-  paymentReference: state.paymentReference,
   selectedStudentIds: state.selectedStudentIds,
 }));
 

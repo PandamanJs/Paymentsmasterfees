@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import svgPaths from "./imports/svg-s534f8yrof";
+import SearchPage from "./components/SearchPage";
 import SchoolDetailsPage from "./components/SchoolDetailsPage";
 import ServicesPage from "./components/ServicesPage";
 import HistoryPage, { type PaymentData } from "./components/HistoryPage";
@@ -20,29 +21,37 @@ import { incrementStudentSelection, incrementServiceSelection } from "./utils/pr
 import { useAppStore } from "./stores/useAppStore";
 import type { CheckoutService, PageType } from "./stores/useAppStore";
 import { toast } from "sonner@2.0.3";
-import { loadLencoScript, logTroubleshootingInfo } from "./utils/lencoPayment";
+import chimiluteLogo from "figma:asset/6d180ec5e608f311d21d72a46c32a5b15849c39d.png";
+import julaniLogo from "figma:asset/5454374a39c6c82a13d2a4e8bc2ca0899c331fc5.png";
+import crestedCraneLogo from "figma:asset/5da21813da6fa21128f400330102b56ec04a15f5.png";
+import maarifLogo from "figma:asset/14e103bdb926a80d9f27d93b19086b97e7c47135.png";
 
 // Mock schools data - in a real app, this would come from an API
 const SCHOOLS = [
   { 
     id: 1, 
     name: "Twalumbu Educational Center",
+    logo: null,
   },
   { 
     id: 2, 
     name: "Chimilute Trust Academy",
+    logo: chimiluteLogo,
   },
   { 
     id: 3, 
     name: "Julani School",
+    logo: julaniLogo,
   },
   { 
     id: 4, 
     name: "Crested Crane Academy",
+    logo: crestedCraneLogo,
   },
   { 
     id: 5, 
     name: "International Maarif School",
+    logo: maarifLogo,
   },
 ];
 
@@ -183,6 +192,13 @@ function TextInput({ onSchoolSelect, selectedSchool }: { onSchoolSelect: (school
               className="w-full text-left px-[20px] py-[14px] font-['IBM_Plex_Sans:Regular',sans-serif] text-black hover:bg-[rgba(149,227,108,0.08)] active:bg-[rgba(149,227,108,0.15)] transition-all duration-150 touch-manipulation border-b border-[rgba(0,0,0,0.04)] last:border-b-0 flex items-center gap-[12px]"
               style={{ fontSize: '16px', letterSpacing: '-0.01em' }}
             >
+              {school.logo && (
+                <img 
+                  src={school.logo} 
+                  alt={`${school.name} logo`}
+                  className="w-[32px] h-[32px] object-contain rounded-[6px] flex-shrink-0"
+                />
+              )}
               <span className="flex-1">{school.name}</span>
             </motion.button>
           ))}
@@ -553,6 +569,54 @@ function SearchPage({ onProceed, selectedSchool, onSchoolSelect }: { onProceed: 
 }
 
 export default function Page() {
+  // Security: Track last navigation timestamp to prevent rapid manipulation
+  const lastNavigationRef = useRef<number>(0);
+  const navigationLockRef = useRef<boolean>(false);
+  
+  // Security: Protect against console manipulation (production only)
+  useEffect(() => {
+    // Store original console methods for potential restore
+    const originalConsole = {
+      log: window.console.log,
+      warn: window.console.warn,
+      error: window.console.error,
+    };
+    
+    if (process.env.NODE_ENV === 'production') {
+      // Disable console methods in production to prevent manipulation
+      const noop = () => {};
+      try {
+        window.console.log = noop;
+        window.console.warn = noop;
+        window.console.error = noop;
+      } catch (e) {
+        // Some browsers don't allow console override, fail silently
+      }
+    }
+    
+    // Detect if DevTools is opened (best effort)
+    const detectDevTools = () => {
+      try {
+        const threshold = 160;
+        if (window.outerWidth - window.innerWidth > threshold || 
+            window.outerHeight - window.innerHeight > threshold) {
+          // DevTools potentially open
+          if (process.env.NODE_ENV === 'development') {
+            originalConsole.log('[Security] Developer tools detected');
+          }
+          // In production, you might want to take additional security measures
+        }
+      } catch (e) {
+        // Fail silently if detection fails
+      }
+    };
+    
+    window.addEventListener('resize', detectDevTools);
+    return () => {
+      window.removeEventListener('resize', detectDevTools);
+    };
+  }, []);
+  
   // Zustand store state
   const currentPage = useAppStore((state) => state.currentPage);
   const navigationDirection = useAppStore((state) => state.navigationDirection);
@@ -567,6 +631,8 @@ export default function Page() {
   const paymentAmount = useAppStore((state) => state.paymentAmount);
   const showTutorial = useAppStore((state) => state.showTutorial);
   const hasSeenTutorial = useAppStore((state) => state.hasSeenTutorial);
+  const lastCompletedPaymentTimestamp = useAppStore((state) => state.lastCompletedPaymentTimestamp);
+  const paymentInProgress = useAppStore((state) => state.paymentInProgress);
   
   // Zustand store actions
   const setNavigationDirection = useAppStore((state) => state.setNavigationDirection);
@@ -580,22 +646,9 @@ export default function Page() {
   const setShowTutorial = useAppStore((state) => state.setShowTutorial);
   const completeTutorial = useAppStore((state) => state.completeTutorial);
   const resetCheckoutFlow = useAppStore((state) => state.resetCheckoutFlow);
-
-  // Load Lenco payment script on mount with retry mechanism
-  useEffect(() => {
-    loadLencoScript()
-      .then((success) => {
-        if (success) {
-          console.log('✅ Lenco payment system ready');
-        } else {
-          console.error('❌ Failed to load Lenco payment system');
-          logTroubleshootingInfo();
-        }
-      })
-      .catch((error) => {
-        console.error('❌ Error loading Lenco script:', error);
-      });
-  }, []);
+  const markPaymentComplete = useAppStore((state) => state.markPaymentComplete);
+  const startPaymentProcess = useAppStore((state) => state.startPaymentProcess);
+  const clearPaymentSecurity = useAppStore((state) => state.clearPaymentSecurity);
 
   // Check if user has seen tutorial on mount
   useEffect(() => {
@@ -606,6 +659,51 @@ export default function Page() {
 
   const handleTutorialComplete = () => {
     completeTutorial();
+  };
+
+  // Security: Validate if user can access a restricted page
+  const canAccessPage = (page: PageType): boolean => {
+    const state = useAppStore.getState();
+    
+    // Anyone can access these pages
+    const publicPages: PageType[] = ['search', 'details', 'services', 'history', 'receipts'];
+    if (publicPages.includes(page)) return true;
+    
+    // Payment flow pages require proper context
+    if (page === 'pay-fees') {
+      return !!state.selectedSchool && !!state.userName && !!state.userPhone;
+    }
+    
+    if (page === 'add-services') {
+      return state.selectedStudentIds.length > 0;
+    }
+    
+    if (page === 'checkout') {
+      return state.checkoutServices.length > 0;
+    }
+    
+    if (page === 'payment') {
+      return state.paymentAmount > 0 && state.checkoutServices.length > 0;
+    }
+    
+    if (page === 'processing') {
+      return state.paymentInProgress;
+    }
+    
+    // Success and download-receipt pages require completed payment
+    if (page === 'success' || page === 'download-receipt') {
+      // Must have completed a payment within the last 5 minutes
+      if (!state.lastCompletedPaymentTimestamp) return false;
+      const timeSincePayment = Date.now() - state.lastCompletedPaymentTimestamp;
+      return timeSincePayment < 5 * 60 * 1000; // 5 minutes
+    }
+    
+    // Failed page is accessible if there was a payment attempt
+    if (page === 'failed') {
+      return true; // Failed page can be shown anytime
+    }
+    
+    return false;
   };
 
   // Navigation helper to push to history and update page
@@ -627,9 +725,18 @@ export default function Page() {
     const validPages: PageType[] = ['search', 'details', 'services', 'history', 'receipts', 'pay-fees', 'add-services', 'checkout', 'payment', 'processing', 'failed', 'success', 'download-receipt'];
     
     if (hash && validPages.includes(hash as PageType)) {
-      // If there's a valid hash, use it
-      window.history.replaceState({ page: hash }, '', `#${hash}`);
-      useAppStore.setState({ currentPage: hash as PageType });
+      const targetPage = hash as PageType;
+      
+      // Security: Validate access to the requested page
+      if (canAccessPage(targetPage)) {
+        window.history.replaceState({ page: targetPage }, '', `#${targetPage}`);
+        useAppStore.setState({ currentPage: targetPage });
+      } else {
+        // Redirect to appropriate page if access denied
+        console.warn(`[Security] Access denied to page: ${targetPage}. Redirecting to search.`);
+        window.history.replaceState({ page: 'search' }, '', '#search');
+        useAppStore.setState({ currentPage: 'search' });
+      }
     } else {
       // Otherwise, start at search
       window.history.replaceState({ page: 'search' }, '', '#search');
@@ -637,23 +744,88 @@ export default function Page() {
 
     // Handle browser back/forward buttons and swipe gestures
     const handlePopState = (event: PopStateEvent) => {
-      const targetPage = event.state?.page as PageType;
-      const currentPageValue = useAppStore.getState().currentPage;
-      
-      // Prevent backward navigation from success or download-receipt pages
-      if (currentPageValue === 'success' || currentPageValue === 'download-receipt') {
+      // Security: Prevent rapid navigation manipulation
+      const now = Date.now();
+      if (navigationLockRef.current || (now - lastNavigationRef.current) < 300) {
+        console.warn('[Security] Rapid navigation detected. Ignoring.');
         event.preventDefault();
-        window.history.pushState({ page: currentPageValue }, '', `#${currentPageValue}`);
         return;
       }
       
-      // Prevent navigation to processing page via back button
+      navigationLockRef.current = true;
+      lastNavigationRef.current = now;
+      
+      // Release lock after 300ms
+      setTimeout(() => {
+        navigationLockRef.current = false;
+      }, 300);
+      
+      const targetPage = event.state?.page as PageType;
+      const currentPageValue = useAppStore.getState().currentPage;
+      const state = useAppStore.getState();
+      
+      console.log(`[Navigation] Attempting navigation from ${currentPageValue} to ${targetPage}`);
+      
+      // Security Level 1: Prevent backward navigation from success or download-receipt pages
+      // For security reasons, redirect to services page instead
+      if (currentPageValue === 'success' || currentPageValue === 'download-receipt') {
+        event.preventDefault();
+        console.warn('[Security] Blocked back navigation from payment completion page. Redirecting to services.');
+        
+        // Clear payment flow and redirect to services
+        clearPaymentSecurity();
+        resetCheckoutFlow();
+        window.history.replaceState({ page: 'services' }, '', '#services');
+        useAppStore.setState({ currentPage: 'services' });
+        return;
+      }
+      
+      // Security Level 2: Prevent navigation TO processing page via back button
+      // Users should never be able to return to the processing page
       if (targetPage === 'processing') {
         event.preventDefault();
+        console.warn('[Security] Blocked navigation to processing page. Moving forward.');
         window.history.forward();
         return;
       }
       
+      // Security Level 3: Prevent navigation TO success or download-receipt without proper context
+      if (targetPage === 'success' || targetPage === 'download-receipt') {
+        if (!canAccessPage(targetPage)) {
+          event.preventDefault();
+          console.warn(`[Security] Blocked unauthorized access to ${targetPage}. Redirecting to services.`);
+          window.history.replaceState({ page: 'services' }, '', '#services');
+          useAppStore.setState({ currentPage: 'services' });
+          return;
+        }
+      }
+      
+      // Security Level 4: Validate access to target page
+      if (targetPage && !canAccessPage(targetPage)) {
+        event.preventDefault();
+        console.warn(`[Security] Access validation failed for page: ${targetPage}. Redirecting to services.`);
+        window.history.replaceState({ page: 'services' }, '', '#services');
+        useAppStore.setState({ currentPage: 'services' });
+        return;
+      }
+      
+      // Security Level 5: Check if payment was recently completed
+      // Prevent going back through payment flow after completion
+      if (state.lastCompletedPaymentTimestamp) {
+        const timeSincePayment = Date.now() - state.lastCompletedPaymentTimestamp;
+        const isRecentPayment = timeSincePayment < 5 * 60 * 1000; // 5 minutes
+        
+        const paymentFlowPages: PageType[] = ['payment', 'checkout', 'add-services', 'pay-fees'];
+        if (isRecentPayment && paymentFlowPages.includes(targetPage)) {
+          event.preventDefault();
+          console.warn('[Security] Blocked navigation to payment flow after recent payment completion. Redirecting to services.');
+          window.history.replaceState({ page: 'services' }, '', '#services');
+          useAppStore.setState({ currentPage: 'services' });
+          return;
+        }
+      }
+      
+      // Allow navigation
       setNavigationDirection('back');
       if (targetPage) {
         useAppStore.setState({ currentPage: targetPage });
@@ -666,7 +838,7 @@ export default function Page() {
     return () => window.removeEventListener('popstate', handlePopState);
   }, []); // Remove currentPage from dependencies
 
-  // Prevent accidental navigation away from app
+  // Prevent accidental navigation away from app and handle page visibility
   useEffect(() => {
     const handleBeforeUnload = (e: BeforeUnloadEvent) => {
       const currentPageValue = useAppStore.getState().currentPage;
@@ -679,8 +851,30 @@ export default function Page() {
       }
     };
 
+    // Security: Handle page visibility changes (tab switching, minimizing)
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'visible') {
+        const currentPageValue = useAppStore.getState().currentPage;
+        const restrictedPages: PageType[] = ['processing', 'payment', 'checkout'];
+        
+        // If user returns to a restricted page, validate access
+        if (restrictedPages.includes(currentPageValue)) {
+          if (!canAccessPage(currentPageValue)) {
+            console.warn(`[Security] Page ${currentPageValue} no longer accessible. Redirecting.`);
+            window.history.replaceState({ page: 'services' }, '', '#services');
+            useAppStore.setState({ currentPage: 'services' });
+          }
+        }
+      }
+    };
+
     window.addEventListener('beforeunload', handleBeforeUnload);
-    return () => window.removeEventListener('beforeunload', handleBeforeUnload);
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
   }, []);
 
   // Add a safety entry to history to prevent closing app on back gesture from search
@@ -689,6 +883,34 @@ export default function Page() {
       window.history.pushState({ page: 'search' }, '', '#search');
     }
   }, [currentPage]);
+
+  // Security: Periodic validation of current page access
+  useEffect(() => {
+    const securityCheckInterval = setInterval(() => {
+      const state = useAppStore.getState();
+      const currentPageValue = state.currentPage;
+      
+      // Check if current page is still accessible
+      if (!canAccessPage(currentPageValue)) {
+        console.warn(`[Security Check] Current page ${currentPageValue} is no longer accessible. Redirecting to services.`);
+        clearPaymentSecurity();
+        resetCheckoutFlow();
+        window.history.replaceState({ page: 'services' }, '', '#services');
+        useAppStore.setState({ currentPage: 'services' });
+      }
+      
+      // Clear old payment completion timestamps (after 5 minutes)
+      if (state.lastCompletedPaymentTimestamp) {
+        const timeSincePayment = Date.now() - state.lastCompletedPaymentTimestamp;
+        if (timeSincePayment > 5 * 60 * 1000) {
+          console.log('[Security] Payment completion timestamp expired. Clearing.');
+          clearPaymentSecurity();
+        }
+      }
+    }, 10000); // Check every 10 seconds
+    
+    return () => clearInterval(securityCheckInterval);
+  }, []);
 
   const handleProceed = () => {
     if (selectedSchool) {
@@ -786,16 +1008,24 @@ export default function Page() {
     window.history.back();
   };
 
-  const handlePaymentComplete = (reference: string) => {
-    // Store the payment reference for verification
-    useAppStore.setState({ paymentReference: reference });
+  const handlePaymentComplete = () => {
+    // Mark that payment process has started
+    startPaymentProcess();
     navigateToPage("processing");
   };
 
   const handleProcessingComplete = (success: boolean) => {
     if (success) {
+      // Mark payment as completed for security tracking
+      markPaymentComplete();
+      
       // Replace processing page in history to prevent back navigation
-      navigateToPage("success", true);
+      // Clear the entire history stack to prevent going back through payment flow
+      window.history.replaceState({ page: 'success' }, '', '#success');
+      useAppStore.setState({ currentPage: 'success' });
+      setNavigationDirection('forward');
+      
+      console.log('[Security] Payment completed successfully. Navigation restricted.');
     } else {
       // Replace processing page in history to prevent back navigation
       navigateToPage("failed", true);
@@ -809,8 +1039,10 @@ export default function Page() {
 
   const handleViewReceiptsFromSuccess = () => {
     // After successful payment, user can view receipts
-    // This replaces the success page to prevent going back
-    navigateToPage("download-receipt", true);
+    // This replaces the success page to prevent going back through payment flow
+    window.history.replaceState({ page: 'download-receipt' }, '', '#download-receipt');
+    useAppStore.setState({ currentPage: 'download-receipt' });
+    setNavigationDirection('forward');
   };
 
   const handleDownloadReceipts = () => {
@@ -820,7 +1052,15 @@ export default function Page() {
   const handleGoHome = () => {
     // Navigate home and clear the payment flow from history
     // This replaces the current page to prevent back navigation
-    navigateToPage("services", true);
+    console.log('[Navigation] Returning to services. Clearing payment data.');
+    
+    clearPaymentSecurity();
+    resetCheckoutFlow();
+    
+    // Clear all payment-related history by replacing state
+    window.history.replaceState({ page: 'services' }, '', '#services');
+    useAppStore.setState({ currentPage: 'services' });
+    setNavigationDirection('forward');
   };
 
   // Page transition animation variants - direction aware

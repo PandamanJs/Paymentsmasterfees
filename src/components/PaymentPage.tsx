@@ -1,39 +1,15 @@
-import React, { useState, useEffect } from "react";
 import { motion } from "motion/react";
-import { initializeLencoPayment, isLencoReady, loadLencoScript, logTroubleshootingInfo } from "../utils/lencoPayment";
-import { useAppStore } from "../stores/useAppStore";
-import { toast } from "sonner@2.0.3";
+import { useState } from "react";
+import svgPaths from "../imports/svg-ft8f5pz3nc";
+import headerSvgPaths from "../imports/svg-4boykq1z8d";
+import imgVisa from "figma:asset/a5c75a14f01268c2534d0dfb0a9182a2bf3629d2.png";
+import imgMastercardLogo from "figma:asset/5f1f04717ce88a1f8a9d6faeee898c4b88ef23f0.png";
 import ExpandedMobileMoney from "../imports/Frame1707478923";
 import ExpandedCardPayment from "../imports/Frame1707478923-18-800";
-import MobileMoneyProviders from "../imports/Frame1707478911";
-import AnimatedPath1 from "../imports/Path60-156-647";
-import AnimatedPathStroke from "../imports/Path60Stroke-156-656";
-import AnimatedPath2 from "../imports/Path60-156-665";
-import imgVisa from "figma:asset/1f8bb25a1b5f5bd54da90c9c6ed22e37e8ea0e08.png";
-import imgMastercardLogo from "figma:asset/b4ecaef28ab74a96d96cfaf9b70d374fa01fed41.png";
-
-// SVG Path Data
-const headerSvgPaths = {
-  p24506700: "M6 5.98528H28.0294C30.2268 5.98528 32.0094 7.76793 32.0094 9.96528V27.0147C32.0094 29.212 30.2268 30.9947 28.0294 30.9947H6C3.80264 30.9947 2.02 29.212 2.02 27.0147V9.96528C2.02 7.76793 3.80264 5.98528 6 5.98528Z",
-  p8fdf600: "M10 15L17 8L24 15"
-};
-
-const svgPaths = {
-  pd1b480: "M1 4.75C1 2.67893 2.67893 1 4.75 1H12.25C14.3211 1 16 2.67893 16 4.75V17.25C16 19.3211 14.3211 21 12.25 21H4.75C2.67893 21 1 19.3211 1 17.25V4.75Z",
-  p34703900: "M6.75 17.5H10.25",
-  p4ee5080: "M21.0039 13.7539C20.0039 11.2539 17.5039 11.2539 16.5039 13.7539L14.5039 18.5039C13.5039 21.0039 14.7539 22.2539 17.2539 21.2539L20.2539 20.0039C20.7539 19.7539 21.2539 19.5039 21.7539 19.2539C22.2539 19.0039 22.7539 18.7539 23.2539 18.5039L25.2539 17.7539C27.7539 16.7539 27.7539 14.2539 25.2539 13.2539L21.0039 11.2539V13.7539Z",
-  pec23280: "M6.00195 10.002C6.00195 9.44971 6.44967 9.00195 7.00195 9.00195H13.002C13.5542 9.00195 14.002 9.44971 14.002 10.002V16.002C14.002 16.5542 13.5542 17.002 13.002 17.002H7.00195C6.44967 17.002 6.00195 16.5542 6.00195 16.002V10.002Z M10.002 11.502L10.502 11.002L13.502 14.002L13.002 14.502L10.002 11.502Z M10.002 13.002C9.44967 13.002 9.00195 13.4497 9.00195 14.002C9.00195 14.5542 9.44967 15.002 10.002 15.002C10.5542 15.002 11.002 14.5542 11.002 14.002C11.002 13.4497 10.5542 13.002 10.002 13.002Z",
-  p116ac00: "M7.16113 10.0039V16.0039H13.1611M7.16113 10.0039L10.1611 13.0039M7.16113 10.0039L10.1611 7.00391M21.1611 16.0039L18.1611 13.0039M21.1611 16.0039L18.1611 19.0039M21.1611 16.0039V10.0039H15.1611",
-  p1c5ceb00: "M2.5 11.1625V15.7625C2.5 21.7625 5 23.5125 10 23.5125H16.25C21.25 23.5125 23.75 21.7625 23.75 15.7625V11.1625",
-  p14a0380: "M6.25 2.5125H20C25 2.5125 26.25 3.7625 26.25 8.7625V10.5125C26.25 15.5125 25 16.7625 20 16.7625H6.25C1.25 16.7625 0 15.5125 0 10.5125V8.7625C0 3.7625 1.25 2.5125 6.25 2.5125Z",
-  pa48d6b0: "M11 6V7C11 8.10457 10.1046 9 9 9H7C5.89543 9 5 8.10457 5 7V6M3 6H13M12 6V12C12 13.1046 11.1046 14 10 14H6C4.89543 14 4 13.1046 4 12V6",
-  p1c1f0680: "M12.5 12.5L51.5 51.5",
-  p32888500: "M12.5 12.5L51.5 51.5"
-};
 
 interface PaymentPageProps {
   onBack: () => void;
-  onPay: (reference: string) => void;
+  onPay: () => void;
   totalAmount: number;
 }
 
@@ -132,11 +108,57 @@ function Frame8() {
   );
 }
 
+function Frame2() {
+  return (
+    <div className="relative shrink-0 size-[30px]">
+      <svg className="block size-full" fill="none" preserveAspectRatio="none" viewBox="0 0 30 30">
+        <g id="Frame 1707478908">
+          <rect fill="var(--fill-0, white)" height="29" rx="7.5" width="29" x="0.5" y="0.5" />
+          <rect height="29" rx="7.5" stroke="var(--stroke-0, #D9D9D9)" width="29" x="0.5" y="0.5" />
+          <path d={svgPaths.p4ee5080} fill="var(--fill-0, #FF0000)" id="path2" />
+        </g>
+      </svg>
+    </div>
+  );
+}
+
+function Frame4() {
+  return (
+    <div className="relative shrink-0 size-[30px]">
+      <svg className="block size-full" fill="none" preserveAspectRatio="none" viewBox="0 0 30 30">
+        <g id="Frame 1707478910">
+          <rect fill="var(--fill-0, white)" height="29" rx="7.5" width="29" x="0.5" y="0.5" />
+          <rect height="29" rx="7.5" stroke="var(--stroke-0, #D9D9D9)" width="29" x="0.5" y="0.5" />
+          <path d={svgPaths.pec23280} fill="var(--fill-0, #02A024)" id="path3" />
+        </g>
+      </svg>
+    </div>
+  );
+}
+
+function Frame3() {
+  return (
+    <div className="relative shrink-0 size-[30px]">
+      <svg className="block size-full" fill="none" preserveAspectRatio="none" viewBox="0 0 30 30">
+        <g id="Frame 1707478909">
+          <rect fill="var(--fill-0, white)" height="29" rx="7.5" width="29" x="0.5" y="0.5" />
+          <rect height="29" rx="7.5" stroke="var(--stroke-0, #D9D9D9)" width="29" x="0.5" y="0.5" />
+          <path d={svgPaths.p116ac00} fill="var(--fill-0, black)" id="path1" />
+        </g>
+      </svg>
+    </div>
+  );
+}
+
 function Frame5() {
   return (
     <div className="relative shrink-0 w-full">
       <div className="flex flex-row items-center size-full">
-        <MobileMoneyProviders />
+        <div className="box-border content-stretch flex gap-[4px] items-center p-[10px] relative w-full">
+          <Frame2 />
+          <Frame4 />
+          <Frame3 />
+        </div>
       </div>
     </div>
   );
@@ -212,8 +234,43 @@ function Frame7() {
       <div className="flex flex-row items-center justify-center size-full">
         <div className="box-border content-stretch flex gap-[10px] items-center justify-center px-[10px] py-0 relative w-full">
           <div className="basis-0 flex flex-col font-['IBM_Plex_Sans_Devanagari:Regular',sans-serif] grow justify-center leading-[0] min-h-px min-w-px not-italic relative shrink-0 text-[8px] text-black tracking-[-0.08px]">
-            <p className="leading-[12px]">Pay with your credit or debit card.</p>
+            <p className="leading-[12px]">Pay with your Visa or Mastercard credit or debit card.</p>
           </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function Frame6() {
+  return (
+    <div className="bg-white box-border content-stretch flex flex-col gap-[10px] items-center justify-center p-[6px] relative rounded-[8px] shrink-0 size-[30px]">
+      <div aria-hidden="true" className="absolute border border-[#d9d9d9] border-solid inset-0 pointer-events-none rounded-[8px]" />
+      <div className="relative shrink-0 size-[20px]" data-name="Visa">
+        <img alt="" className="absolute inset-0 max-w-none object-50%-50% object-contain pointer-events-none size-full" src={imgVisa} />
+      </div>
+    </div>
+  );
+}
+
+function Frame12() {
+  return (
+    <div className="bg-white box-border content-stretch flex flex-col gap-[10px] items-center justify-center p-[6px] relative rounded-[8px] shrink-0 size-[30px]">
+      <div aria-hidden="true" className="absolute border border-[#d9d9d9] border-solid inset-0 pointer-events-none rounded-[8px]" />
+      <div className="relative shrink-0 size-[18px]" data-name="Mastercard Logo">
+        <img alt="" className="absolute inset-0 max-w-none object-50%-50% object-contain pointer-events-none size-full" src={imgMastercardLogo} />
+      </div>
+    </div>
+  );
+}
+
+function Frame13() {
+  return (
+    <div className="relative shrink-0 w-full">
+      <div className="flex flex-row items-center size-full">
+        <div className="box-border content-stretch flex gap-[4px] items-center p-[10px] relative w-full">
+          <Frame6 />
+          <Frame12 />
         </div>
       </div>
     </div>
@@ -225,6 +282,7 @@ function Frame14() {
     <div className="basis-0 content-stretch flex flex-col grow items-start min-h-px min-w-px relative self-stretch shrink-0">
       <Frame1 />
       <Frame7 />
+      <Frame13 />
     </div>
   );
 }
@@ -358,9 +416,9 @@ function Frame17({ totalAmount }: { totalAmount: number }) {
       {/* Decorative animated paths */}
       <div className="absolute flex h-[calc(1px*((var(--transform-inner-width)*0.9998781681060791)+(var(--transform-inner-height)*0.015611708164215088)))] items-center justify-center right-[20px] top-[20px] w-[calc(1px*((var(--transform-inner-height)*0.9998781681060791)+(var(--transform-inner-width)*0.015611708164215088)))]" style={{ "--transform-inner-width": "77.734375", "--transform-inner-height": "39.03125" } as React.CSSProperties}>
         <div className="flex-none rotate-[270.895deg]">
-          <div className="h-[39.042px] relative w-[77.746px]">
+          <div className="h-[39.042px] relative w-[77.746px]" data-name="path60">
             <motion.div 
-              className="w-full h-full"
+              className="absolute inset-[-32.02%_-16.08%]"
               animate={{
                 x: [100, -100],
                 opacity: [0, 1, 1, 0],
@@ -372,23 +430,31 @@ function Frame17({ totalAmount }: { totalAmount: number }) {
                 times: [0, 0.1, 0.9, 1],
               }}
             >
-              <AnimatedPath1 />
+              <svg className="block size-full" fill="none" preserveAspectRatio="none" viewBox="0 0 103 65">
+                <path d={svgPaths.p1c1f0680} id="path60" stroke="var(--stroke-0, #E0F7D4)" strokeLinecap="round" strokeLinejoin="round" strokeWidth="25" />
+              </svg>
             </motion.div>
           </div>
         </div>
       </div>
       <div className="absolute flex h-[calc(1px*((var(--transform-inner-width)*0.9937769770622253)+(var(--transform-inner-height)*0.11138830333948135)))] items-center justify-center right-[0px] top-0 w-[calc(1px*((var(--transform-inner-height)*0.9937769770622253)+(var(--transform-inner-width)*0.11138830333948135)))]" style={{ "--transform-inner-width": "102.734375", "--transform-inner-height": "64.03125" } as React.CSSProperties}>
         <div className="flex-none rotate-[263.605deg]">
-          <div className="h-[64.042px] relative w-[102.745px]">
-            <AnimatedPathStroke />
+          <div className="h-[64.042px] relative w-[102.745px]" data-name="path60 (Stroke)">
+            <div 
+              className="absolute inset-[-0.78%_-0.49%]"
+            >
+              <svg className="block size-full" fill="none" preserveAspectRatio="none" viewBox="0 0 104 66">
+                <path d={svgPaths.p32888500} id="path60 (Stroke)" stroke="var(--stroke-0, #003630)" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </div>
           </div>
         </div>
       </div>
       <div className="absolute flex h-[calc(1px*((var(--transform-inner-width)*0.9519173502922058)+(var(--transform-inner-height)*0.3063550889492035)))] items-center justify-center right-[40px] top-0 w-[calc(1px*((var(--transform-inner-height)*0.9519173502922058)+(var(--transform-inner-width)*0.3063550889492035)))]" style={{ "--transform-inner-width": "77.734375", "--transform-inner-height": "39.03125" } as React.CSSProperties}>
         <div className="flex-none rotate-[252.16deg]">
-          <div className="h-[39.042px] relative w-[77.746px]">
+          <div className="h-[39.042px] relative w-[77.746px]" data-name="path60">
             <motion.div 
-              className="w-full h-full"
+              className="absolute inset-[-32.02%_-16.08%]"
               animate={{
                 x: [100, -100],
                 opacity: [0, 1, 1, 0],
@@ -401,7 +467,9 @@ function Frame17({ totalAmount }: { totalAmount: number }) {
                 delay: 1,
               }}
             >
-              <AnimatedPath2 />
+              <svg className="block size-full" fill="none" preserveAspectRatio="none" viewBox="0 0 103 65">
+                <path d={svgPaths.p1c1f0680} id="path60" stroke="var(--stroke-0, #E0F7D4)" strokeLinecap="round" strokeLinejoin="round" strokeWidth="25" />
+              </svg>
             </motion.div>
           </div>
         </div>
@@ -567,14 +635,6 @@ const validateCVV = (cvv: string): string => {
 export default function PaymentPage({ onBack, onPay, totalAmount }: PaymentPageProps) {
   const [isMobileMoneyExpanded, setIsMobileMoneyExpanded] = useState(false);
   const [isCardPaymentExpanded, setIsCardPaymentExpanded] = useState(false);
-  const [isLencoLoaded, setIsLencoLoaded] = useState(false);
-  const [lencoLoadError, setLencoLoadError] = useState(false);
-  const [isRetrying, setIsRetrying] = useState(false);
-  const [lencoPublicKey, setLencoPublicKey] = useState<string | null>(null);
-  
-  // Simulation state
-  const [isSimulatingPayment, setIsSimulatingPayment] = useState(false);
-  const [simulationProgress, setSimulationProgress] = useState(0);
   
   // Mobile Money state
   const [mobileNumber, setMobileNumber] = useState('');
@@ -589,89 +649,6 @@ export default function PaymentPage({ onBack, onPay, totalAmount }: PaymentPageP
   const [expiryDateError, setExpiryDateError] = useState('');
   const [cvvError, setCvvError] = useState('');
   const [touched, setTouched] = useState({ cardNumber: false, expiryDate: false, cvv: false });
-  
-  // Store state
-  const { userName, userPhone, selectedSchool, checkoutServices } = useAppStore();
-
-  // Fetch Lenco public key from server on mount
-  useEffect(() => {
-    const fetchPublicKey = async () => {
-      try {
-        const { projectId, publicAnonKey } = await import('../utils/supabase/info.tsx');
-        const response = await fetch(
-          `https://${projectId}.supabase.co/functions/v1/make-server-f6550ac6/lenco-public-key`,
-          {
-            headers: {
-              'Authorization': `Bearer ${publicAnonKey}`,
-            },
-          }
-        );
-        
-        if (!response.ok) {
-          throw new Error('Failed to fetch Lenco public key');
-        }
-        
-        const data = await response.json();
-        if (data.success && data.publicKey) {
-          console.log('✅ Fetched Lenco public key from server');
-          setLencoPublicKey(data.publicKey);
-        } else {
-          console.error('❌ No public key in server response');
-          setLencoLoadError(true);
-        }
-      } catch (error) {
-        console.error('❌ Error fetching Lenco public key:', error);
-        setLencoLoadError(true);
-      }
-    };
-    
-    fetchPublicKey();
-  }, []);
-
-  // Check if Lenco is loaded with retry mechanism
-  useEffect(() => {
-    let attempts = 0;
-    const maxAttempts = 200; // Try for 20 seconds (200 * 100ms)
-    
-    const checkLenco = setInterval(() => {
-      attempts++;
-      
-      if (isLencoReady()) {
-        console.log('✅ Lenco payment widget loaded successfully');
-        setIsLencoLoaded(true);
-        setLencoLoadError(false);
-        clearInterval(checkLenco);
-      } else if (attempts >= maxAttempts) {
-        console.error('❌ Lenco widget failed to load after 20 seconds');
-        setLencoLoadError(true);
-        clearInterval(checkLenco);
-        logTroubleshootingInfo();
-      }
-    }, 100);
-    
-    return () => clearInterval(checkLenco);
-  }, []);
-
-  // Manual retry function
-  const handleRetryLenco = async () => {
-    setIsRetrying(true);
-    setLencoLoadError(false);
-    
-    console.log('🔄 Manually retrying Lenco script load...');
-    const success = await loadLencoScript(0, 3);
-    
-    if (success) {
-      setIsLencoLoaded(true);
-      setLencoLoadError(false);
-      toast.success('Payment system loaded successfully!');
-    } else {
-      setLencoLoadError(true);
-      toast.error('Failed to load payment system. Please check your connection and disable any ad blockers.');
-      logTroubleshootingInfo();
-    }
-    
-    setIsRetrying(false);
-  };
 
   const handleMobileMoneyClick = () => {
     setIsMobileMoneyExpanded(!isMobileMoneyExpanded);
@@ -729,15 +706,10 @@ export default function PaymentPage({ onBack, onPay, totalAmount }: PaymentPageP
   };
   
   const canPay = () => {
-    // At least one payment method must be expanded and valid
-    const hasMobileMoneyExpanded = isMobileMoneyExpanded && isMobileMoneyValid();
-    const hasCardExpanded = isCardPaymentExpanded && isCardValid();
-    
-    return hasMobileMoneyExpanded || hasCardExpanded;
+    return isCardValid() && isMobileMoneyValid();
   };
   
   const handlePay = () => {
-    // Validate all inputs
     if (isCardPaymentExpanded) {
       setTouched({ cardNumber: true, expiryDate: true, cvv: true });
       const cardErr = validateCardNumber(cardNumber);
@@ -748,70 +720,20 @@ export default function PaymentPage({ onBack, onPay, totalAmount }: PaymentPageP
       setExpiryDateError(expiryErr);
       setCvvError(cvvErr);
       
-      if (cardErr || expiryErr || cvvErr) {
-        toast.error('Please fix the errors in your card details');
-        return;
-      }
+      if (cardErr || expiryErr || cvvErr) return;
     }
     
-    if (!canPay()) {
-      toast.error('Please select a payment method and fill in all required fields');
-      return;
+    if (canPay()) {
+      onPay();
     }
-
-    setIsSimulatingPayment(true);
-    setSimulationProgress(0);
-    
-    // Simulate payment progress
-    const progressInterval = setInterval(() => {
-      setSimulationProgress(prev => {
-        if (prev >= 100) {
-          clearInterval(progressInterval);
-          return 100;
-        }
-        return prev + 10;
-      });
-    }, 200);
-    
-    // Complete payment after 2 seconds
-    setTimeout(() => {
-      clearInterval(progressInterval);
-      setSimulationProgress(100);
-      
-      // Generate payment reference
-      const paymentReference = `TXN${Date.now()}${Math.random().toString(36).substring(2, 8).toUpperCase()}`;
-      
-      setIsSimulatingPayment(false);
-      onPay(paymentReference);
-    }, 2000);
   };
+
+
 
   return (
     <div className="bg-white h-screen w-full overflow-hidden flex items-center justify-center">
       <div className="relative w-full max-w-[393px] md:max-w-[500px] lg:max-w-[600px] h-screen mx-auto shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] flex flex-col overflow-hidden" data-name="Payment Page">
         <Header onBack={onBack} />
-        
-        {/* Lenco Loading Indicator */}
-        {!isLencoLoaded && (
-          <div className="hidden absolute top-[66px] left-0 right-0 bg-yellow-50 border-b border-yellow-200 px-4 py-2 z-50">
-            <div className="flex items-center gap-2 text-yellow-800 text-sm">
-              <div className="animate-spin rounded-full h-4 w-4 border-2 border-yellow-600 border-t-transparent"></div>
-              <span>Loading payment system...</span>
-            </div>
-          </div>
-        )}
-        
-        {/* Lenco Load Error Indicator */}
-        {lencoLoadError && (
-          <div className="absolute top-[66px] left-0 right-0 bg-red-50 border-b border-red-200 px-4 py-2 z-50">
-            <div className="flex items-center gap-2 text-red-800 text-sm">
-              <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-              </svg>
-              <span>Failed to load payment system. <button className="text-blue-500 underline" onClick={handleRetryLenco} disabled={isRetrying}>Retry</button></span>
-            </div>
-          </div>
-        )}
         
         <div className="relative bg-white flex-1 overflow-hidden">
           <div className="relative h-full">

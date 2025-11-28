@@ -1,8 +1,7 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { motion } from "motion/react";
 import svgPaths from "../imports/svg-hdxmv7xpz6";
 import { projectId, publicAnonKey } from "../utils/supabase/info";
-import { useAppStore } from "../stores/useAppStore";
 
 interface CheckoutService {
   id: string;
@@ -26,60 +25,10 @@ interface ProcessingPageProps {
 }
 
 /**
- * Verify payment with Lenco API through our backend
- */
-async function verifyLencoPayment(reference: string): Promise<{
-  success: boolean;
-  data?: any;
-  error?: string;
-}> {
-  try {
-    const response = await fetch(
-      `https://${projectId}.supabase.co/functions/v1/make-server-f6550ac6/verify-payment/${reference}`,
-      {
-        method: "GET",
-        headers: {
-          "Authorization": `Bearer ${publicAnonKey}`,
-        },
-      }
-    );
-
-    const result = await response.json();
-    
-    if (!response.ok) {
-      console.error("Payment verification failed:", result);
-      return { success: false, error: result.error || "Payment verification failed" };
-    }
-
-    console.log("Payment verification result:", result);
-    
-    // Check if payment status is successful
-    if (result.success && result.data?.data?.status === "successful") {
-      return { success: true, data: result.data.data };
-    }
-    
-    return { 
-      success: false, 
-      error: `Payment status: ${result.data?.data?.status || "unknown"}` 
-    };
-  } catch (error) {
-    console.error("Error verifying payment:", error);
-    return { 
-      success: false, 
-      error: error instanceof Error ? error.message : "Unknown error" 
-    };
-  }
-}
-
-/**
  * Save payment to backend
  * Sends payment information to the server for storage
  */
-async function savePaymentToBackend(
-  paymentData: ProcessingPageProps['paymentData'],
-  lencoReference: string,
-  lencoData?: any
-) {
+async function savePaymentToBackend(paymentData: ProcessingPageProps['paymentData']) {
   if (!paymentData) {
     console.error("No payment data to save");
     return { success: false, error: "No payment data provided" };
@@ -100,9 +49,6 @@ async function savePaymentToBackend(
           // Extract student info from first service (all services are for same student in current flow)
           studentId: paymentData.services[0]?.id || "Unknown",
           studentName: paymentData.services[0]?.studentName || "Unknown",
-          // Add Lenco payment details
-          lencoReference: lencoReference,
-          lencoData: lencoData,
         }),
       }
     );
@@ -117,40 +63,61 @@ async function savePaymentToBackend(
     return result;
   } catch (error) {
     console.error("Error saving payment to backend:", error);
-    return { 
-      success: false, 
-      error: error instanceof Error ? error.message : "Unknown error" 
-    };
+    return { success: false, error: error.message };
   }
 }
 
 export default function ProcessingPage({ onProcessingComplete, paymentData }: ProcessingPageProps) {
-  const paymentReference = useAppStore((state) => state.paymentReference);
-  const [verificationStatus, setVerificationStatus] = useState<string>("Verifying payment...");
-  
-  // Process payment in demo mode
+  // Simulate payment processing and save to backend
   useEffect(() => {
+    let processingCompleted = false;
+    let timeoutId: NodeJS.Timeout;
+    
     const processPayment = async () => {
-      try {
-        setVerificationStatus("Processing payment...");
-        await new Promise(resolve => setTimeout(resolve, 2500));
-        
-        // Simulate successful payment
-        setVerificationStatus("Payment successful!");
-        
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        onProcessingComplete(true);
-        return;
-      } catch (error) {
-        console.error("Error processing payment:", error);
-        setVerificationStatus("An error occurred");
-        await new Promise(resolve => setTimeout(resolve, 1000));
+      // Security: Ensure processing page can't be accessed without payment data
+      if (!paymentData) {
+        console.error('[Security] Processing page accessed without payment data');
         onProcessingComplete(false);
+        return;
       }
+      
+      // Simulate payment processing delay (2 seconds for demo mode)
+      await new Promise(resolve => {
+        timeoutId = setTimeout(resolve, 2000);
+      });
+      
+      // Security check: Ensure processing hasn't been interrupted
+      if (processingCompleted) {
+        console.warn('[Security] Processing already completed. Ignoring duplicate call.');
+        return;
+      }
+      
+      processingCompleted = true;
+      
+      // 100% success rate for demo/simulation mode
+      const isSuccess = true;
+      
+      // If payment succeeds, save it to backend
+      if (isSuccess && paymentData) {
+        const saveResult = await savePaymentToBackend(paymentData);
+        
+        if (!saveResult.success) {
+          console.warn("Payment succeeded but failed to save to history:", saveResult.error);
+          // We still consider the payment successful even if history save fails
+        }
+      }
+      
+      onProcessingComplete(isSuccess);
     };
 
     processPayment();
-  }, [onProcessingComplete, paymentData, paymentReference]);
+    
+    // Security: Cleanup on unmount to prevent duplicate processing
+    return () => {
+      if (timeoutId) clearTimeout(timeoutId);
+      processingCompleted = true;
+    };
+  }, [onProcessingComplete, paymentData]);
 
   return (
     <div className="bg-white min-h-screen flex flex-col">
