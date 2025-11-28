@@ -1,15 +1,16 @@
-import { motion } from "motion/react";
+import { motion, AnimatePresence } from "motion/react";
 import { useState, useEffect } from "react";
 import svgPaths from "../imports/svg-g99px4v16h";
 import headerSvgPaths from "../imports/svg-co0ktog99f";
 import pathSvgPaths from "../imports/svg-d7byi594ix";
 import pathStrokeSvgPaths from "../imports/svg-zrcfpc6p5c";
-import treeSvgPaths from "../imports/svg-e66apwwrzk";
+import treeSvgPaths from "../imports/svg-e66apwwwrzk";
 import { getStudentsByPhone } from "../data/students";
 import { generateReceiptPDF } from "../utils/pdfGenerator";
 import { toast } from "sonner@2.0.3";
 import { Toaster } from "./ui/sonner";
 import { projectId, publicAnonKey } from "../utils/supabase/info";
+import { Filter, X } from "lucide-react";
 
 export interface PaymentReceipt {
   date: string;
@@ -30,6 +31,8 @@ export interface PaymentData {
   termInfo?: string;
   currentBalance?: string;
   receipts?: PaymentReceipt[];
+  term?: number; // 1, 2, or 3
+  year?: number; // e.g., 2024, 2025
 }
 
 interface HistoryPageProps {
@@ -239,6 +242,160 @@ function PaymentPopup({
                     </div>
                   </div>
                 </div>
+              </button>
+            </div>
+          </div>
+        </div>
+      </motion.div>
+    </>
+  );
+}
+
+function FilterPopup({
+  onClose,
+  selectedTerm,
+  selectedYear,
+  onApply,
+}: {
+  onClose: () => void;
+  selectedTerm: number | null;
+  selectedYear: number | null;
+  onApply: (term: number | null, year: number | null) => void;
+}) {
+  const [localTerm, setLocalTerm] = useState<number | null>(selectedTerm);
+  const [localYear, setLocalYear] = useState<number | null>(selectedYear);
+
+  const currentYear = new Date().getFullYear();
+  const years = [currentYear, currentYear - 1, currentYear - 2];
+  const terms = [1, 2, 3];
+
+  const handleApply = () => {
+    onApply(localTerm, localYear);
+    onClose();
+  };
+
+  const handleClear = () => {
+    setLocalTerm(null);
+    setLocalYear(null);
+  };
+
+  return (
+    <>
+      {/* Backdrop */}
+      <motion.div
+        className="fixed inset-0 bg-black/40 backdrop-blur-sm z-50"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        onClick={onClose}
+      />
+
+      {/* Popup */}
+      <motion.div
+        className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-50 w-[90%] max-w-[340px]"
+        initial={{ opacity: 0, scale: 0.95, y: 20 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        exit={{ opacity: 0, scale: 0.95, y: 20 }}
+        transition={{ duration: 0.2 }}
+      >
+        <div className="bg-white rounded-[20px] shadow-[0px_20px_60px_rgba(0,54,48,0.25)] overflow-hidden">
+          {/* Header */}
+          <div className="flex items-center justify-between px-[24px] py-[20px] border-b border-[#e5e7eb]">
+            <div className="flex items-center gap-[12px]">
+              <div className="w-[36px] h-[36px] bg-gradient-to-br from-[#95e36c] to-[#7dd054] rounded-[10px] flex items-center justify-center shadow-sm">
+                <Filter className="w-[18px] h-[18px] text-white" />
+              </div>
+              <h2 className="font-['IBM_Plex_Sans_Devanagari:Bold',sans-serif] text-[18px] text-[#003630] tracking-[-0.18px]">
+                Filter History
+              </h2>
+            </div>
+            <button
+              onClick={onClose}
+              className="w-[32px] h-[32px] flex items-center justify-center rounded-[8px] hover:bg-[#f5f7f9] active:scale-95 transition-all touch-manipulation"
+            >
+              <X className="w-[18px] h-[18px] text-[#6b7280]" />
+            </button>
+          </div>
+
+          {/* Content */}
+          <div className="p-[24px]">
+            {/* Term Selection */}
+            <div className="mb-[24px]">
+              <label className="font-['IBM_Plex_Sans_Devanagari:SemiBold',sans-serif] text-[13px] text-[#003630] mb-[12px] block uppercase tracking-[0.5px]">
+                Select Term
+              </label>
+              <div className="grid grid-cols-4 gap-[8px]">
+                <button
+                  onClick={() => setLocalTerm(null)}
+                  className={`py-[12px] rounded-[10px] font-['IBM_Plex_Sans_Devanagari:Medium',sans-serif] text-[13px] transition-all touch-manipulation active:scale-95 ${
+                    localTerm === null
+                      ? 'bg-gradient-to-br from-[#95e36c] to-[#7dd054] text-white shadow-[0px_4px_12px_rgba(149,227,108,0.4)]'
+                      : 'bg-[#f5f7f9] text-[#6b7280] hover:bg-[#e5e7eb]'
+                  }`}
+                >
+                  All
+                </button>
+                {terms.map((term) => (
+                  <button
+                    key={term}
+                    onClick={() => setLocalTerm(term)}
+                    className={`py-[12px] rounded-[10px] font-['IBM_Plex_Sans_Devanagari:Medium',sans-serif] text-[13px] transition-all touch-manipulation active:scale-95 ${
+                      localTerm === term
+                        ? 'bg-gradient-to-br from-[#95e36c] to-[#7dd054] text-white shadow-[0px_4px_12px_rgba(149,227,108,0.4)]'
+                        : 'bg-[#f5f7f9] text-[#6b7280] hover:bg-[#e5e7eb]'
+                    }`}
+                  >
+                    T{term}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Year Selection */}
+            <div className="mb-[24px]">
+              <label className="font-['IBM_Plex_Sans_Devanagari:SemiBold',sans-serif] text-[13px] text-[#003630] mb-[12px] block uppercase tracking-[0.5px]">
+                Select Year
+              </label>
+              <div className="grid grid-cols-4 gap-[8px]">
+                <button
+                  onClick={() => setLocalYear(null)}
+                  className={`py-[12px] rounded-[10px] font-['IBM_Plex_Sans_Devanagari:Medium',sans-serif] text-[13px] transition-all touch-manipulation active:scale-95 ${
+                    localYear === null
+                      ? 'bg-gradient-to-br from-[#95e36c] to-[#7dd054] text-white shadow-[0px_4px_12px_rgba(149,227,108,0.4)]'
+                      : 'bg-[#f5f7f9] text-[#6b7280] hover:bg-[#e5e7eb]'
+                  }`}
+                >
+                  All
+                </button>
+                {years.map((year) => (
+                  <button
+                    key={year}
+                    onClick={() => setLocalYear(year)}
+                    className={`py-[12px] rounded-[10px] font-['IBM_Plex_Sans_Devanagari:Medium',sans-serif] text-[13px] transition-all touch-manipulation active:scale-95 ${
+                      localYear === year
+                        ? 'bg-gradient-to-br from-[#95e36c] to-[#7dd054] text-white shadow-[0px_4px_12px_rgba(149,227,108,0.4)]'
+                        : 'bg-[#f5f7f9] text-[#6b7280] hover:bg-[#e5e7eb]'
+                    }`}
+                  >
+                    {year}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Action Buttons */}
+            <div className="flex gap-[12px]">
+              <button
+                onClick={handleClear}
+                className="flex-1 py-[14px] rounded-[12px] bg-[#f5f7f9] hover:bg-[#e5e7eb] active:scale-98 transition-all font-['IBM_Plex_Sans_Devanagari:SemiBold',sans-serif] text-[14px] text-[#6b7280] tracking-[-0.14px] touch-manipulation"
+              >
+                Clear
+              </button>
+              <button
+                onClick={handleApply}
+                className="flex-1 py-[14px] rounded-[12px] bg-gradient-to-br from-[#95e36c] to-[#7dd054] hover:shadow-lg active:scale-98 transition-all font-['IBM_Plex_Sans_Devanagari:Bold',sans-serif] text-[14px] text-white tracking-[-0.14px] shadow-[0px_8px_20px_rgba(149,227,108,0.3)] touch-manipulation"
+              >
+                Apply Filters
               </button>
             </div>
           </div>
@@ -501,6 +658,9 @@ export default function HistoryPage({ userName, userPhone, onBack, onViewAllRece
   const [selectedPayment, setSelectedPayment] = useState<PaymentData | null>(null);
   const [allPaymentData, setAllPaymentData] = useState<Record<string, Record<string, PaymentData[]>>>({});
   const [isLoading, setIsLoading] = useState(true);
+  const [showFilterPopup, setShowFilterPopup] = useState(false);
+  const [selectedTerm, setSelectedTerm] = useState<number | null>(null);
+  const [selectedYear, setSelectedYear] = useState<number | null>(null);
 
   /**
    * Fetch payment history from backend
@@ -544,30 +704,34 @@ export default function HistoryPage({ userName, userPhone, onBack, onViewAllRece
           const dayOfMonth = date.getDate().toString();
           const monthKey = `${date.getFullYear()}-${date.getMonth()}`;
 
-          // Group services by student ID
-          payment.services.forEach((service: any) => {
-            // Extract student ID from service (assuming format "StudentName - StudentID")
-            const studentId = payment.studentId || "Unknown";
-            
-            if (!groupedData[studentId]) {
-              groupedData[studentId] = {};
-            }
-            
-            if (!groupedData[studentId][monthKey]) {
-              groupedData[studentId][monthKey] = [];
-            }
+          // Extract student ID and payment-level term/year
+          const studentId = payment.studentId || "Unknown";
+          const paymentTerm = payment.term || 1;
+          const paymentYear = payment.year || date.getFullYear();
+          
+          if (!groupedData[studentId]) {
+            groupedData[studentId] = {};
+          }
+          
+          if (!groupedData[studentId][monthKey]) {
+            groupedData[studentId][monthKey] = [];
+          }
 
-            // Create payment entry
-            const paymentEntry: PaymentData = {
-              date: dayOfWeek,
-              day: dayOfMonth,
-              title: `Paid ${service.description}`,
-              subtitle: `Receipt No. ${service.invoiceNo}`,
-              amount: `K${service.amount.toLocaleString()}`,
-            };
+          // Create payment entry (one entry per payment, not per service)
+          const serviceDescriptions = payment.services.map((s: any) => s.description).join(", ");
+          const paymentEntry: PaymentData = {
+            date: dayOfWeek,
+            day: dayOfMonth,
+            title: `Paid ${serviceDescriptions}`,
+            subtitle: `Receipt No. ${payment.services[0]?.invoiceNo || 'N/A'}`,
+            amount: `K${payment.totalAmount.toLocaleString()}`,
+            term: paymentTerm,
+            year: paymentYear,
+            termInfo: `Term ${paymentTerm} ${paymentYear}`,
+            currentBalance: 'K0',
+          };
 
-            groupedData[studentId][monthKey].push(paymentEntry);
-          });
+          groupedData[studentId][monthKey].push(paymentEntry);
         });
 
         // Merge with demo data to show examples
@@ -621,6 +785,30 @@ export default function HistoryPage({ userName, userPhone, onBack, onViewAllRece
 
   const lastThreeMonths = getLastThreeMonths();
 
+  // Filter payments based on selected term and year
+  const filterPayments = (payments: PaymentData[]): PaymentData[] => {
+    if (!selectedTerm && !selectedYear) {
+      return payments;
+    }
+
+    return payments.filter(payment => {
+      const termMatch = !selectedTerm || payment.term === selectedTerm;
+      const yearMatch = !selectedYear || payment.year === selectedYear;
+      return termMatch && yearMatch;
+    });
+  };
+
+  // Apply filters and check if there are any filtered payments
+  const hasAnyFilteredPayments = lastThreeMonths.some(month => {
+    const payments = paymentsByMonth[month.key] || [];
+    return filterPayments(payments).length > 0;
+  });
+
+  const handleApplyFilter = (term: number | null, year: number | null) => {
+    setSelectedTerm(term);
+    setSelectedYear(year);
+  };
+
   return (
     <div className="bg-white min-h-screen w-full overflow-hidden flex items-center justify-center">
       <div className="relative w-full max-w-[393px] md:max-w-[500px] lg:max-w-[600px] min-h-screen mx-auto">
@@ -632,10 +820,60 @@ export default function HistoryPage({ userName, userPhone, onBack, onViewAllRece
 
         {/* Content */}
         <div className="relative px-[21px] pt-[53px]">
-          {/* Title */}
-          <h1 className="font-['Inter:Regular',sans-serif] text-[18px] text-black tracking-[-0.18px] leading-[0.5] mb-[35px]">
-            Payment History
-          </h1>
+          {/* Title and Filter Button */}
+          <div className="flex items-center justify-between mb-[35px]">
+            <h1 className="font-['Inter:Regular',sans-serif] text-[18px] text-black tracking-[-0.18px] leading-[0.5]">
+              Payment History
+            </h1>
+            <button
+              onClick={() => setShowFilterPopup(true)}
+              className="flex items-center gap-[6px] px-[14px] py-[8px] rounded-[10px] bg-[#f5f7f9] hover:bg-[#e5e7eb] active:scale-95 transition-all touch-manipulation border border-[#e5e7eb]"
+            >
+              <Filter className="w-[16px] h-[16px] text-[#003630]" />
+              <span className="font-['IBM_Plex_Sans_Devanagari:Medium',sans-serif] text-[12px] text-[#003630] tracking-[-0.12px]">
+                Filter
+              </span>
+              {(selectedTerm || selectedYear) && (
+                <div className="w-[6px] h-[6px] rounded-full bg-[#95e36c]" />
+              )}
+            </button>
+          </div>
+
+          {/* Active Filters Display */}
+          {(selectedTerm || selectedYear) && (
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="flex flex-wrap gap-[8px] mb-[20px]"
+            >
+              {selectedTerm && (
+                <div className="flex items-center gap-[6px] px-[10px] py-[6px] bg-[#e0f7d4] rounded-[8px]">
+                  <span className="font-['IBM_Plex_Sans_Devanagari:Medium',sans-serif] text-[11px] text-[#003630]">
+                    Term {selectedTerm}
+                  </span>
+                  <button
+                    onClick={() => setSelectedTerm(null)}
+                    className="w-[14px] h-[14px] flex items-center justify-center rounded-full hover:bg-[#95e36c]/30 active:scale-90 transition-all"
+                  >
+                    <X className="w-[10px] h-[10px] text-[#003630]" />
+                  </button>
+                </div>
+              )}
+              {selectedYear && (
+                <div className="flex items-center gap-[6px] px-[10px] py-[6px] bg-[#e0f7d4] rounded-[8px]">
+                  <span className="font-['IBM_Plex_Sans_Devanagari:Medium',sans-serif] text-[11px] text-[#003630]">
+                    {selectedYear}
+                  </span>
+                  <button
+                    onClick={() => setSelectedYear(null)}
+                    className="w-[14px] h-[14px] flex items-center justify-center rounded-full hover:bg-[#95e36c]/30 active:scale-90 transition-all"
+                  >
+                    <X className="w-[10px] h-[10px] text-[#003630]" />
+                  </button>
+                </div>
+              )}
+            </motion.div>
+          )}
 
           {/* Child Pills */}
           <div className="flex gap-[15px] mb-[25px] overflow-x-auto overflow-y-hidden scrollbar-hide -mx-[21px] px-[21px] pb-[5px] touch-pan-x">
@@ -650,10 +888,37 @@ export default function HistoryPage({ userName, userPhone, onBack, onViewAllRece
             ))}
           </div>
 
+          {/* No Results Message for Filters */}
+          {(selectedTerm || selectedYear) && !hasAnyFilteredPayments && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="flex flex-col items-center justify-center py-[60px] px-[40px]"
+            >
+              <div className="w-[80px] h-[80px] bg-gradient-to-br from-[#e0f7d4] to-[#d0f0c0] rounded-full flex items-center justify-center mb-[20px]">
+                <Filter className="w-[40px] h-[40px] text-[#95e36c]" />
+              </div>
+              <h3 className="font-['IBM_Plex_Sans_Devanagari:Bold',sans-serif] text-[16px] text-[#003630] mb-[8px] text-center">
+                No Payments Found
+              </h3>
+              <p className="font-['Inter:Regular',sans-serif] text-[12px] text-[#6b7280] text-center leading-[18px]">
+                No payment history matches your selected filters.
+                <br />
+                Try adjusting your filter criteria.
+              </p>
+            </motion.div>
+          )}
+
           {/* Dynamic Month Sections */}
           {lastThreeMonths.map((month) => {
-            const payments = paymentsByMonth[month.key] || [];
+            const allPayments = paymentsByMonth[month.key] || [];
+            const payments = filterPayments(allPayments);
             const hasPayments = payments.length > 0;
+
+            // Skip rendering month if no payments after filtering
+            if (!hasPayments && (selectedTerm || selectedYear)) {
+              return null;
+            }
 
             return (
               <div key={month.key} className="mb-[15px]">
@@ -741,6 +1006,18 @@ export default function HistoryPage({ userName, userPhone, onBack, onViewAllRece
             } : undefined}
           />
         )}
+
+        {/* Filter Popup */}
+        <AnimatePresence>
+          {showFilterPopup && (
+            <FilterPopup
+              onClose={() => setShowFilterPopup(false)}
+              selectedTerm={selectedTerm}
+              selectedYear={selectedYear}
+              onApply={handleApplyFilter}
+            />
+          )}
+        </AnimatePresence>
       </div>
       <Toaster />
     </div>
@@ -749,7 +1026,7 @@ export default function HistoryPage({ userName, userPhone, onBack, onViewAllRece
 
 /**
  * Demo payment data showcasing hierarchical structure
- * Shows invoices with multiple receipt payments
+ * Shows invoices with multiple receipt payments across different terms and years
  */
 const getDemoPaymentData = (): Record<string, Record<string, PaymentData[]>> => {
   const now = new Date();
@@ -768,6 +1045,8 @@ const getDemoPaymentData = (): Record<string, Record<string, PaymentData[]>> => 
           invoiceNo: 'INV-001',
           termInfo: 'Term 1 2025',
           currentBalance: 'K500',
+          term: 1,
+          year: currentYear,
           receipts: [
             {
               date: 'Wed',
@@ -796,6 +1075,8 @@ const getDemoPaymentData = (): Record<string, Record<string, PaymentData[]>> => 
           invoiceNo: 'INV-002',
           termInfo: 'Term 1 2025',
           currentBalance: 'K0',
+          term: 1,
+          year: currentYear,
           receipts: [
             {
               date: 'Mon',
@@ -803,6 +1084,28 @@ const getDemoPaymentData = (): Record<string, Record<string, PaymentData[]>> => 
               receiptNo: 'Receipt No. 00348',
               paymentMethod: 'Airtel Money',
               amount: 'K300',
+              balanceAfter: 'K0',
+            },
+          ],
+        },
+        {
+          date: 'Fri',
+          day: '22',
+          title: 'School Bus - January',
+          subtitle: 'Invoice No. INV-006',
+          amount: 'K200',
+          invoiceNo: 'INV-006',
+          termInfo: 'Term 1 2025',
+          currentBalance: 'K0',
+          term: 1,
+          year: currentYear,
+          receipts: [
+            {
+              date: 'Fri',
+              day: '22',
+              receiptNo: 'Receipt No. 00358',
+              paymentMethod: 'Bank Transfer',
+              amount: 'K200',
               balanceAfter: 'K0',
             },
           ],
@@ -816,8 +1119,10 @@ const getDemoPaymentData = (): Record<string, Record<string, PaymentData[]>> => 
           subtitle: 'Invoice No. INV-003',
           amount: 'K1,800',
           invoiceNo: 'INV-003',
-          termInfo: 'Term 4 2024',
+          termInfo: 'Term 3 2024',
           currentBalance: 'K0',
+          term: 3,
+          year: currentYear - 1,
           receipts: [
             {
               date: 'Thu',
@@ -837,8 +1142,61 @@ const getDemoPaymentData = (): Record<string, Record<string, PaymentData[]>> => 
             },
           ],
         },
+        {
+          date: 'Tue',
+          day: '8',
+          title: 'Canteen Fees - December',
+          subtitle: 'Invoice No. INV-007',
+          amount: 'K150',
+          invoiceNo: 'INV-007',
+          termInfo: 'Term 3 2024',
+          currentBalance: 'K0',
+          term: 3,
+          year: currentYear - 1,
+          receipts: [
+            {
+              date: 'Tue',
+              day: '8',
+              receiptNo: 'Receipt No. 00288',
+              paymentMethod: 'MTN Mobile Money',
+              amount: 'K150',
+              balanceAfter: 'K0',
+            },
+          ],
+        },
       ],
-      [`${currentYear}-${currentMonth - 2}`]: [],
+      [`${currentYear}-${currentMonth - 2}`]: [
+        {
+          date: 'Mon',
+          day: '5',
+          title: 'School Fees - Grade 3B',
+          subtitle: 'Invoice No. INV-008',
+          amount: 'K1,500',
+          invoiceNo: 'INV-008',
+          termInfo: 'Term 2 2024',
+          currentBalance: 'K0',
+          term: 2,
+          year: currentYear - 1,
+          receipts: [
+            {
+              date: 'Mon',
+              day: '5',
+              receiptNo: 'Receipt No. 00250',
+              paymentMethod: 'Bank Transfer',
+              amount: 'K750',
+              balanceAfter: 'K750',
+            },
+            {
+              date: 'Wed',
+              day: '14',
+              receiptNo: 'Receipt No. 00255',
+              paymentMethod: 'Airtel Money',
+              amount: 'K750',
+              balanceAfter: 'K0',
+            },
+          ],
+        },
+      ],
     },
     'C30013': {
       [`${currentYear}-${currentMonth}`]: [
@@ -851,6 +1209,8 @@ const getDemoPaymentData = (): Record<string, Record<string, PaymentData[]>> => 
           invoiceNo: 'INV-004',
           termInfo: 'Term 1 2025',
           currentBalance: 'K800',
+          term: 1,
+          year: currentYear,
           receipts: [
             {
               date: 'Fri',
@@ -879,8 +1239,10 @@ const getDemoPaymentData = (): Record<string, Record<string, PaymentData[]>> => 
           subtitle: 'Invoice No. INV-005',
           amount: 'K150',
           invoiceNo: 'INV-005',
-          termInfo: 'Term 4 2024',
+          termInfo: 'Term 3 2024',
           currentBalance: 'K0',
+          term: 3,
+          year: currentYear - 1,
           receipts: [
             {
               date: 'Wed',
@@ -893,7 +1255,30 @@ const getDemoPaymentData = (): Record<string, Record<string, PaymentData[]>> => 
           ],
         },
       ],
-      [`${currentYear}-${currentMonth - 2}`]: [],
+      [`${currentYear}-${currentMonth - 2}`]: [
+        {
+          date: 'Thu',
+          day: '10',
+          title: 'Uniform Purchase',
+          subtitle: 'Invoice No. INV-009',
+          amount: 'K350',
+          invoiceNo: 'INV-009',
+          termInfo: 'Term 2 2024',
+          currentBalance: 'K0',
+          term: 2,
+          year: currentYear - 1,
+          receipts: [
+            {
+              date: 'Thu',
+              day: '10',
+              receiptNo: 'Receipt No. 00260',
+              paymentMethod: 'Bank Transfer',
+              amount: 'K350',
+              balanceAfter: 'K0',
+            },
+          ],
+        },
+      ],
     },
     'C20013': {
       [`${currentYear}-${currentMonth}`]: [
@@ -906,6 +1291,8 @@ const getDemoPaymentData = (): Record<string, Record<string, PaymentData[]>> => 
           invoiceNo: 'INV-006',
           termInfo: 'Term 1 2025',
           currentBalance: 'K400',
+          term: 1,
+          year: currentYear,
           receipts: [
             {
               date: 'Mon',
@@ -934,8 +1321,10 @@ const getDemoPaymentData = (): Record<string, Record<string, PaymentData[]>> => 
           subtitle: 'Invoice No. INV-007',
           amount: 'K80',
           invoiceNo: 'INV-007',
-          termInfo: 'Term 4 2024',
+          termInfo: 'Term 3 2024',
           currentBalance: 'K0',
+          term: 3,
+          year: currentYear - 1,
           receipts: [
             {
               date: 'Tue',

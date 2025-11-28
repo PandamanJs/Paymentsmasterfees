@@ -104,6 +104,11 @@ app.post("/make-server-f6550ac6/payments", async (c) => {
     // Generate unique payment ID
     const paymentId = `payment_${userPhone}_${Date.now()}`;
     
+    // Determine term and year from body or use defaults
+    const paymentDate = timestamp ? new Date(timestamp) : new Date();
+    const defaultTerm = body.term || 1; // Default to Term 1 if not specified
+    const defaultYear = body.year || paymentDate.getFullYear();
+    
     // Create payment record
     const paymentRecord = {
       id: paymentId,
@@ -117,6 +122,8 @@ app.post("/make-server-f6550ac6/payments", async (c) => {
       finalAmount: finalAmount || totalAmount,
       schoolName: schoolName || "Unknown School",
       timestamp,
+      term: defaultTerm,
+      year: defaultYear,
       status: "completed",
       createdAt: new Date().toISOString()
     };

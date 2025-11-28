@@ -21,6 +21,8 @@ interface ProcessingPageProps {
     serviceFee: number;
     finalAmount: number;
     schoolName: string;
+    term?: number;
+    year?: number;
   };
 }
 

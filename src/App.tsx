@@ -1147,6 +1147,8 @@ export default function Page() {
                 serviceFee: paymentAmount * 0.02, // 2% service fee
                 finalAmount: paymentAmount + (paymentAmount * 0.02),
                 schoolName: selectedSchool || "Twalumbu Educational Center",
+                term: 1, // Default to Term 1 - in production, this would be selected by user
+                year: new Date().getFullYear(),
               }}
             />
           </motion.div>
