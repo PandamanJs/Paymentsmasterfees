@@ -4,11 +4,6 @@ import svgPaths from "../imports/svg-cw21sj30t4";
 import headerSvgPaths from "../imports/svg-co0ktog99f";
 import { toast } from "sonner@2.0.3";
 import { ChevronDown } from "lucide-react";
-import imgTecLogo from "figma:asset/ec5fcf89fe0a77803b7cefd4250b03424564bb63.png";
-import chimiluteLogo from "figma:asset/6d180ec5e608f311d21d72a46c32a5b15849c39d.png";
-import julaniLogo from "figma:asset/5454374a39c6c82a13d2a4e8bc2ca0899c331fc5.png";
-import crestedCraneLogo from "figma:asset/5da21813da6fa21128f400330102b56ec04a15f5.png";
-import maarifLogo from "figma:asset/14e103bdb926a80d9f27d93b19086b97e7c47135.png";
 import { getLastPhone, saveLastPhone } from "../utils/preferences";
 import { PHONE_USER_MAP } from "../data/schoolData";
 
@@ -23,18 +18,19 @@ interface SchoolDetailsPageProps {
 }
 
 /**
- * School Logo Configuration
- * Maps school names to their respective logo image paths
+ * Get school initials for display
+ * Extracts first letter of first two words in school name
  * 
- * Usage: SCHOOL_LOGOS["School Name"] => image path
- * Format: "School Name": importedImagePath
+ * @param {string} name - School name
+ * @returns {string} Two-letter initials (e.g., "TE" for "Twalumbu Educational Center")
  */
-const SCHOOL_LOGOS: Record<string, string> = {
-  "Twalumbu Educational Center": imgTecLogo,
-  "Chimilute Trust Academy": chimiluteLogo,
-  "Julani School": julaniLogo,
-  "Crested Crane Academy": crestedCraneLogo,
-  "International Maarif School": maarifLogo,
+const getSchoolInitials = (name: string): string => {
+  return name
+    .split(" ")
+    .map(word => word[0])
+    .slice(0, 2)
+    .join("")
+    .toUpperCase();
 };
 
 /**
@@ -47,8 +43,7 @@ const SCHOOL_LOGOS: Record<string, string> = {
  * 
  * Visual: Black diamond with green checkmark stroke
  */
-function Logo({ schoolName }: { schoolName: string }) {
-  const logoPath = SCHOOL_LOGOS[schoolName];
+function Logo() {
   return (
     <div className="size-[31px]">
       <div className="relative size-full">
@@ -88,7 +83,7 @@ function Header({ onBack, schoolName }: { onBack: () => void; schoolName: string
     <div className="h-[66px] w-full relative">
       <div aria-hidden="true" className="absolute border-[#e6e6e6] border-[0px_0px_1px] border-solid inset-0 pointer-events-none" />
       <div className="absolute left-[94px] top-[17px] flex items-center gap-[16px]">
-        <Logo schoolName={schoolName} />
+        <Logo />
         <p className="font-['IBM_Plex_Sans_Devanagari:Bold',sans-serif] leading-[normal] not-italic text-[20px] text-black text-nowrap whitespace-pre">master-fees</p>
       </div>
     </div>
@@ -96,29 +91,30 @@ function Header({ onBack, schoolName }: { onBack: () => void; schoolName: string
 }
 
 function SchoolTitle({ schoolName }: { schoolName: string }) {
-  const logoPath = SCHOOL_LOGOS[schoolName];
+  const initials = getSchoolInitials(schoolName);
   
   return (
     <div className="absolute left-1/2 top-[120px] translate-x-[-50%] w-full px-[24px]">
       <div className="flex flex-col gap-[16px] items-center justify-center">
-        {/* Dynamic School Logo */}
-        {logoPath && (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.5, ease: "easeOut" }}
-            className="flex justify-center items-center"
-            data-name="School Logo"
+        {/* School Initials Badge */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.5, ease: "easeOut" }}
+          className="flex justify-center items-center"
+          data-name="School Badge"
+        >
+          <div 
+            className="w-[120px] h-[120px] rounded-full bg-[#003630] flex items-center justify-center shadow-lg"
+            style={{
+              boxShadow: '0 10px 25px rgba(0, 54, 48, 0.15), 0 0 0 1px rgba(255, 255, 255, 0.1) inset'
+            }}
           >
-            <div className="w-[120px] h-[120px] flex items-center justify-center">
-              <img 
-                alt={`${schoolName} Logo`} 
-                className="max-w-[160px] max-h-[160px] object-contain" 
-                src={logoPath} 
-              />
-            </div>
-          </motion.div>
-        )}
+            <span className="text-white font-['IBM_Plex_Sans_Devanagari:Bold',sans-serif] text-[40px]">
+              {initials}
+            </span>
+          </div>
+        </motion.div>
         
         {/* School Name Text */}
         <motion.div

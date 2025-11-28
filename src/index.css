@@ -1355,10 +1355,6 @@
     max-height: 80vh;
   }
 
-  .max-h-\[160px\] {
-    max-height: 160px;
-  }
-
   .max-h-\[180px\] {
     max-height: 180px;
   }
@@ -1665,10 +1661,6 @@
 
   .w-full {
     width: 100%;
-  }
-
-  .max-w-\[160px\] {
-    max-width: 160px;
   }
 
   .max-w-\[296px\] {
@@ -2984,6 +2976,10 @@
 
   .text-\[34px\] {
     font-size: 34px;
+  }
+
+  .text-\[40px\] {
+    font-size: 40px;
   }
 
   .leading-\[0\.5\] {
