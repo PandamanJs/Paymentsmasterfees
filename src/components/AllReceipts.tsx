@@ -136,7 +136,7 @@ function ReceiptCard({ title, studentInfo, amount, date, hasTopBorder, receiptNu
     <motion.div 
       whileHover={{ scale: 1.01, y: -2 }}
       whileTap={{ scale: 0.99 }}
-      className="bg-white w-full rounded-[16px] border-2 border-[#e5e7eb] shadow-[0px_8px_24px_rgba(0,54,48,0.08)] hover:shadow-[0px_12px_32px_rgba(0,54,48,0.12)] hover:border-[#95e36c] transition-all relative overflow-hidden group touch-manipulation"
+      className="bg-white w-full rounded-[16px] border-[1.5px] border-[#e5e7eb] shadow-[0px_8px_24px_rgba(0,54,48,0.08)] hover:shadow-[0px_12px_32px_rgba(0,54,48,0.12)] hover:border-[#95e36c] transition-all relative overflow-hidden group touch-manipulation"
     >
       {/* Decorative corner gradient */}
       <div className="absolute top-0 right-0 w-[140px] h-[140px] bg-gradient-to-br from-[#95e36c]/10 via-[#95e36c]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
@@ -176,7 +176,7 @@ function ReceiptCard({ title, studentInfo, amount, date, hasTopBorder, receiptNu
           
           <button 
             onClick={handleDownload}
-            className="flex-shrink-0 flex flex-col items-center justify-center gap-[4px] px-[14px] py-[10px] rounded-[10px] bg-[#f9fafb] hover:bg-[#003630] border border-[#e5e7eb] hover:border-[#003630] transition-all touch-manipulation group/btn active:scale-95 shadow-sm"
+            className="flex-shrink-0 flex flex-col items-center justify-center gap-[4px] px-[14px] py-[10px] rounded-[12px] bg-[#f9fafb] hover:bg-[#003630] border-[1.5px] border-[#e5e7eb] hover:border-[#003630] transition-all touch-manipulation group/btn active:scale-95 shadow-sm"
           >
             <Download className="w-[18px] h-[18px] text-[#003630] group-hover/btn:text-white transition-colors" />
             <p className="font-['IBM_Plex_Sans_Devanagari:SemiBold',sans-serif] text-[10px] text-[#003630] group-hover/btn:text-white tracking-[-0.10px] whitespace-nowrap transition-colors uppercase">

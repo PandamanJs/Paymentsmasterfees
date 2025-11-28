@@ -95,13 +95,13 @@ function AmountInput({ serviceId, value, onChange }: { serviceId: string; value:
 
   return (
     <div className="relative w-full h-[48px] mt-2">
-      <div className="box-border flex items-center gap-2 h-full px-3 rounded-lg border border-[#d4d6da]">
-        <span className="font-['IBM_Plex_Sans_Devanagari:Medium',sans-serif] text-[11px] text-[rgba(45,54,72,0.52)] shrink-0">ZMW</span>
+      <div className="box-border flex items-center gap-2 h-full px-3 rounded-[12px] border-[1.5px] border-[#e5e7eb] bg-[#f9fafb] focus-within:border-[#95e36c] focus-within:bg-white transition-all shadow-sm">
+        <span className="font-['IBM_Plex_Sans_Devanagari:Medium',sans-serif] text-[11px] text-[#6b7280] shrink-0">ZMW</span>
         <input 
           type="text" 
           value={inputValue}
           onChange={handleChange}
-          className="flex-1 min-w-0 font-['IBM_Plex_Sans_Devanagari:Regular',sans-serif] text-[15px] text-right text-[#8d919c] bg-transparent outline-none pr-1"
+          className="flex-1 min-w-0 font-['IBM_Plex_Sans_Devanagari:Medium',sans-serif] text-[15px] text-right text-[#003630] bg-transparent outline-none pr-1 tracking-[-0.2px]"
         />
       </div>
     </div>
@@ -127,15 +127,14 @@ function StudentServiceGroup({
           {studentName}
         </p>
       </div>
-      <div className="glass-light rounded-[12px] p-3 flex gap-3 overflow-x-auto snap-x snap-mandatory scrollbar-thin" 
+      <div className="glass-light rounded-[14px] p-3 flex gap-3 overflow-x-auto snap-x snap-mandatory scrollbar-thin border-[1.5px] border-[#e5e7eb] shadow-sm" 
         style={{
-          background: 'linear-gradient(135deg, rgba(248, 249, 250, 0.95) 0%, rgba(255, 255, 255, 0.9) 100%)',
-          border: '1px solid rgba(149, 227, 108, 0.1)'
+          background: 'linear-gradient(135deg, rgba(248, 249, 250, 0.95) 0%, rgba(255, 255, 255, 0.9) 100%)'
         }}>
         {services.map((service, index) => (
           <div 
             key={service.id} 
-            className="card card-interactive rounded-[10px] p-3 animate-fade-in group flex-shrink-0 w-[280px] snap-center"
+            className="card card-interactive rounded-[14px] p-3 animate-fade-in group flex-shrink-0 w-[280px] snap-center border-[1.5px] border-[#e5e7eb] shadow-sm"
             style={{ 
               animationDelay: `${150 + index * 50}ms`,
               background: 'white'
@@ -183,11 +182,10 @@ function StudentCarouselCard({
           {services.map((service, index) => (
             <div 
               key={service.id} 
-              className="card card-interactive rounded-[10px] p-3 animate-fade-in group w-full"
+              className="card card-interactive rounded-[14px] p-3 animate-fade-in group w-full border-[1.5px] border-[#e5e7eb] shadow-sm"
               style={{ 
                 animationDelay: `${150 + index * 50}ms`,
-                background: 'linear-gradient(135deg, rgba(248, 249, 250, 0.95) 0%, rgba(255, 255, 255, 0.9) 100%)',
-                border: '1px solid rgba(149, 227, 108, 0.1)'
+                background: 'linear-gradient(135deg, rgba(248, 249, 250, 0.95) 0%, rgba(255, 255, 255, 0.9) 100%)'
               }}
             >
               <ServiceItem 
@@ -395,7 +393,7 @@ function Group1({
                   {currentSlide > 0 && (
                     <button
                       onClick={handlePrevSlide}
-                      className="absolute left-0 top-1/2 -translate-y-1/2 z-20 bg-white border-2 border-[#003630] rounded-full p-2 shadow-lg active:scale-95 transition-all hover:bg-[#003630] hover:text-white group"
+                      className="absolute left-0 top-1/2 -translate-y-1/2 z-20 bg-white border-[1.5px] border-[#e5e7eb] hover:border-[#003630] rounded-full p-2 shadow-[0px_4px_12px_rgba(0,0,0,0.08)] active:scale-95 transition-all hover:bg-[#003630] hover:text-white group"
                       style={{ marginLeft: '-12px' }}
                     >
                       <ChevronLeft className="w-5 h-5 text-[#003630] group-hover:text-white" />
@@ -406,7 +404,7 @@ function Group1({
                   {currentSlide < totalStudents - 1 && (
                     <button
                       onClick={handleNextSlide}
-                      className="absolute right-0 top-1/2 -translate-y-1/2 z-20 bg-white border-2 border-[#003630] rounded-full p-2 shadow-lg active:scale-95 transition-all hover:bg-[#003630] hover:text-white group"
+                      className="absolute right-0 top-1/2 -translate-y-1/2 z-20 bg-white border-[1.5px] border-[#e5e7eb] hover:border-[#003630] rounded-full p-2 shadow-[0px_4px_12px_rgba(0,0,0,0.08)] active:scale-95 transition-all hover:bg-[#003630] hover:text-white group"
                       style={{ marginRight: '-12px' }}
                     >
                       <ChevronRight className="w-5 h-5 text-[#003630] group-hover:text-white" />
@@ -473,11 +471,25 @@ function Group1({
       
       <button 
         onClick={onProceed}
-        className="bg-[#003630] box-border content-stretch flex gap-[8px] h-[59px] items-center justify-center overflow-clip px-[24px] py-[10px] rounded-[12px] w-full max-w-[327px] mx-auto touch-manipulation active:scale-[0.98] transition-transform" 
+        className="relative h-[59px] w-full max-w-[327px] mx-auto rounded-[16px] overflow-hidden group touch-manipulation"
         data-name="Button"
       >
-        <p className="font-['IBM_Plex_Sans_Devanagari:Bold',sans-serif] leading-[24px] not-italic relative shrink-0 text-[18px] text-nowrap text-white tracking-[-0.18px] whitespace-pre">Proceed</p>
-        <IconRightWrapper />
+        {/* Background */}
+        <div className="absolute inset-0 bg-[#003630] group-hover:bg-[#004d45] transition-colors" />
+        
+        {/* Shine Effect */}
+        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
+        
+        {/* Shadow */}
+        <div className="absolute inset-0 shadow-[0px_6px_20px_rgba(0,54,48,0.25)] group-active:shadow-[0px_2px_8px_rgba(0,54,48,0.2)] transition-shadow" />
+        
+        {/* Content */}
+        <div className="relative z-10 flex items-center justify-center gap-[10px] h-full group-active:scale-[0.97] transition-transform">
+          <p className="font-['IBM_Plex_Sans_Devanagari:Bold',sans-serif] text-[18px] text-white tracking-[-0.3px]">Proceed</p>
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <path d="M7.5 15L12.5 10L7.5 5" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        </div>
       </button>
     </div>
   );

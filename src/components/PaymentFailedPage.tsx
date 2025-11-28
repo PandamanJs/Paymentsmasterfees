@@ -59,17 +59,32 @@ export default function PaymentFailedPage({ onTryAgain, onBack, failureReason = 
           {failureReason}
         </motion.p>
 
-        {/* Try Again Button */}
+        {/* Try Again Button - Premium Style */}
         <motion.button
           onClick={onTryAgain}
-          className="bg-[#003630] w-full max-w-[308px] h-[59px] rounded-[6px] flex items-center justify-center active:scale-[0.98] transition-transform"
+          className="relative w-full max-w-[308px] h-[59px] rounded-[16px] overflow-hidden group"
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4 }}
         >
-          <p className="font-['IBM_Plex_Sans_Devanagari:SemiBold',sans-serif] text-[18px] text-white tracking-[-0.18px] leading-[24px]">
-            Try Again
-          </p>
+          {/* Background */}
+          <div className="absolute inset-0 bg-[#003630] group-hover:bg-[#004d45] transition-colors" />
+          
+          {/* Shine Effect */}
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
+          
+          {/* Shadow */}
+          <div className="absolute inset-0 shadow-[0px_6px_20px_rgba(0,54,48,0.25)] group-active:shadow-[0px_2px_8px_rgba(0,54,48,0.2)] transition-shadow" />
+          
+          {/* Content */}
+          <div className="relative z-10 flex items-center justify-center gap-[10px] h-full group-active:scale-[0.97] transition-transform">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+              <path d="M4 10H16M16 10L12 6M16 10L12 14" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+            <p className="font-['IBM_Plex_Sans_Devanagari:Bold',sans-serif] text-[18px] text-white tracking-[-0.3px]">
+              Try Again
+            </p>
+          </div>
         </motion.button>
       </div>
     </div>

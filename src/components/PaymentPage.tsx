@@ -566,14 +566,45 @@ function Group1({
           <button 
             onClick={onPay}
             disabled={isPayDisabled}
-            className={`box-border content-stretch flex gap-[8px] h-[59px] items-center justify-center overflow-clip px-[24px] py-[10px] rounded-[12px] w-full max-w-[296px] touch-manipulation transition-all shadow-[0px_2px_8px_rgba(0,54,48,0.3)] ${
-              isPayDisabled 
-                ? 'bg-gray-400 cursor-not-allowed opacity-60' 
-                : 'bg-[#003630] active:scale-[0.98]'
+            className={`relative h-[59px] w-full max-w-[296px] rounded-[16px] overflow-hidden touch-manipulation ${
+              isPayDisabled ? 'cursor-not-allowed' : 'group'
             }`}
             data-name="Button"
           >
-            <p className="font-['IBM_Plex_Sans_Devanagari:SemiBold',sans-serif] leading-[24px] not-italic relative shrink-0 text-[16px] text-nowrap text-white tracking-[-0.16px] whitespace-pre">Pay</p>
+            {/* Background */}
+            <div className={`absolute inset-0 transition-colors ${
+              isPayDisabled 
+                ? 'bg-[#d1d5db]' 
+                : 'bg-[#003630] group-hover:bg-[#004d45]'
+            }`} />
+            
+            {/* Shine Effect */}
+            {!isPayDisabled && (
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
+            )}
+            
+            {/* Shadow */}
+            <div className={`absolute inset-0 transition-shadow ${
+              isPayDisabled
+                ? 'shadow-sm'
+                : 'shadow-[0px_6px_20px_rgba(0,54,48,0.25)] group-active:shadow-[0px_2px_8px_rgba(0,54,48,0.2)]'
+            }`} />
+            
+            {/* Content */}
+            <div className={`relative z-10 flex items-center justify-center gap-[10px] h-full transition-transform ${
+              !isPayDisabled && 'group-active:scale-[0.97]'
+            }`}>
+              <p className={`font-['IBM_Plex_Sans_Devanagari:Bold',sans-serif] text-[18px] tracking-[-0.3px] ${
+                isPayDisabled ? 'text-white/60' : 'text-white'
+              }`}>
+                Pay Now
+              </p>
+              {!isPayDisabled && (
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                  <path d="M7.5 15L12.5 10L7.5 5" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              )}
+            </div>
           </button>
           <Frame18 isMobileMoneyExpanded={isMobileMoneyExpanded} isCardPaymentExpanded={isCardPaymentExpanded} />
         </div>

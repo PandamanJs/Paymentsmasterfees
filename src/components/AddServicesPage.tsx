@@ -364,25 +364,39 @@ function AddSchoolFeesForm({ onDone, schoolName }: { onDone: (grade: string, yea
               <div className="h-[1px] bg-[#e5e7eb]" />
               
               <div>
-                <label className="block font-['IBM_Plex_Sans_Devanagari:SemiBold',sans-serif] text-[11px] text-[#003630] tracking-[-0.11px] mb-[10px]">
+                <label className="block font-['IBM_Plex_Sans_Devanagari:SemiBold',sans-serif] text-[11px] text-[#6b7280] tracking-[1px] uppercase mb-[12px] pl-[4px]">
                   Payment Period
                 </label>
-                <div className="grid grid-cols-2 gap-[10px]">
-                  {PAYMENT_PERIOD_OPTIONS.map((option) => (
-                    <button
-                      key={option.value}
-                      onClick={() => setPaymentPeriod(option.value as "term" | "year")}
-                      className={`px-[16px] py-[14px] rounded-[10px] transition-all touch-manipulation border-2 ${
-                        paymentPeriod === option.value
-                          ? 'bg-[#95e36c] border-[#95e36c] shadow-[0px_2px_8px_rgba(149,227,108,0.3)]'
-                          : 'bg-white border-[#e5e7eb] hover:border-[#cbd2e0]'
-                      }`}
-                    >
-                      <p className={`font-['IBM_Plex_Sans_Devanagari:${paymentPeriod === option.value ? 'Bold' : 'SemiBold'}',sans-serif] text-[12px] text-[#003630] tracking-[-0.12px] text-center leading-tight`}>
-                        {option.label}
-                      </p>
-                    </button>
-                  ))}
+                <div className="relative bg-[#f5f7f9]/80 backdrop-blur-sm rounded-[14px] p-[4px] border-[1.5px] border-[#e5e7eb]/50">
+                  <div className="grid grid-cols-2 gap-[4px] relative">
+                    {PAYMENT_PERIOD_OPTIONS.map((option) => {
+                      const isActive = paymentPeriod === option.value;
+                      return (
+                        <button
+                          key={option.value}
+                          onClick={() => setPaymentPeriod(option.value as "term" | "year")}
+                          className="relative z-10 py-[14px] rounded-[10px] transition-all touch-manipulation active:scale-95"
+                        >
+                          {isActive && (
+                            <motion.div
+                              layoutId="paymentPeriodSelector"
+                              className="absolute inset-0 bg-white rounded-[10px] shadow-[0px_2px_8px_rgba(0,0,0,0.06),0px_1px_2px_rgba(0,0,0,0.04)]"
+                              transition={{ 
+                                type: "spring", 
+                                stiffness: 500, 
+                                damping: 30 
+                              }}
+                            />
+                          )}
+                          <p className={`relative z-10 font-['IBM_Plex_Sans_Devanagari:${isActive ? 'Bold' : 'Medium'}',sans-serif] text-[13px] tracking-[-0.2px] text-center transition-colors ${
+                            isActive ? 'text-[#003630]' : 'text-[#9ca3af]'
+                          }`}>
+                            {option.label}
+                          </p>
+                        </button>
+                      );
+                    })}
+                  </div>
                 </div>
               </div>
               
@@ -399,14 +413,37 @@ function AddSchoolFeesForm({ onDone, schoolName }: { onDone: (grade: string, yea
               )}
             </div>
 
-            {/* Done Button */}
+            {/* Premium Action Button */}
             <button 
               onClick={handleDone}
-              className="mt-[28px] bg-[#95e36c] w-full h-[52px] rounded-[12px] transition-all touch-manipulation active:scale-[0.98] shadow-[0px_4px_0px_0px_rgba(149,227,108,0.3)] active:shadow-[0px_1px_0px_0px_rgba(149,227,108,0.3)] active:translate-y-[3px]"
+              className="relative mt-[28px] w-full h-[56px] rounded-[16px] transition-all touch-manipulation overflow-hidden group"
             >
-              <p className="font-['IBM_Plex_Sans_Devanagari:Bold',sans-serif] text-[15px] text-[#003630] tracking-[-0.15px]">
-                Add Tuition Fee
-              </p>
+              {/* Button Background */}
+              <div className="absolute inset-0 bg-[#003630] group-hover:bg-[#004d45] transition-colors" />
+              
+              {/* Shine Effect */}
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
+              
+              {/* Shadow */}
+              <div className="absolute inset-0 shadow-[0px_6px_20px_rgba(0,54,48,0.25)] group-active:shadow-[0px_2px_8px_rgba(0,54,48,0.2)] transition-shadow" />
+              
+              {/* Content */}
+              <div className="relative z-10 flex items-center justify-center gap-[10px] h-full group-active:scale-[0.97] transition-transform">
+                <span className="font-['IBM_Plex_Sans_Devanagari:Bold',sans-serif] text-[15px] text-white tracking-[-0.2px]">
+                  Add Tuition Fee
+                </span>
+                <motion.svg 
+                  width="18" 
+                  height="18" 
+                  viewBox="0 0 18 18" 
+                  fill="none"
+                  initial={{ x: -5, opacity: 0 }}
+                  animate={{ x: 0, opacity: 1 }}
+                  transition={{ delay: 0.1 }}
+                >
+                  <path d="M6.75 13.5L11.25 9L6.75 4.5" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+                </motion.svg>
+              </div>
             </button>
           </div>
         </motion.div>
@@ -436,30 +473,36 @@ function AppleDropdown({
   return (
     <div className="w-full">
       {/* Label */}
-      <p className="font-['IBM_Plex_Sans_Devanagari:SemiBold',sans-serif] text-[11px] text-[#003630] tracking-[-0.11px] mb-[8px]">
+      <p className="font-['IBM_Plex_Sans_Devanagari:SemiBold',sans-serif] text-[11px] text-[#6b7280] tracking-[1px] uppercase mb-[10px] pl-[4px]">
         {label}
       </p>
       
       {/* Dropdown Button */}
-      <div className="relative">
+      <div className="relative group">
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className="w-full h-[48px] bg-white hover:bg-[#fafbfc] rounded-[10px] px-[16px] flex items-center justify-between transition-all touch-manipulation border-2 border-[#e5e7eb] hover:border-[#cbd2e0] shadow-sm"
+          className="w-full h-[48px] bg-[#f9fafb] hover:bg-white rounded-[12px] px-[16px] pr-[44px] flex items-center justify-between transition-all touch-manipulation border-[1.5px] border-[#e5e7eb] hover:border-[#d1d5db] shadow-sm"
         >
-          <p className="font-['IBM_Plex_Sans_Devanagari:Medium',sans-serif] text-[13px] text-[#003630] tracking-[-0.13px]">
+          <p className="font-['IBM_Plex_Sans_Devanagari:Medium',sans-serif] text-[14px] text-[#003630] tracking-[-0.2px]">
             {selectedOption?.label || "Select..."}
           </p>
-          <motion.svg 
-            width="14" 
-            height="14" 
-            viewBox="0 0 14 14" 
-            fill="none"
-            animate={{ rotate: isOpen ? 180 : 0 }}
-            transition={{ duration: 0.2 }}
-          >
-            <path d="M3.5 5.25L7 8.75L10.5 5.25" stroke="#6b7280" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-          </motion.svg>
         </button>
+        
+        {/* Custom Arrow Icon */}
+        <div className="absolute right-[16px] top-1/2 -translate-y-1/2 pointer-events-none transition-transform group-hover:translate-y-[-calc(50%-1px)]">
+          <div className="w-[20px] h-[20px] bg-white rounded-[6px] border border-[#e5e7eb] flex items-center justify-center shadow-sm">
+            <motion.svg 
+              width="12" 
+              height="12" 
+              viewBox="0 0 12 12" 
+              fill="none"
+              animate={{ rotate: isOpen ? 180 : 0 }}
+              transition={{ duration: 0.2 }}
+            >
+              <path d="M3 4.5L6 7.5L9 4.5" stroke="#6b7280" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            </motion.svg>
+          </div>
+        </div>
         
         {/* Dropdown Menu */}
         {isOpen && (
@@ -469,13 +512,13 @@ function AppleDropdown({
               onClick={() => setIsOpen(false)}
             />
             <motion.div
-              className="absolute z-50 w-full mt-[8px] bg-white rounded-[12px] shadow-[0px_12px_40px_rgba(0,0,0,0.15)] overflow-hidden border border-[#e5e5e7]"
+              className="absolute z-50 w-full mt-[8px] bg-white/95 backdrop-blur-[20px] rounded-[14px] shadow-[0px_8px_32px_rgba(0,0,0,0.12)] overflow-hidden border-[1.5px] border-[#e5e7eb]"
               initial={{ opacity: 0, y: -10, scale: 0.95 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: -10, scale: 0.95 }}
               transition={{ duration: 0.2, ease: "easeOut" }}
             >
-              <div className="max-h-[240px] overflow-y-auto">
+              <div className="max-h-[240px] overflow-y-auto p-[4px]">
                 {options.map((option, index) => (
                   <button
                     key={option.value}
@@ -483,17 +526,29 @@ function AppleDropdown({
                       onChange(option.value);
                       setIsOpen(false);
                     }}
-                    className={`w-full text-left px-[16px] py-[12px] transition-colors touch-manipulation ${
-                      option.value === value 
-                        ? 'bg-[#e0f7d4]' 
-                        : 'hover:bg-[#f5f5f7]'
-                    } ${index !== 0 ? 'border-t border-[#f5f5f7]' : ''}`}
+                    className="w-full group touch-manipulation active:scale-[0.98] transition-transform mb-[2px]"
                   >
-                    <p className={`font-['IBM_Plex_Sans_Devanagari:Regular',sans-serif] text-[14px] tracking-[-0.14px] ${
-                      option.value === value ? 'text-[#003630] font-semibold' : 'text-[#1d1d1f]'
+                    <div className={`w-full text-left px-[14px] py-[12px] rounded-[10px] transition-all relative ${
+                      option.value === value 
+                        ? 'bg-gradient-to-r from-[#e0f7d4] to-[#d0f0c0] border-[1.5px] border-[#95e36c]/30' 
+                        : 'hover:bg-[#f5f7f9] border-[1.5px] border-transparent'
                     }`}>
-                      {option.label}
-                    </p>
+                      {option.value === value && (
+                        <div className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-[60%] bg-[#95e36c] rounded-r-full" />
+                      )}
+                      <div className="flex items-center justify-between">
+                        <p className={`font-['IBM_Plex_Sans_Devanagari:${option.value === value ? 'SemiBold' : 'Regular'}',sans-serif] text-[14px] tracking-[-0.2px] ${
+                          option.value === value ? 'text-[#003630] ml-[8px]' : 'text-[#1d1d1f]'
+                        }`}>
+                          {option.label}
+                        </p>
+                        {option.value === value && (
+                          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                            <path d="M3 8L6 11L13 4" stroke="#95e36c" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+                          </svg>
+                        )}
+                      </div>
+                    </div>
                   </button>
                 ))}
               </div>
@@ -680,8 +735,8 @@ export default function AddServicesPage({ selectedStudentIds, userPhone, schoolN
             Select the services that you would like to pay for and proceed to checkout to make payment.
           </p>
 
-          {/* Main Card */}
-          <div className="bg-white box-border content-stretch flex flex-col gap-[16px] items-center overflow-clip px-[14px] py-[8px] rounded-[15px] mt-[12px] shadow-sm border border-[#e5e7eb] flex-1 min-h-0">
+          {/* Main Card - Premium */}
+          <div className="bg-white box-border content-stretch flex flex-col gap-[16px] items-center overflow-clip px-[14px] py-[8px] rounded-[16px] mt-[12px] shadow-[0px_2px_16px_rgba(0,0,0,0.06)] border-[1.5px] border-[#e5e7eb] flex-1 min-h-0">
             {/* Child Pills */}
             <div className="content-stretch flex gap-[25px] items-center relative shrink-0 w-full overflow-x-auto">
               {selectedStudents.slice(0, 2).map(student => (
@@ -713,25 +768,38 @@ export default function AddServicesPage({ selectedStudentIds, userPhone, schoolN
                   <ServiceTable services={activeStudentServices} onRemoveItem={handleRemoveService} />
                 )}
 
-                {/* Add Buttons */}
+                {/* Add Buttons - Premium Style */}
                 {!showOtherServicesPopup && (
                   <div className="w-full space-y-[12px] mt-[4px]">
+                    {/* Primary Action Button */}
                     <button 
                       onClick={handleAddSchoolFees}
-                      className="bg-[#95e36c] w-full h-[50px] rounded-[12px] transition-all touch-manipulation active:scale-[0.98] shadow-[0px_4px_0px_0px_rgba(149,227,108,0.3)] active:shadow-[0px_1px_0px_0px_rgba(149,227,108,0.3)] active:translate-y-[3px] hover:shadow-[0px_6px_0px_0px_rgba(149,227,108,0.3)] flex items-center justify-center"
+                      className="relative w-full h-[54px] rounded-[16px] transition-all touch-manipulation overflow-hidden group"
                     >
-                      <p className="font-['IBM_Plex_Sans_Devanagari:SemiBold',sans-serif] text-[14px] text-[#003630] tracking-[-0.14px]">
-                        + Add School Fees
-                      </p>
+                      <div className="absolute inset-0 bg-[#003630] group-hover:bg-[#004d45] transition-colors" />
+                      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
+                      <div className="absolute inset-0 shadow-[0px_6px_20px_rgba(0,54,48,0.25)] group-active:shadow-[0px_2px_8px_rgba(0,54,48,0.2)] transition-shadow" />
+                      <div className="relative z-10 flex items-center justify-center gap-[8px] h-full group-active:scale-[0.97] transition-transform">
+                        <span className="font-['IBM_Plex_Sans_Devanagari:Bold',sans-serif] text-[15px] text-white tracking-[-0.2px]">
+                          Add School Fees
+                        </span>
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                          <path d="M8 3.5V12.5M3.5 8H12.5" stroke="white" strokeWidth="2.5" strokeLinecap="round" />
+                        </svg>
+                      </div>
                     </button>
                     
+                    {/* Secondary Action Button */}
                     <button 
                       onClick={handleAddOtherServices}
-                      className="w-full h-[44px] bg-[#f5f5f7] hover:bg-[#ebebed] rounded-[10px] transition-all touch-manipulation active:scale-[0.98] flex items-center justify-center border border-[#e5e5e7]"
+                      className="w-full h-[48px] bg-white border-[1.5px] border-[#e5e7eb] hover:border-[#d1d5db] rounded-[14px] transition-all touch-manipulation active:scale-[0.98] flex items-center justify-center shadow-sm group"
                     >
-                      <p className="font-['IBM_Plex_Sans_Devanagari:Medium',sans-serif] text-[14px] text-[#1d1d1f] tracking-[-0.14px]">
+                      <span className="font-['IBM_Plex_Sans_Devanagari:SemiBold',sans-serif] text-[14px] text-[#003630] tracking-[-0.2px] group-hover:text-[#004d45] transition-colors">
                         Add Other Services
-                      </p>
+                      </span>
+                      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="ml-[8px]">
+                        <path d="M8 3.5V12.5M3.5 8H12.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+                      </svg>
                     </button>
                   </div>
                 )}
@@ -740,8 +808,8 @@ export default function AddServicesPage({ selectedStudentIds, userPhone, schoolN
           </div>
         </div>
 
-        {/* Footer */}
-        <div className="bg-white rounded-[12px] mx-auto mb-[16px] w-[322px] shadow-lg border border-[#afbacf] shrink-0">
+        {/* Footer - Premium Card */}
+        <div className="bg-white rounded-[14px] mx-auto mb-[16px] w-[322px] shadow-[0px_4px_20px_rgba(0,0,0,0.08)] border-[1.5px] border-[#e5e7eb] shrink-0">
           <div className="box-border content-stretch flex gap-[10px] items-center justify-center overflow-clip p-[16px] relative rounded-[inherit] w-full">
             <div className="content-stretch flex flex-col items-start not-italic relative shrink-0 text-[#003630] w-[101px]">
               <p className="font-['IBM_Plex_Sans_Devanagari:SemiBold',sans-serif] h-[19px] leading-[24px] relative shrink-0 text-[17px] tracking-[-0.17px] w-full">
@@ -754,18 +822,34 @@ export default function AddServicesPage({ selectedStudentIds, userPhone, schoolN
             <button 
               onClick={handleNextOrCheckout}
               disabled={!hasServices}
-              className={`basis-0 bg-[#003630] grow h-[46px] min-h-px min-w-px relative rounded-[8px] shrink-0 transition-all ${
+              className={`basis-0 grow h-[46px] min-h-px min-w-px relative rounded-[10px] shrink-0 overflow-hidden group ${
                 hasServices 
-                  ? 'touch-manipulation active:scale-[0.98] cursor-pointer' 
+                  ? 'touch-manipulation cursor-pointer' 
                   : 'opacity-50 cursor-not-allowed'
               }`}
             >
-              <div className="flex flex-row items-center justify-center overflow-clip rounded-[inherit] size-full">
-                <div className="box-border content-stretch flex gap-[8px] h-[46px] items-center justify-center px-[24px] py-[10px] relative w-full">
-                  <p className="font-['IBM_Plex_Sans_Devanagari:SemiBold',sans-serif] leading-[24px] not-italic relative shrink-0 text-[15px] text-nowrap text-white tracking-[-0.15px] whitespace-pre">
-                    {totalAmount > 0 ? "Checkout" : "Next"}
-                  </p>
-                </div>
+              {/* Background */}
+              <div className={`absolute inset-0 transition-colors ${
+                hasServices ? 'bg-[#003630] group-hover:bg-[#004d45]' : 'bg-[#003630]'
+              }`} />
+              
+              {/* Shine Effect */}
+              {hasServices && (
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
+              )}
+              
+              {/* Content */}
+              <div className={`relative z-10 flex items-center justify-center gap-[8px] h-full ${
+                hasServices ? 'group-active:scale-[0.97] transition-transform' : ''
+              }`}>
+                <p className="font-['IBM_Plex_Sans_Devanagari:Bold',sans-serif] text-[15px] text-white tracking-[-0.2px]">
+                  {totalAmount > 0 ? "Checkout" : "Next"}
+                </p>
+                {totalAmount > 0 && (
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                    <path d="M5.5 11.5L10 8L5.5 4.5" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                )}
               </div>
             </button>
           </div>

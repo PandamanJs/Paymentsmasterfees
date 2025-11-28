@@ -74,19 +74,33 @@ export default function PaymentSuccessPage({ onViewReceipts }: PaymentSuccessPag
           Payment Successfully made
         </motion.p>
 
-        {/* View Receipts Button */}
+        {/* View Receipts Button - Premium Style */}
         <motion.button
           onClick={onViewReceipts}
-          className="bg-[#003630] flex gap-[8px] h-[59px] items-center justify-center overflow-clip px-[24px] py-[10px] rounded-[6px] w-full max-w-[308px] active:scale-[0.98] transition-transform"
+          className="relative h-[59px] w-full max-w-[308px] rounded-[16px] overflow-hidden group"
           data-name="Button"
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.8 }}
         >
-          <p className="font-['Inter:Medium',sans-serif] leading-[24px] text-[18px] text-nowrap text-white tracking-[-0.18px]">
-            View Receipt
-          </p>
-          <IconRightWrapper />
+          {/* Background */}
+          <div className="absolute inset-0 bg-[#003630] group-hover:bg-[#004d45] transition-colors" />
+          
+          {/* Shine Effect */}
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
+          
+          {/* Shadow */}
+          <div className="absolute inset-0 shadow-[0px_6px_20px_rgba(0,54,48,0.25)] group-active:shadow-[0px_2px_8px_rgba(0,54,48,0.2)] transition-shadow" />
+          
+          {/* Content */}
+          <div className="relative z-10 flex items-center justify-center gap-[10px] h-full group-active:scale-[0.97] transition-transform">
+            <p className="font-['IBM_Plex_Sans_Devanagari:Bold',sans-serif] text-[18px] text-white tracking-[-0.3px]">
+              View Receipt
+            </p>
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+              <path d="M7.5 15L12.5 10L7.5 5" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </div>
         </motion.button>
       </div>
     </div>

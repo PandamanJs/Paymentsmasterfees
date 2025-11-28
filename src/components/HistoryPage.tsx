@@ -199,52 +199,91 @@ function PaymentPopup({
   };
   return (
     <>
-      {/* Backdrop */}
-      <div 
-        className="fixed inset-0 z-40" 
+      {/* Backdrop with Layered Blur */}
+      <motion.div
+        className="fixed inset-0 z-40"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.25 }}
         onClick={onClose}
-      />
-      
-      {/* Popup */}
-      <motion.div 
-        className="fixed z-50 w-[200px]"
-        style={{ 
-          right: '40px',
-          top: '50%',
-          transform: 'translateY(-50%)'
-        }}
-        initial={{ opacity: 0, scale: 0.9 }}
-        animate={{ opacity: 1, scale: 1 }}
-        exit={{ opacity: 0, scale: 0.9 }}
-        transition={{ duration: 0.2 }}
       >
-        <div className="bg-white relative rounded-[10px] w-full">
-          <div aria-hidden="true" className="absolute border-[0.5px] border-[rgba(139,144,154,0.37)] border-solid inset-0 pointer-events-none rounded-[10px] shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)]" />
-          <div className="w-full">
-            <div className="box-border content-stretch flex flex-col gap-[10px] items-start p-[10px] relative w-full">
+        <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-black/10 to-black/25" />
+        <div className="absolute inset-0 backdrop-blur-[4px]" />
+      </motion.div>
+      
+      {/* Bottom Sheet Popup */}
+      <motion.div
+        className="fixed bottom-0 left-0 right-0 z-50 mx-auto max-w-[393px]"
+        initial={{ y: "100%", opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        exit={{ y: "100%", opacity: 0 }}
+        transition={{ 
+          type: "spring",
+          damping: 30,
+          stiffness: 350,
+          mass: 0.8
+        }}
+      >
+        {/* Drag Handle */}
+        <div className="flex justify-center pt-[12px] pb-[6px]">
+          <div className="w-[36px] h-[5px] bg-white/90 rounded-full shadow-sm" />
+        </div>
+
+        <div className="bg-white/98 backdrop-blur-[20px] rounded-t-[32px] shadow-[0px_-6px_24px_rgba(0,0,0,0.12)] overflow-hidden">
+          {/* Decorative Top Border */}
+          <div className="h-[2px] bg-gradient-to-r from-transparent via-[#95e36c]/50 to-transparent" />
+          
+          {/* Content */}
+          <div className="px-[24px] pt-[24px] pb-[32px]">
+            <h3 className="font-['IBM_Plex_Sans_Devanagari:Bold',sans-serif] text-[20px] text-[#003630] tracking-[-0.4px] mb-[20px]">
+              Receipt Options
+            </h3>
+            
+            <div className="space-y-[10px]">
+              {/* View Receipt Button */}
               <button 
                 onClick={onViewReceipt}
-                className="box-border content-stretch flex gap-[8px] items-center px-[16px] py-[9px] relative w-full hover:bg-[#f5f5f5] active:bg-[#e5e5e5] transition-colors cursor-pointer touch-manipulation rounded-[6px]"
+                className="w-full group touch-manipulation active:scale-[0.98] transition-transform"
               >
-                <div className="basis-0 flex flex-col font-['Public_Sans:Regular',sans-serif] font-normal grow justify-center leading-[0] min-h-px min-w-px relative shrink-0 text-[#23272e] text-[12px]">
-                  <p className="leading-[22px]">View payment Receipt</p>
+                <div className="relative rounded-[14px] px-[20px] py-[16px] bg-white border-[1.5px] border-[#e5e7eb] hover:border-[#d1d5db] shadow-sm transition-all">
+                  <div className="flex items-center gap-[14px]">
+                    <div className="w-[40px] h-[40px] bg-gradient-to-br from-[#f5f7f9] to-[#e5e7eb] rounded-[12px] flex items-center justify-center">
+                      <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                        <path d="M10 3.75C5.83333 3.75 2.275 6.34167 1.25 10C2.275 13.6583 5.83333 16.25 10 16.25C14.1667 16.25 17.725 13.6583 18.75 10C17.725 6.34167 14.1667 3.75 10 3.75Z" stroke="#6b7280" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                        <path d="M10 12.5C11.3807 12.5 12.5 11.3807 12.5 10C12.5 8.61929 11.3807 7.5 10 7.5C8.61929 7.5 7.5 8.61929 7.5 10C7.5 11.3807 8.61929 12.5 10 12.5Z" stroke="#6b7280" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                    </div>
+                    <span className="font-['IBM_Plex_Sans_Devanagari:SemiBold',sans-serif] text-[15px] text-[#003630] tracking-[-0.2px]">
+                      View Receipt
+                    </span>
+                  </div>
                 </div>
               </button>
               
+              {/* Download Receipt Button */}
               <button
                 onClick={handleDownloadReceipt}
-                className="relative rounded-[6px] shrink-0 w-full hover:bg-gray-50 active:bg-gray-100 transition-colors touch-manipulation"
+                className="w-full group touch-manipulation active:scale-[0.98] transition-transform"
               >
-                <div className="flex flex-row items-center w-full">
-                  <div className="box-border content-stretch flex gap-[8px] items-center px-[16px] py-[9px] relative w-full">
-                    <div className="basis-0 flex flex-col font-['Public_Sans:Regular',sans-serif] font-normal grow justify-center leading-[0] min-h-px min-w-px relative shrink-0 text-[#23272e] text-[12px]">
-                      <p className="leading-[22px]">Download Receipt</p>
+                <div className="relative rounded-[14px] px-[20px] py-[16px] bg-white border-[1.5px] border-[#e5e7eb] hover:border-[#d1d5db] shadow-sm transition-all">
+                  <div className="flex items-center gap-[14px]">
+                    <div className="w-[40px] h-[40px] bg-gradient-to-br from-[#f5f7f9] to-[#e5e7eb] rounded-[12px] flex items-center justify-center">
+                      <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                        <path d="M17.5 12.5V15.8333C17.5 16.2754 17.3244 16.6993 17.0118 17.0118C16.6993 17.3244 16.2754 17.5 15.8333 17.5H4.16667C3.72464 17.5 3.30072 17.3244 2.98816 17.0118C2.67559 16.6993 2.5 16.2754 2.5 15.8333V12.5M5.83333 8.33333L10 12.5M10 12.5L14.1667 8.33333M10 12.5V2.5" stroke="#6b7280" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
                     </div>
+                    <span className="font-['IBM_Plex_Sans_Devanagari:SemiBold',sans-serif] text-[15px] text-[#003630] tracking-[-0.2px]">
+                      Download Receipt
+                    </span>
                   </div>
                 </div>
               </button>
             </div>
           </div>
+
+          {/* Bottom Safe Area */}
+          <div className="h-[env(safe-area-inset-bottom,20px)] bg-white/98" />
         </div>
       </motion.div>
     </>
@@ -281,124 +320,191 @@ function FilterPopup({
 
   return (
     <>
-      {/* Backdrop */}
+      {/* Backdrop with unique blur pattern */}
       <motion.div
-        className="fixed inset-0 bg-black/40 backdrop-blur-sm z-50"
+        className="fixed inset-0 z-50"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
+        transition={{ duration: 0.35, ease: [0.32, 0.72, 0, 1] }}
         onClick={onClose}
-      />
-
-      {/* Popup */}
-      <motion.div
-        className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-50 w-[90%] max-w-[340px]"
-        initial={{ opacity: 0, scale: 0.95, y: 20 }}
-        animate={{ opacity: 1, scale: 1, y: 0 }}
-        exit={{ opacity: 0, scale: 0.95, y: 20 }}
-        transition={{ duration: 0.2 }}
       >
-        <div className="bg-white rounded-[20px] shadow-[0px_20px_60px_rgba(0,54,48,0.25)] overflow-hidden">
-          {/* Header */}
-          <div className="flex items-center justify-between px-[24px] py-[20px] border-b border-[#e5e7eb]">
-            <div className="flex items-center gap-[12px]">
-              <div className="w-[36px] h-[36px] bg-gradient-to-br from-[#95e36c] to-[#7dd054] rounded-[10px] flex items-center justify-center shadow-sm">
-                <Filter className="w-[18px] h-[18px] text-white" />
-              </div>
-              <h2 className="font-['IBM_Plex_Sans_Devanagari:Bold',sans-serif] text-[18px] text-[#003630] tracking-[-0.18px]">
-                Filter History
-              </h2>
-            </div>
-            <button
-              onClick={onClose}
-              className="w-[32px] h-[32px] flex items-center justify-center rounded-[8px] hover:bg-[#f5f7f9] active:scale-95 transition-all touch-manipulation"
-            >
-              <X className="w-[18px] h-[18px] text-[#6b7280]" />
-            </button>
-          </div>
+        <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/20 to-black/40" />
+        <div className="absolute inset-0 backdrop-blur-[8px]" />
+      </motion.div>
 
+      {/* Bottom Sheet Style Popup */}
+      <motion.div
+        className="fixed bottom-0 left-0 right-0 z-50 mx-auto max-w-[393px]"
+        initial={{ y: "100%", opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        exit={{ y: "100%", opacity: 0 }}
+        transition={{ 
+          type: "spring",
+          damping: 35,
+          stiffness: 400,
+          mass: 0.8
+        }}
+      >
+        {/* Drag handle area */}
+        <div className="flex justify-center pt-[12px] pb-[8px]">
+          <div className="w-[36px] h-[5px] bg-white/80 rounded-full shadow-sm" />
+        </div>
+
+        <div className="bg-white/95 backdrop-blur-[20px] rounded-t-[32px] shadow-[0px_-10px_40px_rgba(0,0,0,0.15)] overflow-hidden">
+          {/* Decorative gradient top border */}
+          <div className="h-[3px] bg-gradient-to-r from-transparent via-[#95e36c] to-transparent" />
+          
           {/* Content */}
-          <div className="p-[24px]">
-            {/* Term Selection */}
-            <div className="mb-[24px]">
-              <label className="font-['IBM_Plex_Sans_Devanagari:SemiBold',sans-serif] text-[13px] text-[#003630] mb-[12px] block uppercase tracking-[0.5px]">
-                Select Term
+          <div className="px-[24px] pt-[28px] pb-[40px]">
+            {/* Header with unique close button */}
+            <div className="flex items-start justify-between mb-[32px]">
+              <div>
+                <div className="flex items-center gap-[8px] mb-[6px]">
+                  <div className="w-[4px] h-[20px] bg-gradient-to-b from-[#95e36c] to-[#7dd054] rounded-full" />
+                  <h2 className="font-['IBM_Plex_Sans_Devanagari:Bold',sans-serif] text-[24px] text-[#003630] tracking-[-0.5px] leading-[1.1]">
+                    Filter
+                  </h2>
+                </div>
+                <p className="font-['Inter:Regular',sans-serif] text-[13px] text-[#6b7280] tracking-[-0.1px] ml-[12px]">
+                  Refine your payment history
+                </p>
+              </div>
+              <button
+                onClick={onClose}
+                className="w-[36px] h-[36px] flex items-center justify-center rounded-full bg-[#f5f7f9]/60 backdrop-blur-sm border border-[#e5e7eb]/50 hover:bg-[#e5e7eb]/80 active:scale-90 transition-all touch-manipulation shadow-sm"
+              >
+                <X className="w-[16px] h-[16px] text-[#6b7280]" strokeWidth={2.5} />
+              </button>
+            </div>
+
+            {/* Term Selection - Segmented Control Style */}
+            <div className="mb-[28px]">
+              <label className="font-['IBM_Plex_Sans_Devanagari:SemiBold',sans-serif] text-[11px] text-[#6b7280] mb-[12px] block uppercase tracking-[1px] pl-[4px]">
+                Academic Term
               </label>
-              <div className="grid grid-cols-4 gap-[8px]">
-                <button
-                  onClick={() => setLocalTerm(null)}
-                  className={`py-[12px] rounded-[10px] font-['IBM_Plex_Sans_Devanagari:Medium',sans-serif] text-[13px] transition-all touch-manipulation active:scale-95 ${
-                    localTerm === null
-                      ? 'bg-gradient-to-br from-[#95e36c] to-[#7dd054] text-white shadow-[0px_4px_12px_rgba(149,227,108,0.4)]'
-                      : 'bg-[#f5f7f9] text-[#6b7280] hover:bg-[#e5e7eb]'
-                  }`}
-                >
-                  All
-                </button>
-                {terms.map((term) => (
-                  <button
-                    key={term}
-                    onClick={() => setLocalTerm(term)}
-                    className={`py-[12px] rounded-[10px] font-['IBM_Plex_Sans_Devanagari:Medium',sans-serif] text-[13px] transition-all touch-manipulation active:scale-95 ${
-                      localTerm === term
-                        ? 'bg-gradient-to-br from-[#95e36c] to-[#7dd054] text-white shadow-[0px_4px_12px_rgba(149,227,108,0.4)]'
-                        : 'bg-[#f5f7f9] text-[#6b7280] hover:bg-[#e5e7eb]'
-                    }`}
-                  >
-                    T{term}
-                  </button>
-                ))}
+              <div className="relative bg-[#f5f7f9]/80 backdrop-blur-sm rounded-[16px] p-[4px] border border-[#e5e7eb]/50">
+                <div className="grid grid-cols-4 gap-[4px] relative">
+                  {[null, ...terms].map((term, index) => {
+                    const isSelected = localTerm === term;
+                    return (
+                      <button
+                        key={term === null ? 'all' : term}
+                        onClick={() => setLocalTerm(term)}
+                        className="relative z-10 py-[12px] rounded-[12px] font-['IBM_Plex_Sans_Devanagari:SemiBold',sans-serif] text-[14px] transition-all touch-manipulation active:scale-95"
+                        style={{
+                          color: isSelected ? '#003630' : '#9ca3af',
+                        }}
+                      >
+                        {isSelected && (
+                          <motion.div
+                            layoutId="termSelector"
+                            className="absolute inset-0 bg-white rounded-[12px] shadow-[0px_2px_8px_rgba(0,0,0,0.08),0px_1px_2px_rgba(0,0,0,0.06)]"
+                            transition={{ 
+                              type: "spring", 
+                              stiffness: 500, 
+                              damping: 35 
+                            }}
+                          />
+                        )}
+                        <span className="relative z-10">
+                          {term === null ? 'All' : `T${term}`}
+                        </span>
+                      </button>
+                    );
+                  })}
+                </div>
               </div>
             </div>
 
-            {/* Year Selection */}
-            <div className="mb-[24px]">
-              <label className="font-['IBM_Plex_Sans_Devanagari:SemiBold',sans-serif] text-[13px] text-[#003630] mb-[12px] block uppercase tracking-[0.5px]">
-                Select Year
+            {/* Year Selection - Card Style */}
+            <div className="mb-[32px]">
+              <label className="font-['IBM_Plex_Sans_Devanagari:SemiBold',sans-serif] text-[11px] text-[#6b7280] mb-[12px] block uppercase tracking-[1px] pl-[4px]">
+                Academic Year
               </label>
-              <div className="grid grid-cols-4 gap-[8px]">
-                <button
-                  onClick={() => setLocalYear(null)}
-                  className={`py-[12px] rounded-[10px] font-['IBM_Plex_Sans_Devanagari:Medium',sans-serif] text-[13px] transition-all touch-manipulation active:scale-95 ${
-                    localYear === null
-                      ? 'bg-gradient-to-br from-[#95e36c] to-[#7dd054] text-white shadow-[0px_4px_12px_rgba(149,227,108,0.4)]'
-                      : 'bg-[#f5f7f9] text-[#6b7280] hover:bg-[#e5e7eb]'
-                  }`}
-                >
-                  All
-                </button>
-                {years.map((year) => (
-                  <button
-                    key={year}
-                    onClick={() => setLocalYear(year)}
-                    className={`py-[12px] rounded-[10px] font-['IBM_Plex_Sans_Devanagari:Medium',sans-serif] text-[13px] transition-all touch-manipulation active:scale-95 ${
-                      localYear === year
-                        ? 'bg-gradient-to-br from-[#95e36c] to-[#7dd054] text-white shadow-[0px_4px_12px_rgba(149,227,108,0.4)]'
-                        : 'bg-[#f5f7f9] text-[#6b7280] hover:bg-[#e5e7eb]'
-                    }`}
-                  >
-                    {year}
-                  </button>
-                ))}
+              <div className="space-y-[8px]">
+                {[null, ...years].map((year) => {
+                  const isSelected = localYear === year;
+                  return (
+                    <button
+                      key={year === null ? 'all' : year}
+                      onClick={() => setLocalYear(year)}
+                      className="w-full relative group touch-manipulation active:scale-[0.98] transition-transform"
+                    >
+                      <div className={`
+                        relative rounded-[14px] px-[20px] py-[16px] transition-all duration-200
+                        ${isSelected 
+                          ? 'bg-gradient-to-r from-[#95e36c]/10 to-[#7dd054]/5 border-[1.5px] border-[#95e36c]' 
+                          : 'bg-white border-[1.5px] border-[#e5e7eb] hover:border-[#d1d5db]'
+                        }
+                      `}>
+                        {/* Checkmark indicator */}
+                        <div className="flex items-center justify-between">
+                          <span className={`
+                            font-['IBM_Plex_Sans_Devanagari:Medium',sans-serif] text-[15px] tracking-[-0.2px] transition-colors
+                            ${isSelected ? 'text-[#003630]' : 'text-[#6b7280]'}
+                          `}>
+                            {year === null ? 'All Years' : year}
+                          </span>
+                          <div className={`
+                            w-[22px] h-[22px] rounded-full flex items-center justify-center transition-all
+                            ${isSelected 
+                              ? 'bg-[#95e36c] scale-100' 
+                              : 'bg-transparent border-[2px] border-[#d1d5db] scale-90 opacity-50'
+                            }
+                          `}>
+                            {isSelected && (
+                              <motion.svg
+                                initial={{ scale: 0, rotate: -180 }}
+                                animate={{ scale: 1, rotate: 0 }}
+                                transition={{ 
+                                  type: "spring",
+                                  stiffness: 500,
+                                  damping: 25
+                                }}
+                                width="12"
+                                height="10"
+                                viewBox="0 0 12 10"
+                                fill="none"
+                              >
+                                <path
+                                  d="M1.5 5L4.5 8L10.5 2"
+                                  stroke="white"
+                                  strokeWidth="2.5"
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                />
+                              </motion.svg>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    </button>
+                  );
+                })}
               </div>
             </div>
 
-            {/* Action Buttons */}
+            {/* Action Buttons - Unique Style */}
             <div className="flex gap-[12px]">
               <button
                 onClick={handleClear}
-                className="flex-1 py-[14px] rounded-[12px] bg-[#f5f7f9] hover:bg-[#e5e7eb] active:scale-98 transition-all font-['IBM_Plex_Sans_Devanagari:SemiBold',sans-serif] text-[14px] text-[#6b7280] tracking-[-0.14px] touch-manipulation"
+                className="flex-1 h-[52px] rounded-[16px] bg-white border-[1.5px] border-[#e5e7eb] hover:border-[#d1d5db] active:scale-[0.97] transition-all font-['IBM_Plex_Sans_Devanagari:SemiBold',sans-serif] text-[15px] text-[#6b7280] tracking-[-0.2px] touch-manipulation shadow-sm"
               >
-                Clear
+                Reset
               </button>
               <button
                 onClick={handleApply}
-                className="flex-1 py-[14px] rounded-[12px] bg-gradient-to-br from-[#95e36c] to-[#7dd054] hover:shadow-lg active:scale-98 transition-all font-['IBM_Plex_Sans_Devanagari:Bold',sans-serif] text-[14px] text-white tracking-[-0.14px] shadow-[0px_8px_20px_rgba(149,227,108,0.3)] touch-manipulation"
+                className="flex-1 h-[52px] rounded-[16px] bg-[#003630] hover:bg-[#004d45] active:scale-[0.97] transition-all font-['IBM_Plex_Sans_Devanagari:Bold',sans-serif] text-[15px] text-white tracking-[-0.2px] shadow-[0px_4px_16px_rgba(0,54,48,0.24),0px_1px_3px_rgba(0,54,48,0.12)] touch-manipulation relative overflow-hidden group"
               >
-                Apply Filters
+                <span className="relative z-10">Apply</span>
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
               </button>
             </div>
           </div>
+
+          {/* Bottom safe area */}
+          <div className="h-[env(safe-area-inset-bottom,20px)] bg-white/95" />
         </div>
       </motion.div>
     </>
@@ -821,59 +927,116 @@ export default function HistoryPage({ userName, userPhone, onBack, onViewAllRece
         {/* Content */}
         <div className="relative px-[21px] pt-[53px]">
           {/* Title and Filter Button */}
-          <div className="flex items-center justify-between mb-[35px]">
+          <div className="flex items-center justify-between mb-[32px]">
             <h1 className="font-['Inter:Regular',sans-serif] text-[18px] text-black tracking-[-0.18px] leading-[0.5]">
               Payment History
             </h1>
             <button
               onClick={() => setShowFilterPopup(true)}
-              className="flex items-center gap-[6px] px-[14px] py-[8px] rounded-[10px] bg-[#f5f7f9] hover:bg-[#e5e7eb] active:scale-95 transition-all touch-manipulation border border-[#e5e7eb]"
+              className="relative group touch-manipulation active:scale-95 transition-transform"
             >
-              <Filter className="w-[16px] h-[16px] text-[#003630]" />
-              <span className="font-['IBM_Plex_Sans_Devanagari:Medium',sans-serif] text-[12px] text-[#003630] tracking-[-0.12px]">
-                Filter
-              </span>
-              {(selectedTerm || selectedYear) && (
-                <div className="w-[6px] h-[6px] rounded-full bg-[#95e36c]" />
-              )}
+              <div className={`
+                relative flex items-center gap-[8px] px-[16px] py-[10px] rounded-[14px] transition-all duration-200
+                ${(selectedTerm || selectedYear)
+                  ? 'bg-gradient-to-r from-[#003630] to-[#004d45] shadow-[0px_4px_12px_rgba(0,54,48,0.2)]'
+                  : 'bg-white border-[1.5px] border-[#e5e7eb] hover:border-[#d1d5db] shadow-sm'
+                }
+              `}>
+                <Filter 
+                  className={`w-[16px] h-[16px] transition-colors ${
+                    (selectedTerm || selectedYear) ? 'text-white' : 'text-[#003630]'
+                  }`}
+                  strokeWidth={2.5}
+                />
+                <span className={`
+                  font-['IBM_Plex_Sans_Devanagari:SemiBold',sans-serif] text-[13px] tracking-[-0.2px] transition-colors
+                  ${(selectedTerm || selectedYear) ? 'text-white' : 'text-[#003630]'}
+                `}>
+                  {(selectedTerm || selectedYear) ? 'Filtered' : 'Filter'}
+                </span>
+                {(selectedTerm || selectedYear) && (
+                  <motion.div
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    className="w-[18px] h-[18px] bg-[#95e36c] rounded-full flex items-center justify-center"
+                  >
+                    <span className="font-['IBM_Plex_Sans_Devanagari:Bold',sans-serif] text-[10px] text-[#003630]">
+                      {(selectedTerm ? 1 : 0) + (selectedYear ? 1 : 0)}
+                    </span>
+                  </motion.div>
+                )}
+              </div>
             </button>
           </div>
 
-          {/* Active Filters Display */}
-          {(selectedTerm || selectedYear) && (
-            <motion.div
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="flex flex-wrap gap-[8px] mb-[20px]"
-            >
-              {selectedTerm && (
-                <div className="flex items-center gap-[6px] px-[10px] py-[6px] bg-[#e0f7d4] rounded-[8px]">
-                  <span className="font-['IBM_Plex_Sans_Devanagari:Medium',sans-serif] text-[11px] text-[#003630]">
-                    Term {selectedTerm}
-                  </span>
-                  <button
-                    onClick={() => setSelectedTerm(null)}
-                    className="w-[14px] h-[14px] flex items-center justify-center rounded-full hover:bg-[#95e36c]/30 active:scale-90 transition-all"
-                  >
-                    <X className="w-[10px] h-[10px] text-[#003630]" />
-                  </button>
+          {/* Active Filters Display - Unique Chips */}
+          <AnimatePresence mode="popLayout">
+            {(selectedTerm || selectedYear) && (
+              <motion.div
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: "auto", opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                transition={{ duration: 0.3, ease: [0.32, 0.72, 0, 1] }}
+                className="overflow-hidden mb-[24px]"
+              >
+                <div className="flex flex-wrap gap-[10px]">
+                  {selectedTerm && (
+                    <motion.div
+                      initial={{ scale: 0, opacity: 0 }}
+                      animate={{ scale: 1, opacity: 1 }}
+                      exit={{ scale: 0, opacity: 0 }}
+                      transition={{ 
+                        type: "spring",
+                        stiffness: 500,
+                        damping: 30
+                      }}
+                      className="group relative"
+                    >
+                      <div className="relative flex items-center gap-[10px] pl-[16px] pr-[12px] py-[10px] bg-gradient-to-r from-[#e0f7d4] to-[#d0f0c0] rounded-[12px] border-[1.5px] border-[#95e36c]/30 shadow-sm">
+                        <div className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-[60%] bg-[#95e36c] rounded-r-full" />
+                        <span className="font-['IBM_Plex_Sans_Devanagari:SemiBold',sans-serif] text-[13px] text-[#003630] tracking-[-0.1px]">
+                          Term {selectedTerm}
+                        </span>
+                        <button
+                          onClick={() => setSelectedTerm(null)}
+                          className="w-[20px] h-[20px] flex items-center justify-center rounded-full bg-white/60 hover:bg-white active:scale-90 transition-all border border-[#95e36c]/20"
+                        >
+                          <X className="w-[11px] h-[11px] text-[#003630]" strokeWidth={2.5} />
+                        </button>
+                      </div>
+                    </motion.div>
+                  )}
+                  {selectedYear && (
+                    <motion.div
+                      initial={{ scale: 0, opacity: 0 }}
+                      animate={{ scale: 1, opacity: 1 }}
+                      exit={{ scale: 0, opacity: 0 }}
+                      transition={{ 
+                        type: "spring",
+                        stiffness: 500,
+                        damping: 30,
+                        delay: 0.05
+                      }}
+                      className="group relative"
+                    >
+                      <div className="relative flex items-center gap-[10px] pl-[16px] pr-[12px] py-[10px] bg-gradient-to-r from-[#e0f7d4] to-[#d0f0c0] rounded-[12px] border-[1.5px] border-[#95e36c]/30 shadow-sm">
+                        <div className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-[60%] bg-[#95e36c] rounded-r-full" />
+                        <span className="font-['IBM_Plex_Sans_Devanagari:SemiBold',sans-serif] text-[13px] text-[#003630] tracking-[-0.1px]">
+                          {selectedYear}
+                        </span>
+                        <button
+                          onClick={() => setSelectedYear(null)}
+                          className="w-[20px] h-[20px] flex items-center justify-center rounded-full bg-white/60 hover:bg-white active:scale-90 transition-all border border-[#95e36c]/20"
+                        >
+                          <X className="w-[11px] h-[11px] text-[#003630]" strokeWidth={2.5} />
+                        </button>
+                      </div>
+                    </motion.div>
+                  )}
                 </div>
-              )}
-              {selectedYear && (
-                <div className="flex items-center gap-[6px] px-[10px] py-[6px] bg-[#e0f7d4] rounded-[8px]">
-                  <span className="font-['IBM_Plex_Sans_Devanagari:Medium',sans-serif] text-[11px] text-[#003630]">
-                    {selectedYear}
-                  </span>
-                  <button
-                    onClick={() => setSelectedYear(null)}
-                    className="w-[14px] h-[14px] flex items-center justify-center rounded-full hover:bg-[#95e36c]/30 active:scale-90 transition-all"
-                  >
-                    <X className="w-[10px] h-[10px] text-[#003630]" />
-                  </button>
-                </div>
-              )}
-            </motion.div>
-          )}
+              </motion.div>
+            )}
+          </AnimatePresence>
 
           {/* Child Pills */}
           <div className="flex gap-[15px] mb-[25px] overflow-x-auto overflow-y-hidden scrollbar-hide -mx-[21px] px-[21px] pb-[5px] touch-pan-x">
@@ -888,24 +1051,71 @@ export default function HistoryPage({ userName, userPhone, onBack, onViewAllRece
             ))}
           </div>
 
-          {/* No Results Message for Filters */}
+          {/* No Results Message for Filters - Unique Empty State */}
           {(selectedTerm || selectedYear) && !hasAnyFilteredPayments && (
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="flex flex-col items-center justify-center py-[60px] px-[40px]"
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ 
+                type: "spring",
+                stiffness: 300,
+                damping: 25
+              }}
+              className="relative mt-[40px] mb-[40px]"
             >
-              <div className="w-[80px] h-[80px] bg-gradient-to-br from-[#e0f7d4] to-[#d0f0c0] rounded-full flex items-center justify-center mb-[20px]">
-                <Filter className="w-[40px] h-[40px] text-[#95e36c]" />
+              {/* Decorative background elements */}
+              <div className="absolute inset-0 flex items-center justify-center opacity-[0.03]">
+                <Filter className="w-[180px] h-[180px] text-[#95e36c]" strokeWidth={0.5} />
               </div>
-              <h3 className="font-['IBM_Plex_Sans_Devanagari:Bold',sans-serif] text-[16px] text-[#003630] mb-[8px] text-center">
-                No Payments Found
-              </h3>
-              <p className="font-['Inter:Regular',sans-serif] text-[12px] text-[#6b7280] text-center leading-[18px]">
-                No payment history matches your selected filters.
-                <br />
-                Try adjusting your filter criteria.
-              </p>
+
+              <div className="relative bg-gradient-to-br from-white via-[#fafbfc] to-white rounded-[24px] border-[1.5px] border-[#e5e7eb] shadow-[0px_4px_20px_rgba(0,0,0,0.04)] p-[32px] mx-[8px]">
+                {/* Accent bar */}
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[60px] h-[4px] bg-gradient-to-r from-transparent via-[#95e36c] to-transparent rounded-b-full" />
+                
+                <div className="flex flex-col items-center text-center">
+                  {/* Icon container with unique design */}
+                  <div className="relative mb-[24px]">
+                    <div className="absolute inset-0 bg-gradient-to-br from-[#95e36c]/20 to-[#7dd054]/10 blur-xl rounded-full" />
+                    <div className="relative w-[72px] h-[72px] bg-gradient-to-br from-[#f5f7f9] to-[#e5e7eb] rounded-[20px] flex items-center justify-center border-[1.5px] border-white shadow-[0px_2px_8px_rgba(0,0,0,0.06)]">
+                      <div className="absolute inset-[8px] bg-white rounded-[14px]" />
+                      <Filter className="relative z-10 w-[32px] h-[32px] text-[#95e36c]" strokeWidth={2} />
+                      
+                      {/* Animated search indicator */}
+                      <motion.div
+                        className="absolute -right-[4px] -top-[4px] w-[20px] h-[20px] bg-[#003630] rounded-full flex items-center justify-center shadow-sm"
+                        animate={{ scale: [1, 1.1, 1] }}
+                        transition={{ 
+                          duration: 2,
+                          repeat: Infinity,
+                          ease: "easeInOut"
+                        }}
+                      >
+                        <X className="w-[11px] h-[11px] text-white" strokeWidth={3} />
+                      </motion.div>
+                    </div>
+                  </div>
+
+                  <h3 className="font-['IBM_Plex_Sans_Devanagari:Bold',sans-serif] text-[17px] text-[#003630] mb-[8px] tracking-[-0.3px]">
+                    No Results Found
+                  </h3>
+                  <p className="font-['Inter:Regular',sans-serif] text-[13px] text-[#6b7280] leading-[20px] max-w-[240px] tracking-[-0.1px]">
+                    We couldn't find any payments matching your filters. Try selecting different criteria.
+                  </p>
+
+                  {/* Quick action button */}
+                  <button
+                    onClick={() => {
+                      setSelectedTerm(null);
+                      setSelectedYear(null);
+                    }}
+                    className="mt-[20px] px-[20px] py-[10px] rounded-[12px] bg-white border-[1.5px] border-[#e5e7eb] hover:border-[#95e36c] active:scale-95 transition-all shadow-sm group"
+                  >
+                    <span className="font-['IBM_Plex_Sans_Devanagari:SemiBold',sans-serif] text-[13px] text-[#6b7280] group-hover:text-[#003630] transition-colors tracking-[-0.1px]">
+                      Clear All Filters
+                    </span>
+                  </button>
+                </div>
+              </div>
             </motion.div>
           )}
 
