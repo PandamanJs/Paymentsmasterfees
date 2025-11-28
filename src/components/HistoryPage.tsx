@@ -221,7 +221,7 @@ function PaymentPopup({
       
       {/* Bottom Sheet Popup */}
       <motion.div
-        className="fixed bottom-0 left-0 right-0 z-50 mx-auto max-w-[450px]"
+        className="fixed bottom-0 left-0 right-0 z-50 mx-auto max-w-[600px]"
         initial={{ y: "100%", opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         exit={{ y: "100%", opacity: 0 }}
@@ -342,7 +342,7 @@ function FilterPopup({
 
       {/* Bottom Sheet Style Popup */}
       <motion.div
-        className="fixed bottom-0 left-0 right-0 z-50 mx-auto max-w-[450px]"
+        className="fixed bottom-0 left-0 right-0 z-50 mx-auto max-w-[600px]"
         initial={{ y: "100%", opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         exit={{ y: "100%", opacity: 0 }}
@@ -924,7 +924,7 @@ export default function HistoryPage({ userName, userPhone, onBack, onViewAllRece
 
   return (
     <div className="bg-white min-h-screen w-full overflow-hidden flex items-center justify-center">
-      <div className="relative w-full max-w-[450px] md:max-w-[500px] lg:max-w-[600px] min-h-screen mx-auto">
+      <div className="relative w-full max-w-[600px] md:max-w-[700px] lg:max-w-[800px] min-h-screen mx-auto">
         
         {/* Header */}
         <div className="relative h-[60px] w-full">

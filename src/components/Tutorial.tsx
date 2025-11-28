@@ -161,7 +161,7 @@ export default function Tutorial({ onComplete }: TutorialProps) {
                   duration: 0.5,
                   ease: [0.25, 0.1, 0.25, 1],
                 }}
-                className="max-w-[440px] w-full relative"
+                className="max-w-[580px] w-full relative"
                 style={{
                   backgroundColor: "rgba(255, 255, 255, 0.95)",
                   backdropFilter: "blur(60px) saturate(200%)",

@@ -348,7 +348,7 @@ export default function CheckoutPage({ services, onBack, onProceed }: CheckoutPa
 
   return (
     <div className="bg-gradient-to-br from-[#f9fafb] via-white to-[#f5f7f9] h-screen w-full overflow-hidden flex justify-center">
-      <div className="relative w-full max-w-[450px] md:max-w-[500px] lg:max-w-[600px] h-screen" data-name="Checkout page 1">
+      <div className="relative w-full max-w-[600px] md:max-w-[700px] lg:max-w-[800px] h-screen" data-name="Checkout page 1">
         <Header onBack={onBack} />
         <div className="absolute left-1/2 translate-x-[-50%] top-[100px] w-full px-[24px]">
           <div className="inline-flex items-center gap-[8px] mb-[4px]">

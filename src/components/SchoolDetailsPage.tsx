@@ -269,7 +269,7 @@ interface InputSectionProps {
 
 function InputSection({ onValidationChange }: InputSectionProps) {
   return (
-    <div className="absolute left-1/2 translate-x-[-50%] top-[318px] w-full max-w-[450px] px-[24px]">
+    <div className="absolute left-1/2 translate-x-[-50%] top-[318px] w-full max-w-[600px] px-[24px]">
       <div className="flex flex-col gap-[12px] items-center">
         <p className="font-['IBM_Plex_Sans:Regular',sans-serif] leading-[normal] not-italic text-[12px] text-black text-center w-full">
           Enter your registered phone number or the Student ID number to proceed.
@@ -290,7 +290,7 @@ function ProceedButton({ onClick, disabled }: ProceedButtonProps) {
     <button 
       onClick={onClick}
       disabled={disabled}
-      className={`absolute left-1/2 translate-x-[-50%] top-[433px] w-full max-w-[450px] px-[24px] h-[52px] touch-manipulation ${
+      className={`absolute left-1/2 translate-x-[-50%] top-[433px] w-full max-w-[600px] px-[24px] h-[52px] touch-manipulation ${
         disabled ? 'cursor-not-allowed' : 'group'
       }`}
       data-name="Button"
@@ -497,7 +497,7 @@ export default function SchoolDetailsPage({ schoolName, onProceed, onBack }: Sch
 
   return (
     <div className="bg-gradient-to-br from-[#f9fafb] via-white to-[#f5f7f9] min-h-screen w-full flex justify-center">
-      <div className="bg-gradient-to-br from-[#f9fafb] via-white to-[#f5f7f9] relative w-full max-w-[450px] md:max-w-[500px] lg:max-w-[600px] h-screen overflow-hidden" data-name="Page 1">
+      <div className="bg-gradient-to-br from-[#f9fafb] via-white to-[#f5f7f9] relative w-full max-w-[600px] md:max-w-[700px] lg:max-w-[800px] h-screen overflow-hidden" data-name="Page 1">
         <Header onBack={onBack} schoolName={schoolName} />
         <SchoolTitle schoolName={schoolName} isUniversity={isUniversity} />
         <InputSection onValidationChange={handleValidationChange} />

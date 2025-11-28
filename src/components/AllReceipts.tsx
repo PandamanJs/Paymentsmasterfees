@@ -379,7 +379,7 @@ export default function AllReceipts({
       {/* Animated Background */}
       <AnimatedBackground />
       
-      <div className="relative w-full max-w-[450px] md:max-w-[500px] lg:max-w-[600px] min-h-screen mx-auto">
+      <div className="relative w-full max-w-[600px] md:max-w-[700px] lg:max-w-[800px] min-h-screen mx-auto">
         {/* Header - Enhanced */}
         <div className="relative h-[72px] w-full bg-white/80 backdrop-blur-lg border-b border-[#e5e7eb] shadow-sm">
           <div className="absolute inset-0 flex items-center px-[20px]">

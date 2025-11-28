@@ -194,7 +194,7 @@ export default function ReceiptsPage({ onBack, onNext }: ReceiptsPageProps) {
 
   return (
     <div className="bg-gradient-to-br from-[#f9fafb] via-white to-[#f5f7f9] h-screen w-full overflow-hidden flex items-center justify-center">
-      <div className="relative w-full max-w-[450px] md:max-w-[500px] lg:max-w-[600px] h-screen mx-auto" data-name="Receipts Page">
+      <div className="relative w-full max-w-[600px] md:max-w-[700px] lg:max-w-[800px] h-screen mx-auto" data-name="Receipts Page">
         <Header onBack={onBack} />
         <div className="absolute left-1/2 translate-x-[-50%] top-[110px] w-full px-[24px]">
           <div className="inline-flex items-center gap-[8px] mb-[4px]">

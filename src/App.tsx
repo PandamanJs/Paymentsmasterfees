@@ -618,7 +618,7 @@ function Frame4() {
 function SearchPage({ onProceed, selectedSchool, onSchoolSelect }: { onProceed: () => void; selectedSchool: string | null; onSchoolSelect: (school: string) => void }) {
   return (
     <div className="bg-white min-h-screen w-full flex justify-center">
-      <div className="bg-white w-full max-w-[450px] md:max-w-[500px] lg:max-w-[600px] min-h-screen flex flex-col" data-name="Page 3">
+      <div className="bg-white w-full max-w-[600px] md:max-w-[700px] lg:max-w-[800px] min-h-screen flex flex-col" data-name="Page 3">
         <Frame4 />
         <div className="flex-1 flex flex-col justify-between py-[24px] sm:py-[48px]">
           <Frame3 

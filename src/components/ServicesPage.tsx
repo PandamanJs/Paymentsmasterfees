@@ -184,11 +184,11 @@ function DecorativeShapes() {
 function PageGroup1({ onBack }: { onBack: () => void }) {
   return (
     <div className="absolute contents left-0 top-0">
-      <div className="absolute left-1/2 top-[219.31px] translate-x-[-50%] w-full max-w-[450px] px-[24px]">
+      <div className="absolute left-1/2 top-[219.31px] translate-x-[-50%] w-full max-w-[600px] px-[24px]">
         <p className="font-['IBM_Plex_Sans_Devanagari:Regular',sans-serif] leading-[1.5] not-italic text-[12px] text-black tracking-[-0.12px]">Which one of our services would you like us to help you with today?</p>
       </div>
       <DecorativeShapes />
-      <div className="absolute box-border h-[66px] left-1/2 top-0 translate-x-[-50%] w-full max-w-[500px]">
+      <div className="absolute box-border h-[66px] left-1/2 top-0 translate-x-[-50%] w-full max-w-[600px]">
         <Header onBack={onBack} />
       </div>
     </div>
@@ -255,7 +255,7 @@ function Frame4({ onSelectService }: { onSelectService: (service: string) => voi
 
 function Frame6({ onSelectService, onViewHistory, onPayFees, isUniversity }: { onSelectService: (service: string) => void; onViewHistory: () => void; onPayFees?: () => void; isUniversity?: boolean }) {
   return (
-    <div className="absolute content-stretch flex flex-col gap-[24px] items-start left-1/2 translate-x-[-50%] top-[300px] w-full max-w-[450px] px-[24px]">
+    <div className="absolute content-stretch flex flex-col gap-[24px] items-start left-1/2 translate-x-[-50%] top-[300px] w-full max-w-[600px] px-[24px]">
       <Frame2 onPayFees={onPayFees} isUniversity={isUniversity} />
       <Frame3 onViewHistory={onViewHistory} />
       <Frame4 onSelectService={onSelectService} />
@@ -295,9 +295,9 @@ export default function ServicesPage({ userName, schoolName, onBack, onSelectSer
 
   return (
     <div className="bg-white min-h-screen w-full overflow-hidden flex items-center justify-center" data-name="Page 2">
-      <div className="relative w-full max-w-[450px] md:max-w-[500px] lg:max-w-[600px] h-screen mx-auto">
+      <div className="relative w-full max-w-[600px] md:max-w-[700px] lg:max-w-[800px] h-screen mx-auto">
         <PageGroup2 onBack={onBack} />
-        <div className="absolute font-['Inter:Regular',sans-serif] font-normal leading-[0.5] left-1/2 translate-x-[-50%] not-italic text-[18px] text-black top-[164px] tracking-[-0.18px] w-full max-w-[450px] px-[24px]">
+        <div className="absolute font-['Inter:Regular',sans-serif] font-normal leading-[0.5] left-1/2 translate-x-[-50%] not-italic text-[18px] text-black top-[164px] tracking-[-0.18px] w-full max-w-[600px] px-[24px]">
           <p className="font-['IBM_Plex_Sans_Devanagari:Light',sans-serif] mb-[14px]">{greeting}, </p>
           <p className="font-['Agrandir:Grand_Heavy',sans-serif] text-[#003630]">{userName}</p>
         </div>

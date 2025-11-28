@@ -571,7 +571,7 @@ export default function CheckoutPage2({ services, onBack, onProceed }: CheckoutP
 
   return (
     <div className="bg-white h-screen w-full overflow-hidden flex justify-center">
-      <div className="flex flex-col w-full max-w-[450px] h-screen shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)]" data-name="Checkout page 2">
+      <div className="flex flex-col w-full max-w-[600px] md:max-w-[700px] lg:max-w-[800px] h-screen shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)]" data-name="Checkout page 2">
         <Header onBack={onBack} />
         <div className="flex-1 min-h-0">
           <Group1 
