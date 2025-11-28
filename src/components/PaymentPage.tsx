@@ -1,5 +1,6 @@
 import { motion } from "motion/react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { toast } from "sonner@2.0.3";
 import svgPaths from "../imports/svg-ft8f5pz3nc";
 import headerSvgPaths from "../imports/svg-4boykq1z8d";
 import imgVisa from "figma:asset/a5c75a14f01268c2534d0dfb0a9182a2bf3629d2.png";
@@ -649,6 +650,11 @@ export default function PaymentPage({ onBack, onPay, totalAmount }: PaymentPageP
   const [expiryDateError, setExpiryDateError] = useState('');
   const [cvvError, setCvvError] = useState('');
   const [touched, setTouched] = useState({ cardNumber: false, expiryDate: false, cvv: false });
+
+  // Clear any existing toasts on component mount
+  useEffect(() => {
+    toast.dismiss();
+  }, []);
 
   const handleMobileMoneyClick = () => {
     setIsMobileMoneyExpanded(!isMobileMoneyExpanded);

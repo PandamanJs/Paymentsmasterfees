@@ -1,7 +1,8 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import svgPaths from "../imports/svg-f4rs0uzy0h";
 import headerSvgPaths from "../imports/svg-4boykq1z8d";
 import ReceiptsPage from "./ReceiptsPage";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 interface Service {
   id: string;
@@ -158,6 +159,56 @@ function StudentServiceGroup({
   );
 }
 
+function StudentCarouselCard({ 
+  studentName, 
+  services, 
+  inputAmounts, 
+  onAmountChange 
+}: { 
+  studentName: string; 
+  services: Service[]; 
+  inputAmounts: Record<string, number>;
+  onAmountChange: (serviceId: string, value: number) => void;
+}) {
+  return (
+    <div className="w-full px-2">
+      <div className="w-full animate-fade-in" style={{ animationDelay: '100ms' }}>
+        <div className="mb-3 flex items-center gap-2 justify-center">
+          <div className="h-[2px] w-[8px] bg-gradient-to-r from-[#95e36c] to-transparent rounded-full"></div>
+          <p className="font-['IBM_Plex_Sans_Devanagari:Medium',sans-serif] text-[12px] text-[#003630] tracking-wide uppercase">
+            {studentName}
+          </p>
+        </div>
+        <div className="flex flex-col gap-3">
+          {services.map((service, index) => (
+            <div 
+              key={service.id} 
+              className="card card-interactive rounded-[10px] p-3 animate-fade-in group w-full"
+              style={{ 
+                animationDelay: `${150 + index * 50}ms`,
+                background: 'linear-gradient(135deg, rgba(248, 249, 250, 0.95) 0%, rgba(255, 255, 255, 0.9) 100%)',
+                border: '1px solid rgba(149, 227, 108, 0.1)'
+              }}
+            >
+              <ServiceItem 
+                description={service.description}
+                amount={service.amount}
+              />
+              <div className="mt-2 pt-2 border-t border-gradient">
+                <AmountInput 
+                  serviceId={service.id}
+                  value={inputAmounts[service.id] || 0}
+                  onChange={onAmountChange}
+                />
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function Group({ total }: { total: number }) {
   return (
     <div className="flex items-center justify-between w-full">
@@ -242,6 +293,67 @@ function Group1({
 }) {
   // Calculate total from input amounts
   const total = Object.values(inputAmounts).reduce((sum, amount) => sum + amount, 0);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const [touchStart, setTouchStart] = useState(0);
+  const [touchEnd, setTouchEnd] = useState(0);
+  const [isDragging, setIsDragging] = useState(false);
+
+  // Group services by student
+  const servicesByStudent = services.reduce((acc, service) => {
+    if (!acc[service.studentName]) {
+      acc[service.studentName] = [];
+    }
+    acc[service.studentName].push(service);
+    return acc;
+  }, {} as Record<string, Service[]>);
+
+  const studentEntries = Object.entries(servicesByStudent);
+  const totalStudents = studentEntries.length;
+
+  // Handle touch events for swipe
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setTouchStart(e.targetTouches[0].clientX);
+    setIsDragging(true);
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchEnd = () => {
+    if (!isDragging) return;
+    setIsDragging(false);
+    
+    const swipeThreshold = 50;
+    const distance = touchStart - touchEnd;
+    
+    if (Math.abs(distance) > swipeThreshold) {
+      if (distance > 0 && currentSlide < totalStudents - 1) {
+        // Swipe left - go to next
+        setCurrentSlide(currentSlide + 1);
+      } else if (distance < 0 && currentSlide > 0) {
+        // Swipe right - go to previous
+        setCurrentSlide(currentSlide - 1);
+      }
+    }
+  };
+
+  const goToSlide = (index: number) => {
+    setCurrentSlide(index);
+  };
+
+  const handlePrevSlide = () => {
+    if (currentSlide > 0) {
+      setCurrentSlide(currentSlide - 1);
+    }
+  };
+
+  const handleNextSlide = () => {
+    if (currentSlide < totalStudents - 1) {
+      setCurrentSlide(currentSlide + 1);
+    }
+  };
   
   return (
     <div className="flex flex-col h-full px-4 pt-6 pb-4">
@@ -252,28 +364,109 @@ function Group1({
       </div>
       
       <div className="flex-1 min-h-0 mb-4">
-        <div className="bg-white box-border flex flex-col gap-4 h-full overflow-y-auto pb-6 pt-5 px-4 rounded-[18px] w-full max-w-[327px] mx-auto">
-          <p className="font-['IBM_Plex_Sans_Devanagari:Medium',sans-serif] text-[12px] text-black">Enter the amount you want to pay.</p>
-          <div className="flex flex-col gap-5">
-            {(() => {
-              const servicesByStudent = services.reduce((acc, service) => {
-                if (!acc[service.studentName]) {
-                  acc[service.studentName] = [];
-                }
-                acc[service.studentName].push(service);
-                return acc;
-              }, {} as Record<string, Service[]>);
-              
-              return Object.entries(servicesByStudent).map(([studentName, studentServices]) => (
-                <StudentServiceGroup 
-                  key={studentName}
-                  studentName={studentName}
-                  services={studentServices}
-                  inputAmounts={inputAmounts}
-                  onAmountChange={onAmountChange}
-                />
-              ));
-            })()}
+        <div className="bg-white box-border flex flex-col gap-4 h-full overflow-y-auto pb-6 pt-5 px-4 rounded-[18px] w-full max-w-[327px] mx-auto relative">
+          <div className="flex items-center justify-between mb-2">
+            <p className="font-['IBM_Plex_Sans_Devanagari:Medium',sans-serif] text-[12px] text-black">Enter the amount you want to pay.</p>
+            {totalStudents > 1 && (
+              <div className="flex items-center gap-1 bg-[#003630] px-2 py-1 rounded-full">
+                <span className="font-['IBM_Plex_Sans_Devanagari:Medium',sans-serif] text-[10px] text-white">
+                  {currentSlide + 1}/{totalStudents}
+                </span>
+              </div>
+            )}
+          </div>
+          
+          {/* Swipe Instruction Banner */}
+          {totalStudents > 1 && (
+            <div className="bg-gradient-to-r from-[#95e36c]/10 via-[#95e36c]/5 to-[#95e36c]/10 rounded-lg px-3 py-2 mb-3 flex items-center justify-center gap-2 border border-[#95e36c]/20">
+              <ChevronLeft className="w-3 h-3 text-[#003630] animate-pulse" style={{ animationDuration: '1.5s' }} />
+              <span className="font-['IBM_Plex_Sans_Devanagari:Regular',sans-serif] text-[10px] text-[#003630]">
+                Swipe to view other students
+              </span>
+              <ChevronRight className="w-3 h-3 text-[#003630] animate-pulse" style={{ animationDuration: '1.5s' }} />
+            </div>
+          )}
+          
+          <div className="relative">
+            {totalStudents > 1 ? (
+              <>
+                <div className="relative">
+                  {/* Left Arrow Button */}
+                  {currentSlide > 0 && (
+                    <button
+                      onClick={handlePrevSlide}
+                      className="absolute left-0 top-1/2 -translate-y-1/2 z-20 bg-white border-2 border-[#003630] rounded-full p-2 shadow-lg active:scale-95 transition-all hover:bg-[#003630] hover:text-white group"
+                      style={{ marginLeft: '-12px' }}
+                    >
+                      <ChevronLeft className="w-5 h-5 text-[#003630] group-hover:text-white" />
+                    </button>
+                  )}
+                  
+                  {/* Right Arrow Button */}
+                  {currentSlide < totalStudents - 1 && (
+                    <button
+                      onClick={handleNextSlide}
+                      className="absolute right-0 top-1/2 -translate-y-1/2 z-20 bg-white border-2 border-[#003630] rounded-full p-2 shadow-lg active:scale-95 transition-all hover:bg-[#003630] hover:text-white group"
+                      style={{ marginRight: '-12px' }}
+                    >
+                      <ChevronRight className="w-5 h-5 text-[#003630] group-hover:text-white" />
+                    </button>
+                  )}
+                  
+                  <div 
+                    ref={containerRef}
+                    className="overflow-hidden relative"
+                    onTouchStart={handleTouchStart}
+                    onTouchMove={handleTouchMove}
+                    onTouchEnd={handleTouchEnd}
+                  >
+                    <div 
+                      className="flex transition-transform duration-300 ease-out"
+                      style={{ transform: `translateX(-${currentSlide * 100}%)` }}
+                    >
+                      {studentEntries.map(([studentName, studentServices]) => (
+                        <div key={studentName} className="w-full flex-shrink-0">
+                          <StudentCarouselCard 
+                            studentName={studentName}
+                            services={studentServices}
+                            inputAmounts={inputAmounts}
+                            onAmountChange={onAmountChange}
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+                
+                {/* Pagination Dots */}
+                <div className="flex justify-center gap-2 mt-4 bg-[rgba(0,54,48,0.05)] rounded-full py-2 px-4 mx-auto w-fit">
+                  {studentEntries.map((_, index) => (
+                    <button
+                      key={index}
+                      onClick={() => goToSlide(index)}
+                      className={`h-2 rounded-full transition-all duration-300 ${
+                        index === currentSlide 
+                          ? 'w-8 bg-[#003630] shadow-md' 
+                          : 'w-2 bg-[#95e36c] hover:bg-[#003630]/50'
+                      }`}
+                      aria-label={`Go to student ${index + 1}`}
+                    />
+                  ))}
+                </div>
+              </>
+            ) : (
+              <div className="flex flex-col gap-5">
+                {studentEntries.map(([studentName, studentServices]) => (
+                  <StudentServiceGroup 
+                    key={studentName}
+                    studentName={studentName}
+                    services={studentServices}
+                    inputAmounts={inputAmounts}
+                    onAmountChange={onAmountChange}
+                  />
+                ))}
+              </div>
+            )}
           </div>
         </div>
       </div>
