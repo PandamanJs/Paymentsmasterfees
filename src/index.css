@@ -531,10 +531,6 @@
     top: -35px;
   }
 
-  .top-\[11px\] {
-    top: 11px;
-  }
-
   .top-\[14px\] {
     top: 14px;
   }
@@ -629,10 +625,6 @@
 
   .right-\[0px\] {
     right: 0;
-  }
-
-  .right-\[8px\] {
-    right: 8px;
   }
 
   .right-\[10px\] {
@@ -949,6 +941,10 @@
 
   .ml-0 {
     margin-left: calc(var(--spacing) * 0);
+  }
+
+  .ml-\[8px\] {
+    margin-left: 8px;
   }
 
   .ml-\[12px\] {
@@ -1359,6 +1355,10 @@
     max-height: 180px;
   }
 
+  .max-h-\[200px\] {
+    max-height: 200px;
+  }
+
   .max-h-\[240px\] {
     max-height: 240px;
   }
@@ -1465,10 +1465,6 @@
 
   .w-\[54px\] {
     width: 54px;
-  }
-
-  .w-\[76px\] {
-    width: 76px;
   }
 
   .w-\[77\.746px\] {
@@ -1995,6 +1991,12 @@
 
   .gap-px {
     gap: 1px;
+  }
+
+  :where(.space-y-\[4px\] > :not(:last-child)) {
+    --tw-space-y-reverse: 0;
+    margin-block-start: calc(4px * var(--tw-space-y-reverse));
+    margin-block-end: calc(4px * calc(1 - var(--tw-space-y-reverse)));
   }
 
   :where(.space-y-\[6px\] > :not(:last-child)) {
@@ -2732,6 +2734,10 @@
 
   .pr-\[32px\] {
     padding-right: 32px;
+  }
+
+  .pr-\[56px\] {
+    padding-right: 56px;
   }
 
   .pb-0 {

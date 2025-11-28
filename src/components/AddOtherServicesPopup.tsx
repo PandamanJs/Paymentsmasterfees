@@ -6,7 +6,16 @@ import type { SchoolService } from "../data/schoolData";
 
 interface AddOtherServicesPopupProps {
   onClose: () => void;
-  onDone: (services: Array<{ id: string; name: string; amount: number; category: string; term: string; route?: string }>) => void;
+  onDone: (services: Array<{ 
+    id: string; 
+    name: string; 
+    amount: number; 
+    category: string; 
+    term: string; 
+    route?: string;
+    paymentPeriod?: string;
+    uniformItems?: string[];
+  }>) => void;
   schoolName: string;
 }
 
@@ -67,7 +76,63 @@ function PremiumDropdown({
 }
 
 /**
- * Service Checkbox Item with Term and Route Selection
+ * Uniform Item Selector
+ */
+function UniformSelector({
+  subItems,
+  selectedItems,
+  onItemsChange
+}: {
+  subItems: Array<{ id: string; name: string; amount: number }>;
+  selectedItems: string[];
+  onItemsChange: (items: string[]) => void;
+}) {
+  const toggleItem = (itemId: string) => {
+    // If selecting "complete set", deselect all individual items
+    if (itemId === "uniform-complete") {
+      onItemsChange(selectedItems.includes(itemId) ? [] : [itemId]);
+    } else {
+      // If selecting individual item, deselect "complete set"
+      const newItems = selectedItems.includes(itemId)
+        ? selectedItems.filter(id => id !== itemId)
+        : [...selectedItems.filter(id => id !== "uniform-complete"), itemId];
+      onItemsChange(newItems);
+    }
+  };
+
+  return (
+    <div className="space-y-[4px]">
+      <label className="block font-['IBM_Plex_Sans_Devanagari:Medium',sans-serif] text-[10px] text-[#6b7280] uppercase tracking-[0.8px] mb-[8px]">
+        Select Uniform Items
+      </label>
+      <div className="max-h-[200px] overflow-y-auto bg-[#f9fafb] rounded-[8px] border border-[#e5e7eb] p-[8px] space-y-[4px]">
+        {subItems.map(item => (
+          <button
+            key={item.id}
+            onClick={() => toggleItem(item.id)}
+            className={`w-full text-left px-[12px] py-[8px] rounded-[6px] transition-colors touch-manipulation flex items-center justify-between ${
+              selectedItems.includes(item.id)
+                ? 'bg-[#95e36c] text-[#003630]'
+                : 'bg-white hover:bg-[#f5f5f5]'
+            }`}
+          >
+            <div className="flex-1">
+              <p className={`font-['IBM_Plex_Sans_Devanagari:${selectedItems.includes(item.id) ? 'SemiBold' : 'Regular'}',sans-serif] text-[11px] tracking-[-0.11px]`}>
+                {item.name}
+              </p>
+            </div>
+            <p className={`font-['IBM_Plex_Sans_Devanagari:Bold',sans-serif] text-[11px] tracking-[-0.11px] ml-[8px]`}>
+              ZMW {item.amount}
+            </p>
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/**
+ * Service Checkbox Item with all selection options
  */
 function ServiceCheckbox({ 
   service, 
@@ -77,6 +142,10 @@ function ServiceCheckbox({
   onTermChange,
   route,
   onRouteChange,
+  paymentPeriod,
+  onPaymentPeriodChange,
+  uniformItems,
+  onUniformItemsChange,
   schoolName
 }: { 
   service: SchoolService; 
@@ -86,10 +155,31 @@ function ServiceCheckbox({
   onTermChange: (term: string) => void;
   route?: string;
   onRouteChange?: (route: string) => void;
+  paymentPeriod?: string;
+  onPaymentPeriodChange?: (period: string) => void;
+  uniformItems?: string[];
+  onUniformItemsChange?: (items: string[]) => void;
   schoolName: string;
 }) {
   const isTransport = service.category === 'transport';
+  const isMeals = service.category === 'meals';
+  const isUniform = service.category === 'uniform';
+  const hasPaymentPeriods = service.paymentPeriods && service.paymentPeriods.length > 0;
   const busRoutes = BUS_ROUTES[schoolName] || [];
+  
+  // Calculate current amount based on selections
+  let displayAmount = service.amount;
+  
+  if (isUniform && uniformItems && uniformItems.length > 0) {
+    displayAmount = service.subItems
+      ?.filter(item => uniformItems.includes(item.id))
+      .reduce((sum, item) => sum + item.amount, 0) || service.amount;
+  } else if (hasPaymentPeriods && paymentPeriod) {
+    const period = service.paymentPeriods?.find(p => p.period === paymentPeriod);
+    if (period) displayAmount = period.amount;
+  } else if (isTransport && route && service.routePricing) {
+    displayAmount = service.routePricing[route] || service.amount;
+  }
 
   return (
     <div className="w-full">
@@ -126,7 +216,7 @@ function ServiceCheckbox({
           </p>
           <div className="flex items-center gap-[8px]">
             <p className="font-['IBM_Plex_Sans_Devanagari:Bold',sans-serif] text-[13px] text-[#003630] tracking-[-0.13px]">
-              ZMW {service.amount.toLocaleString()}
+              ZMW {displayAmount.toLocaleString()}
             </p>
             <span className="px-[6px] py-[2px] bg-[#e0f7d4] rounded-[4px] text-[9px] font-['IBM_Plex_Sans_Devanagari:Medium',sans-serif] text-[#003630] uppercase tracking-[0.5px]">
               {service.category}
@@ -135,28 +225,50 @@ function ServiceCheckbox({
         </div>
       </button>
 
-      {/* Dropdowns (shown when selected) */}
+      {/* Options (shown when selected) */}
       {isSelected && (
         <div className="px-[16px] pb-[12px] space-y-[8px]" onClick={(e) => e.stopPropagation()}>
-          <div className={`grid ${isTransport ? 'grid-cols-2' : 'grid-cols-1'} gap-[8px]`}>
-            {/* Term Dropdown */}
-            <PremiumDropdown
-              label="Select Term"
-              value={term}
-              options={TERM_OPTIONS}
-              onChange={onTermChange}
+          {/* Uniform Items Selector */}
+          {isUniform && service.subItems && onUniformItemsChange && (
+            <UniformSelector
+              subItems={service.subItems}
+              selectedItems={uniformItems || []}
+              onItemsChange={onUniformItemsChange}
             />
-            
-            {/* Route Dropdown (only for transport services) */}
-            {isTransport && onRouteChange && (
+          )}
+          
+          {/* Payment Period Selector for meals and transport */}
+          {!isUniform && hasPaymentPeriods && onPaymentPeriodChange && (
+            <PremiumDropdown
+              label="Payment Period"
+              value={paymentPeriod || 'term'}
+              options={service.paymentPeriods?.map(p => p.period) || ['term']}
+              onChange={onPaymentPeriodChange}
+            />
+          )}
+          
+          {/* Regular dropdowns layout */}
+          {!isUniform && (
+            <div className={`grid ${isTransport ? 'grid-cols-2' : 'grid-cols-1'} gap-[8px]`}>
+              {/* Term Dropdown */}
               <PremiumDropdown
-                label="Select Route"
-                value={route || busRoutes[0]}
-                options={busRoutes}
-                onChange={onRouteChange}
+                label="Select Term"
+                value={term}
+                options={TERM_OPTIONS}
+                onChange={onTermChange}
               />
-            )}
-          </div>
+              
+              {/* Route Dropdown (only for transport services) */}
+              {isTransport && onRouteChange && (
+                <PremiumDropdown
+                  label="Select Route"
+                  value={route || busRoutes[0]}
+                  options={busRoutes}
+                  onChange={onRouteChange}
+                />
+              )}
+            </div>
+          )}
         </div>
       )}
     </div>
@@ -176,6 +288,10 @@ function ServiceCategoryGroup({
   onTermChange,
   serviceRoutes,
   onRouteChange,
+  servicePaymentPeriods,
+  onPaymentPeriodChange,
+  serviceUniformItems,
+  onUniformItemsChange,
   schoolName
 }: { 
   category: string; 
@@ -186,6 +302,10 @@ function ServiceCategoryGroup({
   onTermChange: (id: string, term: string) => void;
   serviceRoutes: Record<string, string>;
   onRouteChange: (id: string, route: string) => void;
+  servicePaymentPeriods: Record<string, string>;
+  onPaymentPeriodChange: (id: string, period: string) => void;
+  serviceUniformItems: Record<string, string[]>;
+  onUniformItemsChange: (id: string, items: string[]) => void;
   schoolName: string;
 }) {
   if (services.length === 0) return null;
@@ -196,6 +316,8 @@ function ServiceCategoryGroup({
     transport: "Transportation",
     activities: "Activities & Programs",
     supplies: "Supplies & Materials",
+    uniform: "School Uniform",
+    accommodation: "Boarding & Accommodation",
     other: "Other Services"
   };
 
@@ -217,6 +339,10 @@ function ServiceCategoryGroup({
             onTermChange={(term) => onTermChange(service.id, term)}
             route={serviceRoutes[service.id]}
             onRouteChange={(route) => onRouteChange(service.id, route)}
+            paymentPeriod={servicePaymentPeriods[service.id]}
+            onPaymentPeriodChange={(period) => onPaymentPeriodChange(service.id, period)}
+            uniformItems={serviceUniformItems[service.id]}
+            onUniformItemsChange={(items) => onUniformItemsChange(service.id, items)}
             schoolName={schoolName}
           />
         ))}
@@ -229,6 +355,8 @@ export default function AddOtherServicesPopup({ onClose, onDone, schoolName }: A
   const [selectedServiceIds, setSelectedServiceIds] = useState<Set<string>>(new Set());
   const [serviceTerms, setServiceTerms] = useState<Record<string, string>>({});
   const [serviceRoutes, setServiceRoutes] = useState<Record<string, string>>({});
+  const [servicePaymentPeriods, setServicePaymentPeriods] = useState<Record<string, string>>({});
+  const [serviceUniformItems, setServiceUniformItems] = useState<Record<string, string[]>>({});
   
   // Get all services and filter out tuition (handled by Add School Fees)
   const allServices = getSchoolServices(schoolName).filter(service => service.category !== 'tuition');
@@ -261,6 +389,14 @@ export default function AddOtherServicesPopup({ onClose, onDone, schoolName }: A
             setServiceRoutes(prev => ({ ...prev, [serviceId]: routes[0] }));
           }
         }
+        // Initialize payment period for services with payment periods
+        if (service?.paymentPeriods && !servicePaymentPeriods[serviceId]) {
+          setServicePaymentPeriods(prev => ({ ...prev, [serviceId]: 'term' }));
+        }
+        // Initialize uniform items with complete set
+        if (service?.category === 'uniform' && service.subItems && !serviceUniformItems[serviceId]) {
+          setServiceUniformItems(prev => ({ ...prev, [serviceId]: ['uniform-complete'] }));
+        }
       }
       return newSet;
     });
@@ -274,25 +410,74 @@ export default function AddOtherServicesPopup({ onClose, onDone, schoolName }: A
     setServiceRoutes(prev => ({ ...prev, [serviceId]: route }));
   };
 
+  const handlePaymentPeriodChange = (serviceId: string, period: string) => {
+    setServicePaymentPeriods(prev => ({ ...prev, [serviceId]: period }));
+  };
+
+  const handleUniformItemsChange = (serviceId: string, items: string[]) => {
+    setServiceUniformItems(prev => ({ ...prev, [serviceId]: items }));
+  };
+
   const handleDone = () => {
     const selectedServices = allServices
       .filter(service => selectedServiceIds.has(service.id))
-      .map(service => ({
-        id: service.id,
-        name: service.name,
-        amount: service.amount,
-        category: service.category,
-        term: serviceTerms[service.id] || "Term 1",
-        ...(service.category === 'transport' && { route: serviceRoutes[service.id] })
-      }));
+      .map(service => {
+        let amount = service.amount;
+        const paymentPeriod = servicePaymentPeriods[service.id];
+        const route = serviceRoutes[service.id];
+        const uniformItems = serviceUniformItems[service.id];
+        
+        // Calculate amount based on selections
+        if (service.category === 'uniform' && uniformItems && uniformItems.length > 0) {
+          amount = service.subItems
+            ?.filter(item => uniformItems.includes(item.id))
+            .reduce((sum, item) => sum + item.amount, 0) || service.amount;
+        } else if (paymentPeriod && service.paymentPeriods) {
+          const period = service.paymentPeriods.find(p => p.period === paymentPeriod);
+          if (period) amount = period.amount;
+        } else if (service.category === 'transport' && route && service.routePricing) {
+          amount = service.routePricing[route] || service.amount;
+        }
+        
+        return {
+          id: service.id,
+          name: service.name,
+          amount,
+          category: service.category,
+          term: serviceTerms[service.id] || "Term 1",
+          ...(service.category === 'transport' && { route }),
+          ...(paymentPeriod && { paymentPeriod }),
+          ...(uniformItems && uniformItems.length > 0 && { uniformItems })
+        };
+      });
     
     onDone(selectedServices);
   };
 
   const selectedCount = selectedServiceIds.size;
+  
+  // Calculate total amount considering all selections
   const totalAmount = allServices
     .filter(service => selectedServiceIds.has(service.id))
-    .reduce((sum, service) => sum + service.amount, 0);
+    .reduce((sum, service) => {
+      let amount = service.amount;
+      const paymentPeriod = servicePaymentPeriods[service.id];
+      const route = serviceRoutes[service.id];
+      const uniformItems = serviceUniformItems[service.id];
+      
+      if (service.category === 'uniform' && uniformItems && uniformItems.length > 0) {
+        amount = service.subItems
+          ?.filter(item => uniformItems.includes(item.id))
+          .reduce((itemSum, item) => itemSum + item.amount, 0) || service.amount;
+      } else if (paymentPeriod && service.paymentPeriods) {
+        const period = service.paymentPeriods.find(p => p.period === paymentPeriod);
+        if (period) amount = period.amount;
+      } else if (service.category === 'transport' && route && service.routePricing) {
+        amount = service.routePricing[route] || service.amount;
+      }
+      
+      return sum + amount;
+    }, 0);
 
   return (
     <>
@@ -319,7 +504,7 @@ export default function AddOtherServicesPopup({ onClose, onDone, schoolName }: A
                   Add Services
                 </p>
                 <p className="font-['IBM_Plex_Sans_Devanagari:Regular',sans-serif] text-[11px] text-[#6b7280] tracking-[-0.11px]">
-                  Select services, term, and route for {schoolName}
+                  Select services and payment options for {schoolName}
                 </p>
               </div>
               <button
@@ -346,6 +531,10 @@ export default function AddOtherServicesPopup({ onClose, onDone, schoolName }: A
                 onTermChange={handleTermChange}
                 serviceRoutes={serviceRoutes}
                 onRouteChange={handleRouteChange}
+                servicePaymentPeriods={servicePaymentPeriods}
+                onPaymentPeriodChange={handlePaymentPeriodChange}
+                serviceUniformItems={serviceUniformItems}
+                onUniformItemsChange={handleUniformItemsChange}
                 schoolName={schoolName}
               />
             ))}

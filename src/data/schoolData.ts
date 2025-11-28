@@ -46,7 +46,18 @@ export interface SchoolService {
   name: string;        // Service name
   description: string; // Detailed description
   amount: number;      // Cost in ZMW (Zambian Kwacha)
-  category: 'tuition' | 'meals' | 'transport' | 'activities' | 'supplies' | 'other';
+  category: 'tuition' | 'meals' | 'transport' | 'activities' | 'supplies' | 'accommodation' | 'uniform' | 'other';
+  paymentPeriods?: Array<{
+    period: 'term' | 'week' | 'day' | 'year';
+    amount: number;
+    label: string;
+  }>;
+  routePricing?: Record<string, number>; // For transport services with different route prices
+  subItems?: Array<{
+    id: string;
+    name: string;
+    amount: number;
+  }>; // For services like uniform with individual parts
 }
 
 /**
@@ -83,9 +94,14 @@ export const SCHOOL_DATABASE: Record<string, SchoolData> = {
       {
         id: "TEC-S002",
         name: "Canteen (Lunch)",
-        description: "Daily lunch program for one month",
+        description: "Daily lunch program",
         amount: 300,
-        category: "meals"
+        category: "meals",
+        paymentPeriods: [
+          { period: 'term', amount: 300, label: 'Per Term (ZMW 300)' },
+          { period: 'week', amount: 80, label: 'Per Week (ZMW 80)' },
+          { period: 'day', amount: 20, label: 'Per Day (ZMW 20)' }
+        ]
       },
       {
         id: "TEC-S003",
@@ -104,9 +120,19 @@ export const SCHOOL_DATABASE: Record<string, SchoolData> = {
       {
         id: "TEC-S005",
         name: "School Bus",
-        description: "Monthly transport subscription",
+        description: "Transport subscription",
         amount: 400,
-        category: "transport"
+        category: "transport",
+        paymentPeriods: [
+          { period: 'term', amount: 400, label: 'Per Term (ZMW 400)' },
+          { period: 'week', amount: 120, label: 'Per Week (ZMW 120)' },
+          { period: 'day', amount: 30, label: 'Per Day (ZMW 30)' }
+        ],
+        routePricing: {
+          "Route A - Central": 400,
+          "Route B - East": 450,
+          "Route C - West": 500
+        }
       },
       {
         id: "TEC-S006",
@@ -128,6 +154,30 @@ export const SCHOOL_DATABASE: Record<string, SchoolData> = {
         description: "Third term miscellaneous fees",
         amount: 150,
         category: "other"
+      },
+      {
+        id: "TEC-S009",
+        name: "School Uniform",
+        description: "Complete school uniform set or individual items",
+        amount: 600,
+        category: "uniform",
+        subItems: [
+          { id: "uniform-complete", name: "Complete Set", amount: 600 },
+          { id: "uniform-shirt", name: "Shirt/Blouse", amount: 80 },
+          { id: "uniform-trousers", name: "Trousers/Skirt", amount: 120 },
+          { id: "uniform-shoes", name: "School Shoes", amount: 150 },
+          { id: "uniform-socks", name: "Socks (3 pairs)", amount: 40 },
+          { id: "uniform-tie", name: "School Tie", amount: 30 },
+          { id: "uniform-sweater", name: "Sweater/Cardigan", amount: 100 },
+          { id: "uniform-pe", name: "PE Kit", amount: 80 }
+        ]
+      },
+      {
+        id: "TEC-S010",
+        name: "Boarding Accommodation",
+        description: "Full boarding accommodation per term",
+        amount: 1500,
+        category: "accommodation"
       }
     ],
     parents: [
@@ -189,14 +239,19 @@ export const SCHOOL_DATABASE: Record<string, SchoolData> = {
         name: "Canteen (Lunch)",
         description: "Daily nutritious meals for students",
         amount: 450,
-        category: "meals"
+        category: "meals",
+        paymentPeriods: [
+          { period: 'term', amount: 450, label: 'Per Term (ZMW 450)' },
+          { period: 'week', amount: 120, label: 'Per Week (ZMW 120)' },
+          { period: 'day', amount: 25, label: 'Per Day (ZMW 25)' }
+        ]
       },
       {
         id: "CTA-S003",
-        name: "Boarding Fees",
-        description: "Full boarding accommodation",
+        name: "Boarding Accommodation",
+        description: "Full boarding accommodation per term",
         amount: 1800,
-        category: "other"
+        category: "accommodation"
       },
       {
         id: "CTA-S004",
@@ -224,7 +279,18 @@ export const SCHOOL_DATABASE: Record<string, SchoolData> = {
         name: "School Bus",
         description: "Daily transport to and from school",
         amount: 500,
-        category: "transport"
+        category: "transport",
+        paymentPeriods: [
+          { period: 'term', amount: 500, label: 'Per Term (ZMW 500)' },
+          { period: 'week', amount: 140, label: 'Per Week (ZMW 140)' },
+          { period: 'day', amount: 35, label: 'Per Day (ZMW 35)' }
+        ],
+        routePricing: {
+          "Route 1 - Kabulonga": 500,
+          "Route 2 - Roma": 550,
+          "Route 3 - Woodlands": 600,
+          "Route 4 - Chelston": 650
+        }
       },
       {
         id: "CTA-S008",
@@ -246,6 +312,23 @@ export const SCHOOL_DATABASE: Record<string, SchoolData> = {
         description: "Third term miscellaneous fees",
         amount: 200,
         category: "other"
+      },
+      {
+        id: "CTA-S011",
+        name: "School Uniform",
+        description: "Complete school uniform set or individual items",
+        amount: 750,
+        category: "uniform",
+        subItems: [
+          { id: "uniform-complete", name: "Complete Set", amount: 750 },
+          { id: "uniform-shirt", name: "Shirt/Blouse (White)", amount: 90 },
+          { id: "uniform-trousers", name: "Trousers/Skirt (Navy)", amount: 140 },
+          { id: "uniform-shoes", name: "Black School Shoes", amount: 180 },
+          { id: "uniform-socks", name: "Socks (3 pairs)", amount: 50 },
+          { id: "uniform-tie", name: "School Tie", amount: 40 },
+          { id: "uniform-blazer", name: "School Blazer", amount: 200 },
+          { id: "uniform-pe", name: "PE Kit", amount: 100 }
+        ]
       }
     ],
     parents: [
@@ -314,7 +397,12 @@ export const SCHOOL_DATABASE: Record<string, SchoolData> = {
         name: "Canteen (Lunch)",
         description: "Gourmet daily lunch program",
         amount: 500,
-        category: "meals"
+        category: "meals",
+        paymentPeriods: [
+          { period: 'term', amount: 500, label: 'Per Term (ZMW 500)' },
+          { period: 'week', amount: 140, label: 'Per Week (ZMW 140)' },
+          { period: 'day', amount: 30, label: 'Per Day (ZMW 30)' }
+        ]
       },
       {
         id: "JUL-S003",
@@ -339,17 +427,37 @@ export const SCHOOL_DATABASE: Record<string, SchoolData> = {
       },
       {
         id: "JUL-S006",
-        name: "School Uniform Set",
-        description: "Complete uniform with tie and blazer",
+        name: "School Uniform",
+        description: "Complete uniform with tie and blazer or individual items",
         amount: 850,
-        category: "supplies"
+        category: "uniform",
+        subItems: [
+          { id: "uniform-complete", name: "Complete Set (Tie & Blazer)", amount: 850 },
+          { id: "uniform-shirt", name: "White Shirt/Blouse", amount: 100 },
+          { id: "uniform-trousers", name: "Grey Trousers/Skirt", amount: 150 },
+          { id: "uniform-shoes", name: "Black Leather Shoes", amount: 200 },
+          { id: "uniform-socks", name: "Grey Socks (3 pairs)", amount: 60 },
+          { id: "uniform-tie", name: "School Tie", amount: 50 },
+          { id: "uniform-blazer", name: "School Blazer", amount: 250 },
+          { id: "uniform-pe", name: "PE Kit", amount: 120 }
+        ]
       },
       {
         id: "JUL-S007",
         name: "School Bus",
         description: "Premium transport to and from school",
         amount: 550,
-        category: "transport"
+        category: "transport",
+        paymentPeriods: [
+          { period: 'term', amount: 550, label: 'Per Term (ZMW 550)' },
+          { period: 'week', amount: 150, label: 'Per Week (ZMW 150)' },
+          { period: 'day', amount: 35, label: 'Per Day (ZMW 35)' }
+        ],
+        routePricing: {
+          "Route A - Town Center": 550,
+          "Route B - Parklands": 600,
+          "Route C - Riverside": 650
+        }
       },
       {
         id: "JUL-S008",
@@ -371,6 +479,13 @@ export const SCHOOL_DATABASE: Record<string, SchoolData> = {
         description: "Third term miscellaneous fees",
         amount: 250,
         category: "other"
+      },
+      {
+        id: "JUL-S011",
+        name: "Boarding Accommodation",
+        description: "Premium boarding accommodation per term",
+        amount: 2500,
+        category: "accommodation"
       }
     ],
     parents: [
@@ -432,7 +547,12 @@ export const SCHOOL_DATABASE: Record<string, SchoolData> = {
         name: "Canteen (Lunch)",
         description: "Gourmet lunch and snacks program",
         amount: 550,
-        category: "meals"
+        category: "meals",
+        paymentPeriods: [
+          { period: 'term', amount: 550, label: 'Per Term (ZMW 550)' },
+          { period: 'week', amount: 150, label: 'Per Week (ZMW 150)' },
+          { period: 'day', amount: 35, label: 'Per Day (ZMW 35)' }
+        ]
       },
       {
         id: "CCA-S003",
@@ -460,7 +580,18 @@ export const SCHOOL_DATABASE: Record<string, SchoolData> = {
         name: "School Bus",
         description: "Premium transport service",
         amount: 600,
-        category: "transport"
+        category: "transport",
+        paymentPeriods: [
+          { period: 'term', amount: 600, label: 'Per Term (ZMW 600)' },
+          { period: 'week', amount: 165, label: 'Per Week (ZMW 165)' },
+          { period: 'day', amount: 40, label: 'Per Day (ZMW 40)' }
+        ],
+        routePricing: {
+          "Route 1 - CBD": 600,
+          "Route 2 - Northrise": 650,
+          "Route 3 - Kansenshi": 700,
+          "Route 4 - Masala": 750
+        }
       },
       {
         id: "CCA-S007",
@@ -482,6 +613,30 @@ export const SCHOOL_DATABASE: Record<string, SchoolData> = {
         description: "Third term miscellaneous fees",
         amount: 300,
         category: "other"
+      },
+      {
+        id: "CCA-S010",
+        name: "School Uniform",
+        description: "Cambridge international uniform or individual items",
+        amount: 950,
+        category: "uniform",
+        subItems: [
+          { id: "uniform-complete", name: "Complete Set", amount: 950 },
+          { id: "uniform-shirt", name: "White Shirt/Blouse", amount: 110 },
+          { id: "uniform-trousers", name: "Navy Trousers/Skirt", amount: 170 },
+          { id: "uniform-shoes", name: "Black Leather Shoes", amount: 220 },
+          { id: "uniform-socks", name: "Navy Socks (3 pairs)", amount: 70 },
+          { id: "uniform-tie", name: "School Tie", amount: 60 },
+          { id: "uniform-blazer", name: "Embroidered Blazer", amount: 280 },
+          { id: "uniform-pe", name: "PE Kit", amount: 130 }
+        ]
+      },
+      {
+        id: "CCA-S011",
+        name: "Boarding Accommodation",
+        description: "International standard boarding per term",
+        amount: 3000,
+        category: "accommodation"
       }
     ],
     parents: [
@@ -543,7 +698,12 @@ export const SCHOOL_DATABASE: Record<string, SchoolData> = {
         name: "Canteen (Lunch)",
         description: "International cuisine lunch program",
         amount: 650,
-        category: "meals"
+        category: "meals",
+        paymentPeriods: [
+          { period: 'term', amount: 650, label: 'Per Term (ZMW 650)' },
+          { period: 'week', amount: 180, label: 'Per Week (ZMW 180)' },
+          { period: 'day', amount: 40, label: 'Per Day (ZMW 40)' }
+        ]
       },
       {
         id: "IMS-S003",
@@ -578,7 +738,19 @@ export const SCHOOL_DATABASE: Record<string, SchoolData> = {
         name: "School Bus",
         description: "Premium transport with AC",
         amount: 700,
-        category: "transport"
+        category: "transport",
+        paymentPeriods: [
+          { period: 'term', amount: 700, label: 'Per Term (ZMW 700)' },
+          { period: 'week', amount: 190, label: 'Per Week (ZMW 190)' },
+          { period: 'day', amount: 45, label: 'Per Day (ZMW 45)' }
+        ],
+        routePricing: {
+          "Route A - Embassy Area": 700,
+          "Route B - Kabulonga": 750,
+          "Route C - Roma": 800,
+          "Route D - Woodlands": 850,
+          "Route E - Mass Media": 900
+        }
       },
       {
         id: "IMS-S008",
@@ -600,6 +772,30 @@ export const SCHOOL_DATABASE: Record<string, SchoolData> = {
         description: "Third term miscellaneous fees",
         amount: 350,
         category: "other"
+      },
+      {
+        id: "IMS-S011",
+        name: "School Uniform",
+        description: "International school uniform or individual items",
+        amount: 1200,
+        category: "uniform",
+        subItems: [
+          { id: "uniform-complete", name: "Complete Set (Premium)", amount: 1200 },
+          { id: "uniform-shirt", name: "White Oxford Shirt/Blouse", amount: 130 },
+          { id: "uniform-trousers", name: "Charcoal Trousers/Skirt", amount: 200 },
+          { id: "uniform-shoes", name: "Black Leather Shoes", amount: 250 },
+          { id: "uniform-socks", name: "Charcoal Socks (3 pairs)", amount: 80 },
+          { id: "uniform-tie", name: "School Tie (Silk)", amount: 70 },
+          { id: "uniform-blazer", name: "Embroidered Blazer", amount: 350 },
+          { id: "uniform-pe", name: "PE Kit (Adidas)", amount: 150 }
+        ]
+      },
+      {
+        id: "IMS-S012",
+        name: "Boarding Accommodation",
+        description: "Premium international boarding per term",
+        amount: 4000,
+        category: "accommodation"
       }
     ],
     parents: [

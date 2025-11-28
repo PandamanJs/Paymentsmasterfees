@@ -190,7 +190,7 @@ function ServiceTable({ services, onRemoveItem }: { services: Service[]; onRemov
           {services.map((service, index) => (
             <motion.div 
               key={service.id} 
-              className="box-border content-stretch flex h-[36px] items-start pl-[5px] pr-0 py-0 w-full relative group hover:bg-gradient-to-r hover:from-[rgba(149,227,108,0.03)] hover:to-transparent transition-all duration-200"
+              className="box-border content-stretch flex h-[36px] items-start pl-[5px] pr-[56px] py-0 w-full relative group hover:bg-gradient-to-r hover:from-[rgba(149,227,108,0.03)] hover:to-transparent transition-all duration-200"
               initial={{ opacity: 0, x: -10 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: index * 0.05, duration: 0.2, ease: "easeOut" }}
@@ -198,19 +198,22 @@ function ServiceTable({ services, onRemoveItem }: { services: Service[]; onRemov
               <div className="box-border content-stretch flex gap-[10px] h-full items-center p-[10px] relative shrink-0 flex-1">
                 <div className="content-stretch flex flex-col h-[26px] items-start justify-center leading-[0] not-italic relative shrink-0">
                   <div className="flex flex-col font-['IBM_Plex_Sans_Devanagari:Medium',sans-serif] h-[15px] justify-center relative shrink-0 text-[12px] text-black">
-                    <p className="leading-[1.4]">{service.description}</p>
+                    <p className="leading-[1.4]">{service.description.replace(/\s*\(Per term\)/i, '')}</p>
                   </div>
                   <div className="flex flex-col font-['Inter:Light',sans-serif] font-light justify-center relative shrink-0 text-[#003049] text-[8px] tracking-[-0.08px]">
                     <p className="leading-[12px]">Invoice No. {service.invoiceNo}</p>
                   </div>
                 </div>
               </div>
-              <div className="box-border content-stretch flex gap-[10px] h-full items-start justify-center pb-[10px] pt-[2px] px-[10px] relative shrink-0 w-[76px]">
+              <div className="box-border content-stretch flex gap-[10px] h-full items-start justify-end pb-[10px] pt-[2px] px-[10px] relative shrink-0 w-[100px]">
                 <div className="flex flex-col font-['IBM_Plex_Sans_Devanagari:Medium',sans-serif] justify-center leading-[0] not-italic relative shrink-0 text-[12px] text-black text-nowrap">
                   <p className="leading-[1.4] whitespace-pre">K{service.amount.toLocaleString()}</p>
                 </div>
               </div>
-              <div className="absolute right-[8px] top-[11px] opacity-60 group-hover:opacity-100 transition-opacity">
+              <div 
+                className="absolute right-0 top-0 h-full px-[12px] flex items-center justify-center opacity-60 group-hover:opacity-100 transition-opacity"
+                style={{ minWidth: '44px' }}
+              >
                 <XIcon onClick={() => onRemoveItem(service.id)} />
               </div>
               {index < services.length - 1 && (
@@ -298,11 +301,20 @@ function AddSchoolFeesForm({ onDone, schoolName }: { onDone: (grade: string, yea
   const [selectedGrade, setSelectedGrade] = useState(GRADE_OPTIONS[2].value);
   const [selectedYear, setSelectedYear] = useState("2025");
   const [selectedTerm, setSelectedTerm] = useState("Term 1");
+  const [paymentPeriod, setPaymentPeriod] = useState<"term" | "year">("term");
+
+  const PAYMENT_PERIOD_OPTIONS = [
+    { label: "Per Term", value: "term" },
+    { label: "Full Year (3 Terms)", value: "year" }
+  ];
 
   const handleDone = () => {
     const gradeOption = GRADE_OPTIONS.find(opt => opt.value === selectedGrade);
     if (gradeOption) {
-      onDone(gradeOption.label, selectedYear, selectedTerm, gradeOption.price);
+      // Multiply by 3 if paying for full year
+      const finalPrice = paymentPeriod === "year" ? gradeOption.price * 3 : gradeOption.price;
+      const termLabel = paymentPeriod === "year" ? "Full Year" : selectedTerm;
+      onDone(gradeOption.label, selectedYear, termLabel, finalPrice);
     }
   };
 
@@ -327,7 +339,7 @@ function AddSchoolFeesForm({ onDone, schoolName }: { onDone: (grade: string, yea
                 Add School Fees
               </p>
               <p className="font-['IBM_Plex_Sans_Devanagari:Regular',sans-serif] text-[11px] text-[#6b7280] tracking-[-0.11px]">
-                Select grade, year, and term
+                Select grade, year, payment period, and term
               </p>
             </div>
 
@@ -348,11 +360,20 @@ function AddSchoolFeesForm({ onDone, schoolName }: { onDone: (grade: string, yea
               />
               
               <AppleDropdown
-                label="Term"
-                options={TERM_OPTIONS.map(t => ({ label: t, value: t }))}
-                value={selectedTerm}
-                onChange={setSelectedTerm}
+                label="Payment Period"
+                options={PAYMENT_PERIOD_OPTIONS}
+                value={paymentPeriod}
+                onChange={(val) => setPaymentPeriod(val as "term" | "year")}
               />
+              
+              {paymentPeriod === "term" && (
+                <AppleDropdown
+                  label="Term"
+                  options={TERM_OPTIONS.map(t => ({ label: t, value: t }))}
+                  value={selectedTerm}
+                  onChange={setSelectedTerm}
+                />
+              )}
             </div>
 
             {/* Done Button */}
