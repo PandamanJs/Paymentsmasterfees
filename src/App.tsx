@@ -192,13 +192,6 @@ function TextInput({ onSchoolSelect, selectedSchool }: { onSchoolSelect: (school
               className="w-full text-left px-[20px] py-[14px] font-['IBM_Plex_Sans:Regular',sans-serif] text-black hover:bg-[rgba(149,227,108,0.08)] active:bg-[rgba(149,227,108,0.15)] transition-all duration-150 touch-manipulation border-b border-[rgba(0,0,0,0.04)] last:border-b-0 flex items-center gap-[12px]"
               style={{ fontSize: '16px', letterSpacing: '-0.01em' }}
             >
-              {school.logo && (
-                <img 
-                  src={school.logo} 
-                  alt={`${school.name} logo`}
-                  className="w-[32px] h-[32px] object-contain rounded-[6px] flex-shrink-0"
-                />
-              )}
               <span className="flex-1">{school.name}</span>
             </motion.button>
           ))}

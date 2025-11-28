@@ -3,8 +3,6 @@ import { useState, useEffect } from "react";
 import { toast } from "sonner@2.0.3";
 import svgPaths from "../imports/svg-ft8f5pz3nc";
 import headerSvgPaths from "../imports/svg-4boykq1z8d";
-import imgVisa from "figma:asset/a5c75a14f01268c2534d0dfb0a9182a2bf3629d2.png";
-import imgMastercardLogo from "figma:asset/5f1f04717ce88a1f8a9d6faeee898c4b88ef23f0.png";
 import ExpandedMobileMoney from "../imports/Frame1707478923";
 import ExpandedCardPayment from "../imports/Frame1707478923-18-800";
 
@@ -248,7 +246,7 @@ function Frame6() {
     <div className="bg-white box-border content-stretch flex flex-col gap-[10px] items-center justify-center p-[6px] relative rounded-[8px] shrink-0 size-[30px]">
       <div aria-hidden="true" className="absolute border border-[#d9d9d9] border-solid inset-0 pointer-events-none rounded-[8px]" />
       <div className="relative shrink-0 size-[20px]" data-name="Visa">
-        <img alt="" className="absolute inset-0 max-w-none object-50%-50% object-contain pointer-events-none size-full" src={imgVisa} />
+        <img alt="Visa" className="absolute inset-0 max-w-none object-50%-50% object-contain pointer-events-none size-full" src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/visa.svg" />
       </div>
     </div>
   );
@@ -259,7 +257,7 @@ function Frame12() {
     <div className="bg-white box-border content-stretch flex flex-col gap-[10px] items-center justify-center p-[6px] relative rounded-[8px] shrink-0 size-[30px]">
       <div aria-hidden="true" className="absolute border border-[#d9d9d9] border-solid inset-0 pointer-events-none rounded-[8px]" />
       <div className="relative shrink-0 size-[18px]" data-name="Mastercard Logo">
-        <img alt="" className="absolute inset-0 max-w-none object-50%-50% object-contain pointer-events-none size-full" src={imgMastercardLogo} />
+        <img alt="Mastercard" className="absolute inset-0 max-w-none object-50%-50% object-contain pointer-events-none size-full" src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/mastercard.svg" />
       </div>
     </div>
   );
