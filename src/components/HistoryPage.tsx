@@ -4,7 +4,6 @@ import svgPaths from "../imports/svg-g99px4v16h";
 import headerSvgPaths from "../imports/svg-co0ktog99f";
 import pathSvgPaths from "../imports/svg-d7byi594ix";
 import pathStrokeSvgPaths from "../imports/svg-zrcfpc6p5c";
-import treeSvgPaths from "../imports/svg-e66apwwwrzk";
 import { getStudentsByPhone } from "../data/students";
 import { generateReceiptPDF } from "../utils/pdfGenerator";
 import { toast } from "sonner@2.0.3";
