@@ -334,17 +334,17 @@ function AddSchoolFeesForm({ onDone, schoolName }: { onDone: (grade: string, yea
         >
           <div className="p-[20px]">
             {/* Header */}
-            <div className="mb-[24px]">
-              <p className="font-['IBM_Plex_Sans_Devanagari:Bold',sans-serif] text-[16px] text-[#003630] tracking-[-0.16px] mb-[4px]">
+            <div className="mb-[28px]">
+              <p className="font-['IBM_Plex_Sans_Devanagari:Bold',sans-serif] text-[18px] text-[#003630] tracking-[-0.18px] mb-[6px]">
                 Add School Fees
               </p>
-              <p className="font-['IBM_Plex_Sans_Devanagari:Regular',sans-serif] text-[11px] text-[#6b7280] tracking-[-0.11px]">
-                Select grade, year, payment period, and term
+              <p className="font-['IBM_Plex_Sans_Devanagari:Regular',sans-serif] text-[12px] text-[#6b7280] tracking-[-0.12px] leading-relaxed">
+                Select grade and payment options
               </p>
             </div>
 
             {/* Form Fields */}
-            <div className="space-y-[16px]">
+            <div className="space-y-[20px]">
               <AppleDropdown
                 label="Grade/Form"
                 options={GRADE_OPTIONS}
@@ -352,37 +352,60 @@ function AddSchoolFeesForm({ onDone, schoolName }: { onDone: (grade: string, yea
                 onChange={setSelectedGrade}
               />
               
+              <div className="h-[1px] bg-[#e5e7eb]" />
+              
               <AppleDropdown
-                label="Year"
+                label="Academic Year"
                 options={YEAR_OPTIONS.map(y => ({ label: y, value: y }))}
                 value={selectedYear}
                 onChange={setSelectedYear}
               />
               
-              <AppleDropdown
-                label="Payment Period"
-                options={PAYMENT_PERIOD_OPTIONS}
-                value={paymentPeriod}
-                onChange={(val) => setPaymentPeriod(val as "term" | "year")}
-              />
+              <div className="h-[1px] bg-[#e5e7eb]" />
+              
+              <div>
+                <label className="block font-['IBM_Plex_Sans_Devanagari:SemiBold',sans-serif] text-[11px] text-[#003630] tracking-[-0.11px] mb-[10px]">
+                  Payment Period
+                </label>
+                <div className="grid grid-cols-2 gap-[10px]">
+                  {PAYMENT_PERIOD_OPTIONS.map((option) => (
+                    <button
+                      key={option.value}
+                      onClick={() => setPaymentPeriod(option.value as "term" | "year")}
+                      className={`px-[16px] py-[14px] rounded-[10px] transition-all touch-manipulation border-2 ${
+                        paymentPeriod === option.value
+                          ? 'bg-[#95e36c] border-[#95e36c] shadow-[0px_2px_8px_rgba(149,227,108,0.3)]'
+                          : 'bg-white border-[#e5e7eb] hover:border-[#cbd2e0]'
+                      }`}
+                    >
+                      <p className={`font-['IBM_Plex_Sans_Devanagari:${paymentPeriod === option.value ? 'Bold' : 'SemiBold'}',sans-serif] text-[12px] text-[#003630] tracking-[-0.12px] text-center leading-tight`}>
+                        {option.label}
+                      </p>
+                    </button>
+                  ))}
+                </div>
+              </div>
               
               {paymentPeriod === "term" && (
-                <AppleDropdown
-                  label="Term"
-                  options={TERM_OPTIONS.map(t => ({ label: t, value: t }))}
-                  value={selectedTerm}
-                  onChange={setSelectedTerm}
-                />
+                <>
+                  <div className="h-[1px] bg-[#e5e7eb]" />
+                  <AppleDropdown
+                    label="Select Term"
+                    options={TERM_OPTIONS.map(t => ({ label: t, value: t }))}
+                    value={selectedTerm}
+                    onChange={setSelectedTerm}
+                  />
+                </>
               )}
             </div>
 
             {/* Done Button */}
             <button 
               onClick={handleDone}
-              className="mt-[24px] bg-[#95e36c] w-full h-[48px] rounded-[12px] transition-all touch-manipulation active:scale-[0.98] shadow-[0px_4px_0px_0px_rgba(149,227,108,0.3)] active:shadow-[0px_1px_0px_0px_rgba(149,227,108,0.3)] active:translate-y-[3px]"
+              className="mt-[28px] bg-[#95e36c] w-full h-[52px] rounded-[12px] transition-all touch-manipulation active:scale-[0.98] shadow-[0px_4px_0px_0px_rgba(149,227,108,0.3)] active:shadow-[0px_1px_0px_0px_rgba(149,227,108,0.3)] active:translate-y-[3px]"
             >
-              <p className="font-['IBM_Plex_Sans_Devanagari:SemiBold',sans-serif] text-[14px] text-[#003630] tracking-[-0.14px]">
-                Add Fee
+              <p className="font-['IBM_Plex_Sans_Devanagari:Bold',sans-serif] text-[15px] text-[#003630] tracking-[-0.15px]">
+                Add Tuition Fee
               </p>
             </button>
           </div>
@@ -413,7 +436,7 @@ function AppleDropdown({
   return (
     <div className="w-full">
       {/* Label */}
-      <p className="font-['IBM_Plex_Sans_Devanagari:Medium',sans-serif] text-[11px] text-[#6b7280] tracking-[-0.11px] mb-[8px] uppercase tracking-[0.5px]">
+      <p className="font-['IBM_Plex_Sans_Devanagari:SemiBold',sans-serif] text-[11px] text-[#003630] tracking-[-0.11px] mb-[8px]">
         {label}
       </p>
       
@@ -421,20 +444,20 @@ function AppleDropdown({
       <div className="relative">
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className="w-full h-[44px] bg-[#f5f5f7] hover:bg-[#ebebed] rounded-[10px] px-[16px] flex items-center justify-between transition-all touch-manipulation"
+          className="w-full h-[48px] bg-white hover:bg-[#fafbfc] rounded-[10px] px-[16px] flex items-center justify-between transition-all touch-manipulation border-2 border-[#e5e7eb] hover:border-[#cbd2e0] shadow-sm"
         >
-          <p className="font-['IBM_Plex_Sans_Devanagari:Regular',sans-serif] text-[14px] text-[#1d1d1f] tracking-[-0.14px]">
+          <p className="font-['IBM_Plex_Sans_Devanagari:Medium',sans-serif] text-[13px] text-[#003630] tracking-[-0.13px]">
             {selectedOption?.label || "Select..."}
           </p>
           <motion.svg 
-            width="12" 
-            height="8" 
-            viewBox="0 0 12 8" 
+            width="14" 
+            height="14" 
+            viewBox="0 0 14 14" 
             fill="none"
             animate={{ rotate: isOpen ? 180 : 0 }}
             transition={{ duration: 0.2 }}
           >
-            <path d="M1 1.5L6 6.5L11 1.5" stroke="#86868b" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            <path d="M3.5 5.25L7 8.75L10.5 5.25" stroke="#6b7280" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
           </motion.svg>
         </button>
         
@@ -482,6 +505,47 @@ function AppleDropdown({
   );
 }
 
+/**
+ * Helper function to build service description with all metadata
+ */
+function buildServiceDescription(service: { 
+  name: string; 
+  term: string; 
+  route?: string;
+  paymentPeriod?: string;
+  uniformItems?: string[];
+}): string {
+  let description = service.name;
+  
+  if (service.term) {
+    description += ` - ${service.term}`;
+  }
+  
+  if (service.paymentPeriod) {
+    const periodLabels: Record<string, string> = {
+      'term': 'Per Term',
+      'week': 'Per Week',
+      'day': 'Per Day',
+      'year': 'Full Year'
+    };
+    description += ` (${periodLabels[service.paymentPeriod] || service.paymentPeriod})`;
+  }
+  
+  if (service.route) {
+    description += ` - ${service.route}`;
+  }
+  
+  if (service.uniformItems && service.uniformItems.length > 0) {
+    if (service.uniformItems.includes('uniform-complete')) {
+      description += ' (Complete Set)';
+    } else {
+      description += ` (${service.uniformItems.length} item${service.uniformItems.length > 1 ? 's' : ''})`;
+    }
+  }
+  
+  return description;
+}
+
 export default function AddServicesPage({ selectedStudentIds, userPhone, schoolName, onBack, onNext, onCheckout }: AddServicesPageProps) {
   const allStudents = getStudentsByPhone(userPhone);
   const selectedStudents = allStudents.filter(s => selectedStudentIds.includes(s.id));
@@ -525,7 +589,16 @@ export default function AddServicesPage({ selectedStudentIds, userPhone, schoolN
     setShowOtherServicesPopup(true);
   };
 
-  const handleOtherServicesDone = (services: Array<{ id: string; name: string; amount: number; category: string; term: string; route?: string }>) => {
+  const handleOtherServicesDone = (services: Array<{ 
+    id: string; 
+    name: string; 
+    amount: number; 
+    category: string; 
+    term: string; 
+    route?: string;
+    paymentPeriod?: string;
+    uniformItems?: string[];
+  }>) => {
     setShowOtherServicesPopup(false);
     
     if (services.length === 0) return;
@@ -536,37 +609,24 @@ export default function AddServicesPage({ selectedStudentIds, userPhone, schoolN
     // Convert the school services to the Service format, filtering out duplicates
     const newServices: Service[] = services
       .filter(service => {
-        // Create a signature for this service based on name, term, and route
-        const newSignature = `${service.name}-${service.term}${service.route ? `-${service.route}` : ''}`;
+        // Create a signature for this service based on all key attributes
+        const newSignature = `${service.name}-${service.term}${service.route ? `-${service.route}` : ''}${service.paymentPeriod ? `-${service.paymentPeriod}` : ''}${service.uniformItems ? `-${service.uniformItems.join(',')}` : ''}`;
         
         // Check if a service with this signature already exists
         const isDuplicate = existingServices.some(existing => {
           // Extract the signature from the existing service description
-          return existing.description === (
-            service.name + 
-            (service.term ? ` - ${service.term}` : '') + 
-            (service.route ? ` (${service.route})` : '')
-          );
+          return existing.description === buildServiceDescription(service);
         });
         
         return !isDuplicate;
       })
       .map((service, index) => {
-        // Build service description with term and route info
-        let description = service.name;
-        if (service.term) {
-          description += ` - ${service.term}`;
-        }
-        if (service.route) {
-          description += ` (${service.route})`;
-        }
-        
-        // Generate a unique ID by combining the service ID with term and route info
+        // Generate a unique ID
         const uniqueId = `${service.id}-${service.term.replace(/\s+/g, '-')}-${service.route ? service.route.replace(/\s+/g, '-') : 'no-route'}-${Date.now()}-${index}`;
         
         return {
           id: uniqueId,
-          description: description,
+          description: buildServiceDescription(service),
           amount: service.amount,
           invoiceNo: "202"
         };
