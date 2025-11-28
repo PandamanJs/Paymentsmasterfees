@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { motion } from "motion/react";
 import svgPaths from "../imports/svg-rwvnsqykxb";
-import { getSchoolServices } from "../data/schoolData";
+import { getSchoolServices, getInstitutionType } from "../data/schoolData";
 import type { SchoolService } from "../data/schoolData";
 
 interface AddOtherServicesPopupProps {
@@ -27,10 +27,12 @@ const BUS_ROUTES: Record<string, string[]> = {
   "Chimilute Trust Academy": ["Route 1 - Kabulonga", "Route 2 - Roma", "Route 3 - Woodlands", "Route 4 - Chelston"],
   "Julani School": ["Route A - Town Center", "Route B - Parklands", "Route C - Riverside"],
   "Crested Crane Academy": ["Route 1 - CBD", "Route 2 - Northrise", "Route 3 - Kansenshi", "Route 4 - Masala"],
-  "International Maarif School": ["Route A - Embassy Area", "Route B - Kabulonga", "Route C - Roma", "Route D - Woodlands", "Route E - Mass Media"]
+  "International Maarif School": ["Route A - Embassy Area", "Route B - Kabulonga", "Route C - Roma", "Route D - Woodlands", "Route E - Mass Media"],
+  "African Christian University": ["City Center - Main Campus", "Chelston - Main Campus", "Kabulonga - Main Campus", "Meanwood - Main Campus", "Rhodes Park - Main Campus"]
 };
 
 const TERM_OPTIONS = ["Term 1", "Term 2", "Term 3"];
+const SEMESTER_OPTIONS = ["Semester 1", "Semester 2"];
 
 /**
  * Premium Dropdown Component
@@ -309,7 +311,8 @@ function ServiceCheckbox({
   onPaymentPeriodChange,
   uniformItems,
   onUniformItemsChange,
-  schoolName
+  schoolName,
+  isUniversity
 }: { 
   service: SchoolService; 
   isSelected: boolean; 
@@ -323,6 +326,7 @@ function ServiceCheckbox({
   uniformItems?: string[];
   onUniformItemsChange?: (items: string[]) => void;
   schoolName: string;
+  isUniversity?: boolean;
 }) {
   const isTransport = service.category === 'transport';
   const isMeals = service.category === 'meals';
@@ -511,7 +515,7 @@ function ServiceCheckbox({
                             <p className={`font-['IBM_Plex_Sans_Devanagari:${isActive ? 'Bold' : 'Medium'}',sans-serif] text-[12px] tracking-[-0.1px] text-center leading-tight mb-[4px] transition-colors ${
                               isActive ? 'text-[#003630]' : 'text-[#9ca3af]'
                             }`}>
-                              {p.period === 'term' ? 'Term' : p.period === 'week' ? 'Weekly' : 'Daily'}
+                              {p.period === 'term' ? (isUniversity ? 'Semester' : 'Term') : p.period === 'week' ? 'Weekly' : 'Daily'}
                             </p>
                             <p className={`font-['IBM_Plex_Sans_Devanagari:SemiBold',sans-serif] text-[10px] tracking-[-0.1px] text-center transition-colors ${
                               isActive ? 'text-[#6b7280]' : 'text-[#cbd5e0]'
@@ -534,11 +538,11 @@ function ServiceCheckbox({
                 <div className="absolute top-0 right-0 w-[60px] h-[60px] bg-gradient-to-br from-[#95e36c]/5 to-transparent rounded-bl-[30px]" />
                 
                 <div className="relative p-[16px] space-y-[14px]">
-                  {/* Term Dropdown */}
+                  {/* Term/Semester Dropdown */}
                   <PremiumDropdown
-                    label="Academic Term"
+                    label={isUniversity ? "Academic Semester" : "Academic Term"}
                     value={term}
-                    options={TERM_OPTIONS}
+                    options={isUniversity ? SEMESTER_OPTIONS : TERM_OPTIONS}
                     onChange={onTermChange}
                   />
                   
@@ -585,7 +589,8 @@ function ServiceCategoryGroup({
   onPaymentPeriodChange,
   serviceUniformItems,
   onUniformItemsChange,
-  schoolName
+  schoolName,
+  isUniversity
 }: { 
   category: string; 
   services: SchoolService[]; 
@@ -600,17 +605,18 @@ function ServiceCategoryGroup({
   serviceUniformItems: Record<string, string[]>;
   onUniformItemsChange: (id: string, items: string[]) => void;
   schoolName: string;
+  isUniversity?: boolean;
 }) {
   if (services.length === 0) return null;
 
   const categoryLabels: Record<string, string> = {
     tuition: "Tuition Fees",
-    meals: "Meals & Catering",
-    transport: "Transportation",
+    meals: isUniversity ? "Cafeteria & Dining" : "Meals & Catering",
+    transport: isUniversity ? "Campus Shuttle" : "Transportation",
     activities: "Activities & Programs",
     supplies: "Supplies & Materials",
     uniform: "School Uniform",
-    accommodation: "Boarding & Accommodation",
+    accommodation: isUniversity ? "Student Housing" : "Boarding & Accommodation",
     other: "Other Services"
   };
 
@@ -654,7 +660,7 @@ function ServiceCategoryGroup({
             service={service}
             isSelected={selectedIds.has(service.id)}
             onToggle={() => onToggle(service.id)}
-            term={serviceTerms[service.id] || "Term 1"}
+            term={serviceTerms[service.id] || (isUniversity ? "Semester 1" : "Term 1")}
             onTermChange={(term) => onTermChange(service.id, term)}
             route={serviceRoutes[service.id]}
             onRouteChange={(route) => onRouteChange(service.id, route)}
@@ -663,6 +669,7 @@ function ServiceCategoryGroup({
             uniformItems={serviceUniformItems[service.id]}
             onUniformItemsChange={(items) => onUniformItemsChange(service.id, items)}
             schoolName={schoolName}
+            isUniversity={isUniversity}
           />
         ))}
       </div>
@@ -671,13 +678,17 @@ function ServiceCategoryGroup({
 }
 
 export default function AddOtherServicesPopup({ onClose, onDone, schoolName }: AddOtherServicesPopupProps) {
+  // Determine if this is a university or school
+  const institutionType = getInstitutionType(schoolName);
+  const isUniversity = institutionType === 'university';
+  
   const [selectedServiceIds, setSelectedServiceIds] = useState<Set<string>>(new Set());
   const [serviceTerms, setServiceTerms] = useState<Record<string, string>>({});
   const [serviceRoutes, setServiceRoutes] = useState<Record<string, string>>({});
   const [servicePaymentPeriods, setServicePaymentPeriods] = useState<Record<string, string>>({});
   const [serviceUniformItems, setServiceUniformItems] = useState<Record<string, string[]>>({});
   
-  // Get all services and filter out tuition (handled by Add School Fees)
+  // Get all services and filter out tuition (handled by Add School Fees/Add Tuition)
   const allServices = getSchoolServices(schoolName).filter(service => service.category !== 'tuition');
   
   // Group services by category
@@ -918,6 +929,7 @@ export default function AddOtherServicesPopup({ onClose, onDone, schoolName }: A
                 serviceUniformItems={serviceUniformItems}
                 onUniformItemsChange={handleUniformItemsChange}
                 schoolName={schoolName}
+                isUniversity={isUniversity}
               />
             ))}
             

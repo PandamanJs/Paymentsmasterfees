@@ -119,11 +119,18 @@ function ChildPill({ name, id, isActive, onClick }: { name: string; id: string; 
   return (
     <button 
       onClick={onClick}
-      className={`${isActive ? 'bg-[#95e36c]' : 'bg-[#edf0f7]'} rounded-[6px] px-[24px] py-[10px] cursor-pointer touch-manipulation active:opacity-80 transition-opacity flex-shrink-0`}
+      className={`
+        ${isActive 
+          ? 'bg-gradient-to-br from-[#95e36c] to-[#7dd054] shadow-[0px_4px_12px_rgba(149,227,108,0.3)]' 
+          : 'bg-[#f9fafb] hover:bg-[#f3f4f6] shadow-sm'
+        } 
+        rounded-[12px] px-[24px] py-[12px] cursor-pointer touch-manipulation active:scale-95 transition-all flex-shrink-0 border-[1.5px] 
+        ${isActive ? 'border-[#7dd054]' : 'border-[#e5e7eb]'}
+      `}
     >
-      <div className={`font-['Inter:${isActive ? 'Medium' : 'Extra_Light'},sans-serif] ${isActive ? 'font-medium' : 'font-extralight'} leading-[15px] text-[10px] tracking-[-0.1px] ${isActive ? 'text-[#003630]' : 'text-[#2d3648]'}`}>
+      <div className={`font-['Inter:${isActive ? 'Bold' : 'Medium'},sans-serif] ${isActive ? 'font-bold' : 'font-medium'} leading-[15px] text-[11px] tracking-[-0.15px] ${isActive ? 'text-[#003630]' : 'text-[#6b7280]'}`}>
         <p className="mb-0">{name}</p>
-        <p>{id}</p>
+        <p className={`${isActive ? 'opacity-90' : 'opacity-70'}`}>{id}</p>
       </div>
     </button>
   );
@@ -1131,9 +1138,10 @@ export default function HistoryPage({ userName, userPhone, onBack, onViewAllRece
             }
 
             return (
-              <div key={month.key} className="mb-[15px]">
-                <div className="bg-[#f5f4f7] h-[25px] flex items-center px-[22px] mb-[10px] -mx-[21px]">
-                  <p className="font-['Inter:Medium',sans-serif] text-[10px] text-black tracking-[-0.1px] leading-[15px]">
+              <div key={month.key} className="mb-[20px]">
+                <div className="relative bg-gradient-to-r from-[#f9fafb] via-[#f3f4f6] to-[#f9fafb] h-[32px] flex items-center px-[22px] mb-[12px] -mx-[21px] border-y border-[#e5e7eb]/50">
+                  <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-gradient-to-b from-[#95e36c] to-[#7dd054]" />
+                  <p className="font-['Inter:Bold',sans-serif] text-[11px] text-[#003630] tracking-[-0.15px] leading-[15px] uppercase">
                     {month.label}
                   </p>
                 </div>

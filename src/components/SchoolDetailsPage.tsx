@@ -5,7 +5,7 @@ import headerSvgPaths from "../imports/svg-co0ktog99f";
 import { toast } from "sonner@2.0.3";
 import { ChevronDown } from "lucide-react";
 import { getLastPhone, saveLastPhone } from "../utils/preferences";
-import { PHONE_USER_MAP } from "../data/schoolData";
+import { PHONE_USER_MAP, getInstitutionType } from "../data/schoolData";
 
 /**
  * Component Props Interface
@@ -80,17 +80,17 @@ function Logo() {
 
 function Header({ onBack, schoolName }: { onBack: () => void; schoolName: string }) {
   return (
-    <div className="h-[66px] w-full relative">
-      <div aria-hidden="true" className="absolute border-[#e6e6e6] border-[0px_0px_1px] border-solid inset-0 pointer-events-none" />
+    <div className="h-[66px] w-full relative bg-white/95 backdrop-blur-[20px]">
+      <div aria-hidden="true" className="absolute border-[#e5e7eb] border-[0px_0px_1.5px] border-solid inset-0 pointer-events-none" />
       <div className="absolute left-[94px] top-[17px] flex items-center gap-[16px]">
         <Logo />
-        <p className="font-['IBM_Plex_Sans_Devanagari:Bold',sans-serif] leading-[normal] not-italic text-[20px] text-black text-nowrap whitespace-pre">master-fees</p>
+        <p className="font-['IBM_Plex_Sans_Devanagari:Bold',sans-serif] leading-[normal] not-italic text-[20px] text-[#003630] text-nowrap whitespace-pre tracking-[-0.3px]">master-fees</p>
       </div>
     </div>
   );
 }
 
-function SchoolTitle({ schoolName }: { schoolName: string }) {
+function SchoolTitle({ schoolName, isUniversity }: { schoolName: string; isUniversity?: boolean }) {
   const initials = getSchoolInitials(schoolName);
   
   return (
@@ -105,12 +105,12 @@ function SchoolTitle({ schoolName }: { schoolName: string }) {
           data-name="School Badge"
         >
           <div 
-            className="w-[120px] h-[120px] rounded-full bg-[#003630] flex items-center justify-center shadow-lg"
+            className="w-[120px] h-[120px] rounded-full bg-gradient-to-br from-[#003630] to-[#004d45] flex items-center justify-center border-[3px] border-white"
             style={{
-              boxShadow: '0 10px 25px rgba(0, 54, 48, 0.15), 0 0 0 1px rgba(255, 255, 255, 0.1) inset'
+              boxShadow: '0 12px 32px rgba(0, 54, 48, 0.25), 0 0 0 1px rgba(255, 255, 255, 0.1) inset'
             }}
           >
-            <span className="text-white font-['IBM_Plex_Sans_Devanagari:Bold',sans-serif] text-[40px]">
+            <span className="text-white font-['IBM_Plex_Sans_Devanagari:Bold',sans-serif] text-[40px] tracking-[-0.5px]">
               {initials}
             </span>
           </div>
@@ -123,7 +123,7 @@ function SchoolTitle({ schoolName }: { schoolName: string }) {
           transition={{ duration: 0.5, delay: 0.2 }}
           className="font-['Inter:Regular',sans-serif] font-normal leading-[28px] not-italic text-[0px] text-black text-center w-full max-w-[340px]"
         >
-          <p className="font-['IBM_Plex_Sans_Devanagari:Regular',sans-serif] mb-0 text-[12px]">Pay School fees for</p>
+          <p className="font-['IBM_Plex_Sans_Devanagari:Regular',sans-serif] mb-0 text-[12px]">{isUniversity ? 'Pay Tuition for' : 'Pay School fees for'}</p>
           <p className="font-['IBM_Plex_Sans_Devanagari:Bold',sans-serif] text-[24px] leading-[32px]">{schoolName}</p>
         </motion.div>
       </div>
@@ -290,10 +290,45 @@ function ProceedButton({ onClick, disabled }: ProceedButtonProps) {
     <button 
       onClick={onClick}
       disabled={disabled}
-      className="absolute bg-[#003630] box-border flex gap-[8px] h-[48px] items-center justify-center left-[48px] overflow-clip px-[24px] py-[10px] rounded-[12px] top-[433px] w-[297px] shadow-[0px_4px_0px_0px_rgba(0,54,48,0.25)] active:shadow-[0px_1px_0px_0px_rgba(0,54,48,0.25)] active:translate-y-[3px] transition-all touch-manipulation disabled:opacity-50 disabled:cursor-not-allowed disabled:active:translate-y-0 disabled:active:shadow-[0px_4px_0px_0px_rgba(0,54,48,0.25)]" 
+      className={`absolute left-[48px] top-[433px] w-[297px] h-[52px] rounded-[16px] overflow-hidden touch-manipulation ${
+        disabled ? 'cursor-not-allowed' : 'group'
+      }`}
       data-name="Button"
     >
-      <p className="font-['IBM_Plex_Sans_Devanagari:SemiBold',sans-serif] leading-[24px] not-italic text-[16px] text-nowrap text-white tracking-[-0.16px] whitespace-pre">Proceed</p>
+      {/* Background */}
+      <div className={`absolute inset-0 transition-colors ${
+        disabled 
+          ? 'bg-[#d1d5db]' 
+          : 'bg-[#003630] group-hover:bg-[#004d45]'
+      }`} />
+      
+      {/* Shine Effect */}
+      {!disabled && (
+        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
+      )}
+      
+      {/* Shadow */}
+      <div className={`absolute inset-0 transition-shadow ${
+        disabled
+          ? 'shadow-sm'
+          : 'shadow-[0px_6px_20px_rgba(0,54,48,0.25)] group-active:shadow-[0px_2px_8px_rgba(0,54,48,0.2)]'
+      }`} />
+      
+      {/* Content */}
+      <div className={`relative z-10 flex items-center justify-center gap-[10px] h-full transition-transform ${
+        !disabled && 'group-active:scale-[0.97]'
+      }`}>
+        <p className={`font-['IBM_Plex_Sans_Devanagari:Bold',sans-serif] text-[16px] tracking-[-0.3px] ${
+          disabled ? 'text-white/60' : 'text-white'
+        }`}>
+          Proceed
+        </p>
+        {!disabled && (
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+            <path d="M6.75 13.5L11.25 9L6.75 4.5" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        )}
+      </div>
     </button>
   );
 }
@@ -432,6 +467,9 @@ function DecorativeShapes() {
 }
 
 export default function SchoolDetailsPage({ schoolName, onProceed, onBack }: SchoolDetailsPageProps) {
+  const institutionType = getInstitutionType(schoolName);
+  const isUniversity = institutionType === 'university';
+  
   const [isPhoneValid, setIsPhoneValid] = useState(false);
   const [phoneNumber, setPhoneNumber] = useState("");
   const [userName, setUserName] = useState("");
@@ -454,10 +492,10 @@ export default function SchoolDetailsPage({ schoolName, onProceed, onBack }: Sch
   };
 
   return (
-    <div className="bg-white min-h-screen w-full flex justify-center">
-      <div className="bg-white relative w-full max-w-[393px] md:max-w-[500px] lg:max-w-[600px] h-screen overflow-hidden" data-name="Page 1">
+    <div className="bg-gradient-to-br from-[#f9fafb] via-white to-[#f5f7f9] min-h-screen w-full flex justify-center">
+      <div className="bg-gradient-to-br from-[#f9fafb] via-white to-[#f5f7f9] relative w-full max-w-[393px] md:max-w-[500px] lg:max-w-[600px] h-screen overflow-hidden" data-name="Page 1">
         <Header onBack={onBack} schoolName={schoolName} />
-        <SchoolTitle schoolName={schoolName} />
+        <SchoolTitle schoolName={schoolName} isUniversity={isUniversity} />
         <InputSection onValidationChange={handleValidationChange} />
         <ProceedButton onClick={handleProceedClick} disabled={!isPhoneValid} />
         <Footer />

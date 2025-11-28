@@ -1,6 +1,6 @@
 import { motion } from "motion/react";
 import { useState } from "react";
-import { getStudentsByPhone } from "../data/students";
+import { getStudentsByPhone, getInstitutionType } from "../data/students";
 import svgPaths from "../imports/svg-4boykq1z8d";
 import dropdownSvgPaths from "../imports/svg-g5tpckf1cs";
 import checkSvgPaths from "../imports/svg-ntb0im3s1u";
@@ -242,6 +242,7 @@ function DropdownIcon() {
 const YEAR_OPTIONS = ["2023", "2024", "2025", "2026"];
 
 const TERM_OPTIONS = ["Term 1", "Term 2", "Term 3"];
+const SEMESTER_OPTIONS = ["Semester 1", "Semester 2"];
 
 /**
  * Get school-specific grade pricing
@@ -291,19 +292,39 @@ function getSchoolGradePricing(schoolName: string) {
       { label: "Grade 11 - K6,500 (Per term)", value: "grade-11", price: 6500 },
       { label: "Grade 12 - K7,000 (Per term)", value: "grade-12", price: 7000 },
     ],
+    "African Christian University": [
+      { label: "Year 1 - Business Administration - K8,500 (Per semester)", value: "year-1-business", price: 8500 },
+      { label: "Year 1 - Computer Science - K8,500 (Per semester)", value: "year-1-cs", price: 8500 },
+      { label: "Year 1 - Education - K8,500 (Per semester)", value: "year-1-education", price: 8500 },
+      { label: "Year 2 - Business Administration - K8,500 (Per semester)", value: "year-2-business", price: 8500 },
+      { label: "Year 2 - Computer Science - K8,500 (Per semester)", value: "year-2-cs", price: 8500 },
+      { label: "Year 2 - Education - K8,500 (Per semester)", value: "year-2-education", price: 8500 },
+      { label: "Year 3 - Business Administration - K8,500 (Per semester)", value: "year-3-business", price: 8500 },
+      { label: "Year 3 - Computer Science - K8,500 (Per semester)", value: "year-3-cs", price: 8500 },
+      { label: "Year 3 - Education - K8,500 (Per semester)", value: "year-3-education", price: 8500 },
+      { label: "Year 4 - Business Administration - K8,500 (Per semester)", value: "year-4-business", price: 8500 },
+      { label: "Year 4 - Computer Science - K8,500 (Per semester)", value: "year-4-cs", price: 8500 },
+      { label: "Year 4 - Education - K8,500 (Per semester)", value: "year-4-education", price: 8500 },
+    ],
   };
 
   return pricingBySchool[schoolName] || pricingBySchool["Twalumbu Educational Center"];
 }
 
 function AddSchoolFeesForm({ onDone, schoolName }: { onDone: (grade: string, year: string, term: string, price: number) => void; schoolName: string }) {
+  const institutionType = getInstitutionType(schoolName);
+  const isUniversity = institutionType === 'university';
+  
   const GRADE_OPTIONS = getSchoolGradePricing(schoolName);
   const [selectedGrade, setSelectedGrade] = useState(GRADE_OPTIONS[2].value);
   const [selectedYear, setSelectedYear] = useState("2025");
-  const [selectedTerm, setSelectedTerm] = useState("Term 1");
+  const [selectedTerm, setSelectedTerm] = useState(isUniversity ? "Semester 1" : "Term 1");
   const [paymentPeriod, setPaymentPeriod] = useState<"term" | "year">("term");
 
-  const PAYMENT_PERIOD_OPTIONS = [
+  const PAYMENT_PERIOD_OPTIONS = isUniversity ? [
+    { label: "Per Semester", value: "term" },
+    { label: "Full Year (2 Semesters)", value: "year" }
+  ] : [
     { label: "Per Term", value: "term" },
     { label: "Full Year (3 Terms)", value: "year" }
   ];
@@ -311,8 +332,9 @@ function AddSchoolFeesForm({ onDone, schoolName }: { onDone: (grade: string, yea
   const handleDone = () => {
     const gradeOption = GRADE_OPTIONS.find(opt => opt.value === selectedGrade);
     if (gradeOption) {
-      // Multiply by 3 if paying for full year
-      const finalPrice = paymentPeriod === "year" ? gradeOption.price * 3 : gradeOption.price;
+      // Multiply by 2 for universities (semesters) or 3 for schools (terms) if paying for full year
+      const multiplier = isUniversity ? 2 : 3;
+      const finalPrice = paymentPeriod === "year" ? gradeOption.price * multiplier : gradeOption.price;
       const termLabel = paymentPeriod === "year" ? "Full Year" : selectedTerm;
       onDone(gradeOption.label, selectedYear, termLabel, finalPrice);
     }
@@ -336,17 +358,17 @@ function AddSchoolFeesForm({ onDone, schoolName }: { onDone: (grade: string, yea
             {/* Header */}
             <div className="mb-[28px]">
               <p className="font-['IBM_Plex_Sans_Devanagari:Bold',sans-serif] text-[18px] text-[#003630] tracking-[-0.18px] mb-[6px]">
-                Add School Fees
+                {isUniversity ? 'Add Tuition' : 'Add School Fees'}
               </p>
               <p className="font-['IBM_Plex_Sans_Devanagari:Regular',sans-serif] text-[12px] text-[#6b7280] tracking-[-0.12px] leading-relaxed">
-                Select grade and payment options
+                {isUniversity ? 'Select program and payment options' : 'Select grade and payment options'}
               </p>
             </div>
 
             {/* Form Fields */}
             <div className="space-y-[20px]">
               <AppleDropdown
-                label="Grade/Form"
+                label={isUniversity ? "Program/Year" : "Grade/Form"}
                 options={GRADE_OPTIONS}
                 value={selectedGrade}
                 onChange={setSelectedGrade}
@@ -404,8 +426,8 @@ function AddSchoolFeesForm({ onDone, schoolName }: { onDone: (grade: string, yea
                 <>
                   <div className="h-[1px] bg-[#e5e7eb]" />
                   <AppleDropdown
-                    label="Select Term"
-                    options={TERM_OPTIONS.map(t => ({ label: t, value: t }))}
+                    label={isUniversity ? "Select Semester" : "Select Term"}
+                    options={(isUniversity ? SEMESTER_OPTIONS : TERM_OPTIONS).map(t => ({ label: t, value: t }))}
                     value={selectedTerm}
                     onChange={setSelectedTerm}
                   />
@@ -605,6 +627,10 @@ export default function AddServicesPage({ selectedStudentIds, userPhone, schoolN
   const allStudents = getStudentsByPhone(userPhone);
   const selectedStudents = allStudents.filter(s => selectedStudentIds.includes(s.id));
   
+  // Determine if this is a university or school
+  const institutionType = getInstitutionType(schoolName);
+  const isUniversity = institutionType === 'university';
+  
   const [activeStudentId, setActiveStudentId] = useState<string>(selectedStudents[0]?.id || "");
   const activeStudent = selectedStudents.find(s => s.id === activeStudentId);
   const [showAddFeesForm, setShowAddFeesForm] = useState(false);
@@ -781,7 +807,7 @@ export default function AddServicesPage({ selectedStudentIds, userPhone, schoolN
                       <div className="absolute inset-0 shadow-[0px_6px_20px_rgba(0,54,48,0.25)] group-active:shadow-[0px_2px_8px_rgba(0,54,48,0.2)] transition-shadow" />
                       <div className="relative z-10 flex items-center justify-center gap-[8px] h-full group-active:scale-[0.97] transition-transform">
                         <span className="font-['IBM_Plex_Sans_Devanagari:Bold',sans-serif] text-[15px] text-white tracking-[-0.2px]">
-                          Add School Fees
+                          {isUniversity ? 'Add Tuition' : 'Add School Fees'}
                         </span>
                         <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
                           <path d="M8 3.5V12.5M3.5 8H12.5" stroke="white" strokeWidth="2.5" strokeLinecap="round" />

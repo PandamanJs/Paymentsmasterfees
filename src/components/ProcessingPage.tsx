@@ -122,7 +122,7 @@ export default function ProcessingPage({ onProcessingComplete, paymentData }: Pr
   }, [onProcessingComplete, paymentData]);
 
   return (
-    <div className="bg-white min-h-screen flex flex-col">
+    <div className="bg-gradient-to-br from-[#f9fafb] via-white to-[#f5f7f9] min-h-screen flex flex-col">
       {/* Main Content - Centered */}
       <div className="flex-1 flex flex-col items-center justify-center px-6">
         {/* Animated Icon */}

@@ -3,9 +3,11 @@ import svgPaths from "../imports/svg-o96q0cdj2h";
 import headerSvgPaths from "../imports/svg-co0ktog99f";
 import { useState } from "react";
 import ViewPaymentPlansPage from "./ViewPaymentPlansPage";
+import { getInstitutionType } from "../data/schoolData";
 
 interface ServicesPageProps {
   userName: string;
+  schoolName?: string;
   onBack: () => void;
   onSelectService: (service: string) => void;
   onViewHistory: () => void;
@@ -199,7 +201,7 @@ function PageGroup2({ onBack }: { onBack: () => void }) {
   );
 }
 
-function Frame2({ onPayFees }: { onPayFees?: () => void }) {
+function Frame2({ onPayFees, isUniversity }: { onPayFees?: () => void; isUniversity?: boolean }) {
   return (
     <div className="content-stretch flex gap-[15px] h-[44px] items-start relative shrink-0 w-full animate-fade-in" style={{ animationDelay: '100ms' }}>
       <button
@@ -207,7 +209,7 @@ function Frame2({ onPayFees }: { onPayFees?: () => void }) {
         className="btn-dark box-border content-stretch flex gap-[8px] items-center justify-center overflow-clip px-[24px] py-[10px] relative shrink-0 w-[297px] touch-manipulation" 
         data-name="Button"
       >
-        <p className="font-['IBM_Plex_Sans_Devanagari:Medium',sans-serif] leading-[24px] not-italic relative shrink-0 text-[15px] text-nowrap text-white tracking-[-0.15px] whitespace-pre">Pay for School Fees</p>
+        <p className="font-['IBM_Plex_Sans_Devanagari:Medium',sans-serif] leading-[24px] not-italic relative shrink-0 text-[15px] text-nowrap text-white tracking-[-0.15px] whitespace-pre">{isUniversity ? 'Pay Tuition' : 'Pay for School Fees'}</p>
       </button>
     </div>
   );
@@ -249,17 +251,20 @@ function Frame4({ onSelectService }: { onSelectService: (service: string) => voi
   );
 }
 
-function Frame6({ onSelectService, onViewHistory, onPayFees }: { onSelectService: (service: string) => void; onViewHistory: () => void; onPayFees?: () => void }) {
+function Frame6({ onSelectService, onViewHistory, onPayFees, isUniversity }: { onSelectService: (service: string) => void; onViewHistory: () => void; onPayFees?: () => void; isUniversity?: boolean }) {
   return (
     <div className="absolute content-stretch flex flex-col gap-[24px] h-[171px] items-start left-[49px] top-[300px] w-[297px]">
-      <Frame2 onPayFees={onPayFees} />
+      <Frame2 onPayFees={onPayFees} isUniversity={isUniversity} />
       <Frame3 onViewHistory={onViewHistory} />
       <Frame4 onSelectService={onSelectService} />
     </div>
   );
 }
 
-export default function ServicesPage({ userName, onBack, onSelectService, onViewHistory, onPayFees }: ServicesPageProps) {
+export default function ServicesPage({ userName, schoolName, onBack, onSelectService, onViewHistory, onPayFees }: ServicesPageProps) {
+  const institutionType = schoolName ? getInstitutionType(schoolName) : undefined;
+  const isUniversity = institutionType === 'university';
+  
   const [showPaymentPlans, setShowPaymentPlans] = useState(false);
   const currentHour = new Date().getHours();
   const greeting = currentHour >= 5 && currentHour < 12 ? "Good morning" : currentHour >= 12 && currentHour < 17 ? "Good Afternoon" : "Good Evening";
@@ -294,7 +299,7 @@ export default function ServicesPage({ userName, onBack, onSelectService, onView
           <p className="font-['IBM_Plex_Sans_Devanagari:Light',sans-serif] mb-[14px]">{greeting}, </p>
           <p className="font-['Agrandir:Grand_Heavy',sans-serif] text-[#003630]">{userName}</p>
         </div>
-        <Frame6 onSelectService={handleViewPaymentPlans} onViewHistory={onViewHistory} onPayFees={onPayFees} />
+        <Frame6 onSelectService={handleViewPaymentPlans} onViewHistory={onViewHistory} onPayFees={onPayFees} isUniversity={isUniversity} />
       </div>
     </div>
   );

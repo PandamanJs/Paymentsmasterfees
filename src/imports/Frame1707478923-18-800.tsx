@@ -34,7 +34,7 @@ export default function ExpandedCardPayment({
   const formatExpiryDate = (value: string) => {
     const cleaned = value.replace(/\D/g, "");
     if (cleaned.length >= 2) {
-      return `${cleaned.slice(0, 2)}/${cleaned.slice(2, 4)}`;
+      return `${cleaned.slice(0, 2)}/${cleaned.slice(2, 6)}`;
     }
     return cleaned;
   };
@@ -48,7 +48,7 @@ export default function ExpandedCardPayment({
 
   const handleExpiryDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const formatted = formatExpiryDate(e.target.value);
-    if (formatted.replace(/\//g, "").length <= 4) {
+    if (formatted.replace(/\//g, "").length <= 6) {
       onExpiryDateChange(formatted);
     }
   };
@@ -61,29 +61,29 @@ export default function ExpandedCardPayment({
   };
 
   return (
-    <div className="bg-white border border-[#003630] rounded-[12px] p-[16px] w-full">
+    <div className="bg-white border-[1.5px] border-[#003630] rounded-[16px] p-[16px] w-full shadow-[0px_8px_24px_rgba(0,54,48,0.12)]">
       <button
         onClick={onCollapse}
-        className="w-full flex items-center justify-between mb-[12px] touch-manipulation"
+        className="w-full flex items-center justify-between mb-[16px] touch-manipulation group"
       >
         <div className="flex items-center gap-[10px]">
           <div className="size-[20px] flex items-center justify-center">
             <svg className="block size-full" fill="none" viewBox="0 0 20 20">
-              <path d="M17.5 5.83333H2.5C1.57952 5.83333 0.833333 6.57952 0.833333 7.5V15.8333C0.833333 16.7538 1.57952 17.5 2.5 17.5H17.5C18.4205 17.5 19.1667 16.7538 19.1667 15.8333V7.5C19.1667 6.57952 18.4205 5.83333 17.5 5.83333Z" stroke="#171717" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" />
-              <path d="M0.833333 9.16667H19.1667" stroke="#171717" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" />
+              <path d="M17.5 5.83333H2.5C1.57952 5.83333 0.833333 6.57952 0.833333 7.5V15.8333C0.833333 16.7538 1.57952 17.5 2.5 17.5H17.5C18.4205 17.5 19.1667 16.7538 19.1667 15.8333V7.5C19.1667 6.57952 18.4205 5.83333 17.5 5.83333Z" stroke="#003630" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
+              <path d="M0.833333 9.16667H19.1667" stroke="#003630" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
             </svg>
           </div>
-          <p className="font-['IBM_Plex_Sans_Devanagari:Regular',sans-serif] text-[16px] text-black tracking-[-0.16px]">
+          <p className="font-['IBM_Plex_Sans_Devanagari:SemiBold',sans-serif] text-[16px] text-[#003630] tracking-[-0.3px]">
             Card Payment
           </p>
         </div>
-        <ChevronDown className="w-5 h-5 text-black transform rotate-180" />
+        <ChevronDown className="w-5 h-5 text-[#003630] transform rotate-180 group-hover:translate-y-[-2px] transition-transform" strokeWidth={2.5} />
       </button>
       
-      <div className="flex flex-col gap-[12px]">
+      <div className="flex flex-col gap-[14px]">
         {/* Card Number */}
-        <div className="flex flex-col gap-[8px]">
-          <label className="font-['IBM_Plex_Sans:Regular',sans-serif] text-[12px] text-[rgba(0,0,0,0.64)]">
+        <div className="flex flex-col gap-[10px]">
+          <label className="font-['IBM_Plex_Sans:SemiBold',sans-serif] text-[13px] text-[#6b7280] tracking-[-0.2px]">
             Card Number
           </label>
           <input
@@ -91,37 +91,37 @@ export default function ExpandedCardPayment({
             value={cardNumber}
             onChange={handleCardNumberChange}
             placeholder="1234 5678 9012 3456"
-            className={`bg-white border ${cardNumberError ? 'border-red-500' : 'border-[#003049]'} rounded-[10px] p-[12px] font-['IBM_Plex_Sans:Regular',sans-serif] text-[14px] text-black placeholder:text-[rgba(45,54,72,0.44)] tracking-[-0.14px] outline-none touch-manipulation`}
+            className={`bg-[#f9fafb] border-[1.5px] ${cardNumberError ? 'border-red-500 bg-red-50' : 'border-[#e5e7eb]'} rounded-[14px] p-[14px] font-['IBM_Plex_Sans:SemiBold',sans-serif] text-[15px] text-[#003630] placeholder:text-[#9ca3af] tracking-[-0.2px] outline-none touch-manipulation focus:border-[#003630] focus:bg-white transition-all shadow-sm`}
           />
           {cardNumberError && (
-            <p className="font-['IBM_Plex_Sans:Regular',sans-serif] text-[10px] text-red-500">
+            <p className="font-['IBM_Plex_Sans:Medium',sans-serif] text-[11px] text-red-500 tracking-[-0.15px]">
               {cardNumberError}
             </p>
           )}
         </div>
 
         {/* Expiry Date and CVV */}
-        <div className="flex gap-[12px]">
+        <div className="flex gap-[12px] items-start">
           <div className="flex-1 flex flex-col gap-[8px]">
-            <label className="font-['IBM_Plex_Sans:Regular',sans-serif] text-[12px] text-[rgba(0,0,0,0.64)]">
+            <label className="font-['IBM_Plex_Sans:SemiBold',sans-serif] text-[13px] text-[#6b7280] tracking-[-0.2px]">
               Expiry Date
             </label>
             <input
               type="text"
               value={expiryDate}
               onChange={handleExpiryDateChange}
-              placeholder="MM/YY"
-              className={`bg-white border ${expiryDateError ? 'border-red-500' : 'border-[#003049]'} rounded-[10px] p-[12px] font-['IBM_Plex_Sans:Regular',sans-serif] text-[14px] text-black placeholder:text-[rgba(45,54,72,0.44)] tracking-[-0.14px] outline-none touch-manipulation`}
+              placeholder="MM/YYYY"
+              className={`bg-[#f9fafb] border-[1.5px] ${expiryDateError ? 'border-red-500 bg-red-50' : 'border-[#e5e7eb]'} rounded-[14px] p-[14px] font-['IBM_Plex_Sans:SemiBold',sans-serif] text-[15px] text-[#003630] placeholder:text-[#9ca3af] tracking-[-0.2px] outline-none touch-manipulation focus:border-[#003630] focus:bg-white transition-all shadow-sm`}
             />
             {expiryDateError && (
-              <p className="font-['IBM_Plex_Sans:Regular',sans-serif] text-[10px] text-red-500">
+              <p className="font-['IBM_Plex_Sans:Medium',sans-serif] text-[11px] text-red-500 tracking-[-0.15px]">
                 {expiryDateError}
               </p>
             )}
           </div>
 
-          <div className="flex-1 flex flex-col gap-[8px]">
-            <label className="font-['IBM_Plex_Sans:Regular',sans-serif] text-[12px] text-[rgba(0,0,0,0.64)]">
+          <div className="w-[90px] flex flex-col gap-[8px]">
+            <label className="font-['IBM_Plex_Sans:SemiBold',sans-serif] text-[13px] text-[#6b7280] tracking-[-0.2px]">
               CVV
             </label>
             <input
@@ -129,10 +129,11 @@ export default function ExpandedCardPayment({
               value={cvv}
               onChange={handleCvvChange}
               placeholder="123"
-              className={`bg-white border ${cvvError ? 'border-red-500' : 'border-[#003049]'} rounded-[10px] p-[8px] w-[80px] font-['IBM_Plex_Sans:Regular',sans-serif] text-[14px] text-black placeholder:text-[rgba(45,54,72,0.44)] tracking-[-0.14px] outline-none touch-manipulation`}
+              maxLength={3}
+              className={`bg-[#f9fafb] border-[1.5px] ${cvvError ? 'border-red-500 bg-red-50' : 'border-[#e5e7eb]'} rounded-[14px] p-[14px] font-['IBM_Plex_Sans:SemiBold',sans-serif] text-[15px] text-[#003630] placeholder:text-[#9ca3af] tracking-[-0.2px] outline-none touch-manipulation focus:border-[#003630] focus:bg-white transition-all shadow-sm text-center`}
             />
             {cvvError && (
-              <p className="font-['IBM_Plex_Sans:Regular',sans-serif] text-[10px] text-red-500">
+              <p className="font-['IBM_Plex_Sans:Medium',sans-serif] text-[11px] text-red-500 tracking-[-0.15px]">
                 {cvvError}
               </p>
             )}

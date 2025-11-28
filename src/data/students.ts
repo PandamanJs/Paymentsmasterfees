@@ -15,7 +15,8 @@ export {
   getSchoolServices,
   getSchoolByPhone,
   getParentDataByPhone,
-  isPhoneRegistered
+  isPhoneRegistered,
+  getInstitutionType
 } from './schoolData';
 
 // Re-export PARENT_STUDENT_MAP for backward compatibility

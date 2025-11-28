@@ -82,16 +82,19 @@ export default function SearchPage({ onProceed, selectedSchool, onSchoolSelect }
   };
 
   return (
-    <div className="bg-white min-h-screen flex flex-col">
-      {/* Header */}
-      <div className="px-6 pt-8 pb-4">
+    <div className="bg-gradient-to-br from-[#f9fafb] via-white to-[#f5f7f9] min-h-screen flex flex-col">
+      {/* Header - Premium */}
+      <div className="px-6 pt-10 pb-6">
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4 }}
         >
-          <h1 className="text-[#003630] mb-2">Select Your School</h1>
-          <p className="text-[#003630]/60">
+          <div className="inline-flex items-center gap-[8px] mb-[12px]">
+            <div className="w-[3px] h-[32px] bg-gradient-to-b from-[#95e36c] to-[#003630] rounded-full" />
+            <h1 className="font-['IBM_Plex_Sans_Devanagari:Bold',sans-serif] text-[28px] text-[#003630] tracking-[-0.5px]">Select Your School</h1>
+          </div>
+          <p className="font-['IBM_Plex_Sans_Devanagari:Regular',sans-serif] text-[14px] text-[#6b7280] tracking-[-0.2px]">
             Choose your school to continue with payment
           </p>
         </motion.div>
@@ -107,11 +110,11 @@ export default function SearchPage({ onProceed, selectedSchool, onSchoolSelect }
         >
           <div
             className={`
-              relative bg-white rounded-2xl overflow-hidden
-              transition-all duration-300
+              relative bg-white rounded-[16px] overflow-hidden
+              transition-all duration-300 border-[1.5px]
               ${isSearchFocused 
-                ? 'ring-2 ring-[#95e36c] shadow-lg shadow-[#95e36c]/10' 
-                : 'ring-1 ring-[#003630]/10 shadow-md'
+                ? 'border-[#95e36c] shadow-[0px_8px_24px_rgba(149,227,108,0.25)]' 
+                : 'border-[#e5e7eb] shadow-sm'
               }
             `}
             style={{
@@ -186,13 +189,15 @@ export default function SearchPage({ onProceed, selectedSchool, onSchoolSelect }
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ duration: 0.3, delay: index * 0.05 }}
+                    whileHover={{ scale: 1.01, y: -2 }}
+                    whileTap={{ scale: 0.99 }}
                     onClick={() => handleSchoolSelect(school.name)}
                     className={`
-                      w-full rounded-2xl p-4 
+                      relative w-full rounded-[16px] p-4 border-[1.5px]
                       transition-all duration-300
                       ${isSelected
-                        ? 'bg-[#95e36c] shadow-lg shadow-[#95e36c]/20 ring-2 ring-[#95e36c]'
-                        : 'bg-white shadow-md ring-1 ring-[#003630]/10 hover:shadow-lg active:scale-[0.98]'
+                        ? 'bg-white border-[#95e36c] shadow-[0px_8px_24px_rgba(149,227,108,0.25)]'
+                        : 'bg-white border-[#e5e7eb] hover:border-[#d1d5db] shadow-sm hover:shadow-md'
                       }
                     `}
                     style={{
@@ -200,15 +205,24 @@ export default function SearchPage({ onProceed, selectedSchool, onSchoolSelect }
                       touchAction: 'manipulation',
                     }}
                   >
+                    {/* Selection indicator */}
+                    {isSelected && (
+                      <motion.div
+                        initial={{ scaleX: 0 }}
+                        animate={{ scaleX: 1 }}
+                        className="absolute left-0 top-0 bottom-0 w-[4px] bg-[#95e36c] rounded-l-[16px]"
+                      />
+                    )}
+                    
                     <div className="flex items-center gap-4">
-                      {/* School Logo/Initials */}
+                      {/* School Logo/Initials - Premium Badge */}
                       <div
                         className={`
-                          flex-shrink-0 rounded-xl flex items-center justify-center
+                          flex-shrink-0 rounded-[14px] flex items-center justify-center border-[2px]
                           transition-all duration-300
                           ${isSelected
-                            ? 'bg-white text-[#95e36c]'
-                            : 'bg-[#003630] text-white'
+                            ? 'bg-gradient-to-br from-[#95e36c] to-[#7dd054] border-white text-white shadow-[0px_4px_12px_rgba(149,227,108,0.3)]'
+                            : 'bg-gradient-to-br from-[#003630] to-[#004d45] border-[#e5e7eb] text-white shadow-sm'
                           }
                         `}
                         style={{
@@ -335,22 +349,29 @@ export default function SearchPage({ onProceed, selectedSchool, onSchoolSelect }
           >
             <button
               onClick={handleProceed}
-              className="
-                w-full py-4 rounded-2xl
-                bg-[#003630] text-white
-                shadow-lg shadow-[#003630]/20
-                active:scale-[0.98]
-                transition-all duration-200
-              "
+              className="relative w-full h-[56px] rounded-[16px] overflow-hidden group"
               style={{
-                minHeight: '56px',
                 touchAction: 'manipulation',
               }}
             >
-              <span className="flex items-center justify-center gap-2">
-                Continue with {selectedSchool.split(" ")[0]}
-                <ChevronRight size={20} />
-              </span>
+              {/* Background */}
+              <div className="absolute inset-0 bg-[#003630] group-hover:bg-[#004d45] transition-colors" />
+              
+              {/* Shine Effect */}
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
+              
+              {/* Shadow */}
+              <div className="absolute inset-0 shadow-[0px_6px_20px_rgba(0,54,48,0.25)] group-active:shadow-[0px_2px_8px_rgba(0,54,48,0.2)] transition-shadow" />
+              
+              {/* Content */}
+              <div className="relative z-10 flex items-center justify-center gap-[10px] h-full group-active:scale-[0.97] transition-transform">
+                <span className="font-['IBM_Plex_Sans_Devanagari:Bold',sans-serif] text-[16px] text-white tracking-[-0.3px]">
+                  Continue with {selectedSchool.split(" ")[0]}
+                </span>
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                  <path d="M7.5 15L12.5 10L7.5 5" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </div>
             </button>
           </motion.div>
         )}

@@ -14,11 +14,11 @@ interface PaymentPageProps {
 
 function Header({ onBack }: { onBack: () => void }) {
   return (
-    <div className="h-[66px] w-full relative bg-white">
-      <div aria-hidden="true" className="absolute border-[#e6e6e6] border-[0px_0px_1px] border-solid inset-0 pointer-events-none" />
+    <div className="h-[66px] w-full relative bg-white/95 backdrop-blur-[20px]">
+      <div aria-hidden="true" className="absolute border-[#e5e7eb] border-[0px_0px_1.5px] border-solid inset-0 pointer-events-none" />
       <div className="absolute left-[94px] top-[17px] flex items-center gap-[16px]">
         <Logo />
-        <p className="font-['IBM_Plex_Sans_Devanagari:Bold',sans-serif] leading-[normal] not-italic text-[20px] text-black text-nowrap whitespace-pre">master-fees</p>
+        <p className="font-['IBM_Plex_Sans_Devanagari:Bold',sans-serif] leading-[normal] not-italic text-[20px] text-[#003630] text-nowrap whitespace-pre tracking-[-0.3px]">master-fees</p>
       </div>
     </div>
   );
@@ -187,10 +187,11 @@ function Frame11() {
 
 function Frame10({ onClick }: { onClick: () => void }) {
   return (
-    <div className="bg-white relative rounded-[12px] shrink-0 w-full cursor-pointer" onClick={onClick}>
-      <div aria-hidden="true" className="absolute border border-[#d9d9d9] border-solid inset-0 pointer-events-none rounded-[12px]" />
+    <div className="bg-white relative rounded-[16px] shrink-0 w-full cursor-pointer group hover:border-[#d1d5db] transition-all" onClick={onClick}>
+      <div aria-hidden="true" className="absolute border-[1.5px] border-[#e5e7eb] border-solid inset-0 pointer-events-none rounded-[16px] group-hover:border-[#d1d5db] transition-colors" />
+      <div className="absolute inset-0 shadow-sm group-hover:shadow-md transition-shadow rounded-[16px]" />
       <div className="size-full">
-        <div className="box-border content-stretch flex gap-[6px] items-start px-[12px] py-[16px] relative w-full">
+        <div className="box-border content-stretch flex gap-[6px] items-start px-[12px] py-[16px] relative w-full group-active:scale-[0.99] transition-transform">
           <div className="relative shrink-0 size-[30px]" data-name="mobile">
             <VuesaxLinearMobile />
           </div>
@@ -243,8 +244,8 @@ function Frame7() {
 
 function Frame6() {
   return (
-    <div className="bg-white box-border content-stretch flex flex-col gap-[10px] items-center justify-center p-[6px] relative rounded-[8px] shrink-0 size-[30px]">
-      <div aria-hidden="true" className="absolute border border-[#d9d9d9] border-solid inset-0 pointer-events-none rounded-[8px]" />
+    <div className="bg-white box-border content-stretch flex flex-col gap-[10px] items-center justify-center p-[6px] relative rounded-[10px] shrink-0 size-[30px]">
+      <div aria-hidden="true" className="absolute border-[1.5px] border-[#e5e7eb] border-solid inset-0 pointer-events-none rounded-[10px]" />
       <div className="relative shrink-0 size-[20px]" data-name="Visa">
         <img alt="Visa" className="absolute inset-0 max-w-none object-50%-50% object-contain pointer-events-none size-full" src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/visa.svg" />
       </div>
@@ -254,8 +255,8 @@ function Frame6() {
 
 function Frame12() {
   return (
-    <div className="bg-white box-border content-stretch flex flex-col gap-[10px] items-center justify-center p-[6px] relative rounded-[8px] shrink-0 size-[30px]">
-      <div aria-hidden="true" className="absolute border border-[#d9d9d9] border-solid inset-0 pointer-events-none rounded-[8px]" />
+    <div className="bg-white box-border content-stretch flex flex-col gap-[10px] items-center justify-center p-[6px] relative rounded-[10px] shrink-0 size-[30px]">
+      <div aria-hidden="true" className="absolute border-[1.5px] border-[#e5e7eb] border-solid inset-0 pointer-events-none rounded-[10px]" />
       <div className="relative shrink-0 size-[18px]" data-name="Mastercard Logo">
         <img alt="Mastercard" className="absolute inset-0 max-w-none object-50%-50% object-contain pointer-events-none size-full" src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/mastercard.svg" />
       </div>
@@ -300,10 +301,11 @@ function Frame15() {
 
 function Frame16({ onClick }: { onClick: () => void }) {
   return (
-    <div className="bg-white relative rounded-[12px] shrink-0 w-full cursor-pointer" onClick={onClick}>
-      <div aria-hidden="true" className="absolute border border-[#d9d9d9] border-solid inset-0 pointer-events-none rounded-[12px]" />
+    <div className="bg-white relative rounded-[16px] shrink-0 w-full cursor-pointer group hover:border-[#d1d5db] transition-all" onClick={onClick}>
+      <div aria-hidden="true" className="absolute border-[1.5px] border-[#e5e7eb] border-solid inset-0 pointer-events-none rounded-[16px] group-hover:border-[#d1d5db] transition-colors" />
+      <div className="absolute inset-0 shadow-sm group-hover:shadow-md transition-shadow rounded-[16px]" />
       <div className="size-full">
-        <div className="box-border content-stretch flex gap-[6px] items-start px-[12px] py-[16px] relative w-full">
+        <div className="box-border content-stretch flex gap-[6px] items-start px-[12px] py-[16px] relative w-full group-active:scale-[0.99] transition-transform">
           <div className="relative shrink-0 size-[30px]" data-name="cards">
             <VuesaxLinearCards />
           </div>
@@ -741,6 +743,9 @@ export default function PaymentPage({ onBack, onPay, totalAmount }: PaymentPageP
   };
   
   const canPay = () => {
+    // At least one payment method must be selected
+    if (!isCardPaymentExpanded && !isMobileMoneyExpanded) return false;
+    
     return isCardValid() && isMobileMoneyValid();
   };
   
@@ -766,11 +771,11 @@ export default function PaymentPage({ onBack, onPay, totalAmount }: PaymentPageP
 
 
   return (
-    <div className="bg-white h-screen w-full overflow-hidden flex items-center justify-center">
-      <div className="relative w-full max-w-[393px] md:max-w-[500px] lg:max-w-[600px] h-screen mx-auto shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] flex flex-col overflow-hidden" data-name="Payment Page">
+    <div className="bg-gradient-to-br from-[#f9fafb] via-white to-[#f5f7f9] h-screen w-full overflow-hidden flex items-center justify-center">
+      <div className="relative w-full max-w-[393px] md:max-w-[500px] lg:max-w-[600px] h-screen mx-auto flex flex-col overflow-hidden" data-name="Payment Page">
         <Header onBack={onBack} />
         
-        <div className="relative bg-white flex-1 overflow-hidden">
+        <div className="relative bg-gradient-to-br from-[#f9fafb] via-white to-[#f5f7f9] flex-1 overflow-hidden">
           <div className="relative h-full">
             <Group1 
               onPay={handlePay} 

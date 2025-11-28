@@ -32,26 +32,37 @@ const SCHOOLS = [
     id: 1, 
     name: "Twalumbu Educational Center",
     logo: null,
+    type: "school" as const,
   },
   { 
     id: 2, 
     name: "Chimilute Trust Academy",
     logo: chimiluteLogo,
+    type: "school" as const,
   },
   { 
     id: 3, 
     name: "Julani School",
     logo: julaniLogo,
+    type: "school" as const,
   },
   { 
     id: 4, 
     name: "Crested Crane Academy",
     logo: crestedCraneLogo,
+    type: "school" as const,
   },
   { 
     id: 5, 
     name: "International Maarif School",
     logo: maarifLogo,
+    type: "school" as const,
+  },
+  { 
+    id: 6, 
+    name: "African Christian University",
+    logo: null,
+    type: "university" as const,
   },
 ];
 
@@ -162,7 +173,7 @@ function TextInput({ onSchoolSelect, selectedSchool }: { onSchoolSelect: (school
             value={inputValue}
             onChange={handleInputChange}
             onFocus={() => inputValue.trim().length > 0 && setShowSuggestions(true)}
-            placeholder="e.g. Twalumbu"
+            placeholder="e.g. Twalumbu, ACU"
             className="flex-1 bg-transparent border-none outline-none font-['IBM_Plex_Sans:Regular',sans-serif] text-black placeholder:text-[rgba(45,54,72,0.4)] tracking-[-0.01em] touch-manipulation"
             style={{ fontSize: '16px' }}
           />
@@ -323,7 +334,7 @@ function Frame2() {
   return (
     <div className="content-stretch flex flex-col items-center not-italic relative shrink-0 text-black text-center w-full px-[24px]">
       <div className="flex flex-col font-['IBM_Plex_Sans:Regular',sans-serif] justify-center leading-[0] relative shrink-0 text-[16px] w-full">
-        <p className="leading-[45px]">Pay School Fees with</p>
+        <p className="leading-[45px]">Pay Fees with</p>
       </div>
       <p className="font-['IBM_Plex_Sans:SemiBold',sans-serif] leading-[45px] relative shrink-0 text-[32px] sm:text-[48px] w-full">master-fees</p>
     </div>
@@ -1266,6 +1277,7 @@ export default function Page() {
           >
             <ServicesPage 
               userName={userName}
+              schoolName={selectedSchool || undefined}
               onBack={handleBackToDetails}
               onSelectService={handleServiceSelect}
               onViewHistory={handleViewHistory}

@@ -20,11 +20,11 @@ interface CheckoutPageProps {
 
 function Header({ onBack }: { onBack: () => void }) {
   return (
-    <div className="h-[66px] w-full relative">
-      <div aria-hidden="true" className="absolute border-[#e6e6e6] border-[0px_0px_1px] border-solid inset-0 pointer-events-none" />
+    <div className="h-[66px] w-full relative bg-white/95 backdrop-blur-[20px]">
+      <div aria-hidden="true" className="absolute border-[#e5e7eb] border-[0px_0px_1.5px] border-solid inset-0 pointer-events-none" />
       <div className="absolute left-[94px] top-[17px] flex items-center gap-[16px]">
         <Logo />
-        <p className="font-['IBM_Plex_Sans_Devanagari:Bold',sans-serif] leading-[normal] not-italic text-[20px] text-black text-nowrap whitespace-pre">master-fees</p>
+        <p className="font-['IBM_Plex_Sans_Devanagari:Bold',sans-serif] leading-[normal] not-italic text-[20px] text-[#003630] text-nowrap whitespace-pre tracking-[-0.3px]">master-fees</p>
       </div>
     </div>
   );
@@ -102,15 +102,41 @@ function IconRightWrapper() {
   );
 }
 
-function Button({ onProceed }: { onProceed: () => void }) {
+function Button({ onProceed, isDisabled }: { onProceed: () => void; isDisabled?: boolean }) {
   return (
     <button 
       onClick={onProceed}
-      className="basis-0 bg-[#003630] grow h-full min-h-px min-w-px relative rounded-[10px] shrink-0 touch-manipulation active:scale-[0.98] transition-transform" 
+      disabled={isDisabled}
+      className={`relative basis-0 grow h-full min-h-px min-w-px rounded-[14px] shrink-0 touch-manipulation overflow-hidden ${
+        isDisabled ? 'cursor-not-allowed' : 'group'
+      }`}
       data-name="Button"
     >
-      <div className="flex flex-row items-center justify-center overflow-clip rounded-[inherit] size-full">
-        <div className="box-border content-stretch flex gap-[8px] items-center justify-center px-[20px] py-[10px] relative size-full">
+      {/* Background */}
+      <div className={`absolute inset-0 transition-colors ${
+        isDisabled 
+          ? 'bg-[#d1d5db]' 
+          : 'bg-[#003630] group-hover:bg-[#004d45]'
+      }`} />
+      
+      {/* Shine Effect */}
+      {!isDisabled && (
+        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
+      )}
+      
+      {/* Shadow */}
+      <div className={`absolute inset-0 transition-shadow ${
+        isDisabled
+          ? 'shadow-sm'
+          : 'shadow-[0px_4px_12px_rgba(0,54,48,0.2)] group-active:shadow-[0px_2px_6px_rgba(0,54,48,0.15)]'
+      }`} />
+      
+      <div className={`relative z-10 flex flex-row items-center justify-center overflow-clip rounded-[inherit] size-full transition-transform ${
+        !isDisabled && 'group-active:scale-[0.97]'
+      }`}>
+        <div className={`box-border content-stretch flex gap-[8px] items-center justify-center px-[20px] py-[10px] relative size-full ${
+          isDisabled ? 'opacity-60' : ''
+        }`}>
           <IconRightWrapper />
         </div>
       </div>
@@ -120,24 +146,29 @@ function Button({ onProceed }: { onProceed: () => void }) {
 
 function Frame({ paymentAmount, onAmountChange }: { paymentAmount: string; onAmountChange: (value: string) => void }) {
   return (
-    <div className="bg-[#f5f4f7] box-border content-stretch flex h-[56px] items-center justify-between leading-[1.4] not-italic px-[12px] py-[14px] relative rounded-[10px] shrink-0 w-[226px]">
-      <p className="font-['IBM_Plex_Sans_Devanagari:Medium',sans-serif] relative shrink-0 text-[12px] text-[rgba(45,54,72,0.52)] w-[48.835px]">ZMW</p>
+    <div className="relative bg-white border-[1.5px] border-[#e5e7eb] box-border content-stretch flex h-[56px] items-center justify-between leading-[1.4] not-italic px-[12px] py-[14px] rounded-[14px] shrink-0 w-[226px] shadow-sm">
+      <div className="absolute inset-0 bg-[#f9fafb] rounded-[14px]" style={{ zIndex: -1 }} />
+      <p className="font-['IBM_Plex_Sans_Devanagari:SemiBold',sans-serif] relative shrink-0 text-[12px] text-[#6b7280] w-[48.835px]">ZMW</p>
       <input
         type="text"
         value={paymentAmount}
         onChange={(e) => onAmountChange(e.target.value)}
-        className="bg-transparent font-['IBM_Plex_Sans_Condensed:Regular',sans-serif] relative shrink-0 text-[20px] text-black text-right w-[87px] outline-none"
+        className="bg-transparent font-['IBM_Plex_Sans_Condensed:SemiBold',sans-serif] relative shrink-0 text-[20px] text-[#003630] text-right w-[87px] outline-none tracking-[-0.3px]"
       />
     </div>
   );
 }
 
 function Frame4({ paymentAmount, onAmountChange, onProceed }: { paymentAmount: string; onAmountChange: (value: string) => void; onProceed: () => void }) {
+  // Parse payment amount to check if valid
+  const parsedAmount = parseFloat(paymentAmount.replace(/,/g, ''));
+  const isDisabled = isNaN(parsedAmount) || parsedAmount <= 0;
+  
   return (
     <div className="content-stretch flex gap-[8px] items-center relative shrink-0 w-full">
       <Frame paymentAmount={paymentAmount} onAmountChange={onAmountChange} />
       <div className="basis-0 flex flex-row grow items-center self-stretch shrink-0">
-        <Button onProceed={onProceed} />
+        <Button onProceed={onProceed} isDisabled={isDisabled} />
       </div>
     </div>
   );
@@ -187,14 +218,14 @@ function Frame12({ services }: { services: Service[] }) {
   const total = services.reduce((sum, service) => sum + service.amount, 0);
   
   return (
-    <div className="content-stretch flex flex-col gap-[12px] items-start relative shrink-0 w-full overflow-y-auto max-h-[180px] scrollbar-thin animate-fade-in pr-[4px]" 
+    <div className="content-stretch flex flex-col gap-[12px] items-start relative shrink-0 w-full overflow-y-auto max-h-[180px] scrollbar-thin animate-fade-in pr-[4px] border-[1.5px] border-[#e5e7eb] rounded-[14px] bg-gradient-to-br from-[#f9fafb] via-white to-[#f3f4f6] shadow-[0px_4px_12px_rgba(0,54,48,0.06)] p-[12px]" 
       style={{ 
         animationDelay: '100ms',
         scrollbarWidth: 'thin',
-        scrollbarColor: 'rgba(149, 227, 108, 0.3) transparent'
+        scrollbarColor: 'rgba(149, 227, 108, 0.5) rgba(229, 231, 235, 0.3)'
       }}>
       {/* Scroll fade indicator - top */}
-      <div className="sticky top-0 left-0 right-0 h-[12px] pointer-events-none z-10 bg-gradient-to-b from-white to-transparent"></div>
+      <div className="sticky top-0 left-0 right-0 h-[16px] pointer-events-none z-10 bg-gradient-to-b from-[#f9fafb] via-white/80 to-transparent"></div>
       
       {services.map((service, index) => (
         <div
@@ -215,7 +246,7 @@ function Frame12({ services }: { services: Service[] }) {
       </div>
       
       {/* Scroll fade indicator - bottom */}
-      <div className="sticky bottom-0 left-0 right-0 h-[12px] pointer-events-none z-10 bg-gradient-to-t from-white to-transparent"></div>
+      <div className="sticky bottom-0 left-0 right-0 h-[16px] pointer-events-none z-10 bg-gradient-to-t from-[#f9fafb] via-white/80 to-transparent"></div>
     </div>
   );
 }
@@ -225,12 +256,14 @@ function Frame3({ onPayInPart }: { onPayInPart: () => void }) {
     <div className="content-stretch flex gap-[15px] items-start w-full shrink-0">
       <button 
         onClick={onPayInPart}
-        className="basis-0 grow min-h-px min-w-px relative rounded-[10px] shrink-0 touch-manipulation active:opacity-80 transition-opacity" 
+        className="basis-0 grow min-h-px min-w-px relative rounded-[14px] shrink-0 touch-manipulation group overflow-hidden border-[1.5px] border-[#e5e7eb] hover:border-[#d1d5db] transition-all" 
         data-name="Button"
       >
-        <div className="flex flex-row items-center justify-center overflow-clip rounded-[inherit] size-full">
+        <div className="absolute inset-0 bg-white group-hover:bg-[#f9fafb] transition-colors" />
+        <div className="absolute inset-0 shadow-sm group-hover:shadow-md group-active:shadow-sm transition-shadow" />
+        <div className="relative z-10 flex flex-row items-center justify-center overflow-clip rounded-[inherit] size-full group-active:scale-[0.97] transition-transform">
           <div className="box-border content-stretch flex gap-[8px] items-center justify-center px-[24px] py-[10px] relative w-full">
-            <p className="font-['IBM_Plex_Sans_Devanagari:Medium',sans-serif] leading-[24px] not-italic relative shrink-0 text-[#003630] text-[16px] text-nowrap tracking-[-0.16px] whitespace-pre">Pay in part</p>
+            <p className="font-['IBM_Plex_Sans_Devanagari:SemiBold',sans-serif] leading-[24px] not-italic relative shrink-0 text-[#003630] text-[16px] text-nowrap tracking-[-0.3px] whitespace-pre">Pay in part</p>
           </div>
         </div>
         <div aria-hidden="true" className="absolute border border-[#003630] border-solid inset-0 pointer-events-none rounded-[10px]" />
@@ -263,10 +296,7 @@ function Frame5() {
 
 function Frame2({ services, paymentAmount, onAmountChange, onProceed, onPayInPart }: { services: Service[]; paymentAmount: string; onAmountChange: (value: string) => void; onProceed: () => void; onPayInPart: () => void }) {
   return (
-    <div className="absolute glass box-border content-stretch flex flex-col gap-[16px] h-[444px] items-start left-[calc(50%+0.5px)] pb-[30px] pt-[20px] px-[25px] rounded-[20px] top-[157px] translate-x-[-50%] w-[346px]"
-      style={{
-        boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(255, 255, 255, 0.6) inset'
-      }}
+    <div className="absolute bg-white border-[1.5px] border-[#e5e7eb] box-border content-stretch flex flex-col gap-[16px] h-[444px] items-start left-[calc(50%+0.5px)] pb-[30px] pt-[20px] px-[25px] rounded-[20px] top-[145px] translate-x-[-50%] w-[346px] shadow-[0px_8px_24px_rgba(0,0,0,0.06)]"
     >
       <div className="overflow-clip relative shrink-0 size-[24px]" data-name="Interface / Shopping_Bag_01">
         <div className="absolute inset-[16.67%_12.5%]" data-name="Vector">
@@ -317,10 +347,15 @@ export default function CheckoutPage({ services, onBack, onProceed }: CheckoutPa
   }
 
   return (
-    <div className="bg-white h-screen w-full overflow-hidden flex justify-center">
-      <div className="relative w-full max-w-[393px] md:max-w-[500px] lg:max-w-[600px] h-screen shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)]" data-name="Checkout page 1">
+    <div className="bg-gradient-to-br from-[#f9fafb] via-white to-[#f5f7f9] h-screen w-full overflow-hidden flex justify-center">
+      <div className="relative w-full max-w-[393px] md:max-w-[500px] lg:max-w-[600px] h-screen" data-name="Checkout page 1">
         <Header onBack={onBack} />
-        <p className="absolute font-['IBM_Plex_Sans_Devanagari:Medium',sans-serif] leading-[24px] left-[44px] not-italic text-[18px] text-black top-[118px] tracking-[-0.18px] w-[311px]">Checkout</p>
+        <div className="absolute left-[44px] top-[100px]">
+          <div className="inline-flex items-center gap-[8px] mb-[4px]">
+            <div className="w-[3px] h-[24px] bg-gradient-to-b from-[#95e36c] to-[#003630] rounded-full" />
+            <p className="font-['IBM_Plex_Sans_Devanagari:Bold',sans-serif] text-[22px] text-[#003630] tracking-[-0.4px]">Checkout</p>
+          </div>
+        </div>
         <Frame2 services={services} paymentAmount={paymentAmount} onAmountChange={setPaymentAmount} onProceed={() => setShowReceipts(true)} onPayInPart={() => setShowPayInPart(true)} />
       </div>
     </div>

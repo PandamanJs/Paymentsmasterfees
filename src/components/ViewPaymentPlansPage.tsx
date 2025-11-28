@@ -26,7 +26,7 @@ interface ViewPaymentPlansPageProps {
  */
 function Header({ onBack }: { onBack: () => void }) {
   return (
-    <div className="relative h-[66px] w-full border-b border-[#e6e6e6]/50 bg-white/80 backdrop-blur-xl">
+    <div className="relative h-[66px] w-full border-b-[1.5px] border-[#e5e7eb] bg-white/95 backdrop-blur-[20px]">
       <div className="absolute left-[20px] top-[17px] flex items-center gap-[16px]">
         <button
           onClick={onBack}
@@ -36,14 +36,14 @@ function Header({ onBack }: { onBack: () => void }) {
             <path
               d="M12 16L6 10L12 4"
               stroke="#003630"
-              strokeWidth="2"
+              strokeWidth="2.5"
               strokeLinecap="round"
               strokeLinejoin="round"
             />
           </svg>
         </button>
         <Logo />
-        <p className="font-['IBM_Plex_Sans_Devanagari:Bold',sans-serif] text-[20px] text-black">
+        <p className="font-['IBM_Plex_Sans_Devanagari:Bold',sans-serif] text-[20px] text-[#003630] tracking-[-0.3px]">
           master-fees
         </p>
       </div>
@@ -355,8 +355,8 @@ export default function ViewPaymentPlansPage({ onBack, schoolName }: ViewPayment
   ];
 
   return (
-    <div className="bg-gradient-to-br from-[#fafbfc] via-white to-[#f5f9f8] h-screen w-full overflow-hidden flex items-center justify-center">
-      <div className="relative w-full max-w-[393px] md:max-w-[500px] lg:max-w-[600px] h-screen mx-auto shadow-[0px_0px_0px_1px_rgba(0,0,0,0.04),0px_8px_24px_rgba(0,0,0,0.08)] bg-white flex flex-col">
+    <div className="bg-gradient-to-br from-[#f9fafb] via-white to-[#f5f7f9] h-screen w-full overflow-hidden flex items-center justify-center">
+      <div className="relative w-full max-w-[393px] md:max-w-[500px] lg:max-w-[600px] h-screen mx-auto bg-gradient-to-br from-[#f9fafb] via-white to-[#f5f7f9] flex flex-col">
         <Header onBack={onBack} />
 
         {/* Hero Section */}

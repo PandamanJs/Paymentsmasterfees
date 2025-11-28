@@ -67,6 +67,7 @@ export interface SchoolService {
 export interface SchoolData {
   name: string;
   code: string;        // School code prefix for student IDs
+  type: 'school' | 'university'; // Institution type
   services: SchoolService[];
   parents: ParentData[];
 }
@@ -83,6 +84,7 @@ export const SCHOOL_DATABASE: Record<string, SchoolData> = {
   "Twalumbu Educational Center": {
     name: "Twalumbu Educational Center",
     code: "TEC",
+    type: "school",
     services: [
       {
         id: "TEC-S001",
@@ -226,6 +228,7 @@ export const SCHOOL_DATABASE: Record<string, SchoolData> = {
   "Chimilute Trust Academy": {
     name: "Chimilute Trust Academy",
     code: "CTA",
+    type: "school",
     services: [
       {
         id: "CTA-S001",
@@ -384,6 +387,7 @@ export const SCHOOL_DATABASE: Record<string, SchoolData> = {
   "Julani School": {
     name: "Julani School",
     code: "JUL",
+    type: "school",
     services: [
       {
         id: "JUL-S001",
@@ -534,6 +538,7 @@ export const SCHOOL_DATABASE: Record<string, SchoolData> = {
   "Crested Crane Academy": {
     name: "Crested Crane Academy",
     code: "CCA",
+    type: "school",
     services: [
       {
         id: "CCA-S001",
@@ -685,6 +690,7 @@ export const SCHOOL_DATABASE: Record<string, SchoolData> = {
   "International Maarif School": {
     name: "International Maarif School",
     code: "IMS",
+    type: "school",
     services: [
       {
         id: "IMS-S001",
@@ -835,6 +841,145 @@ export const SCHOOL_DATABASE: Record<string, SchoolData> = {
         ]
       }
     ]
+  },
+
+  /**
+   * AFRICAN CHRISTIAN UNIVERSITY (ACU)
+   * Private Christian university in Lusaka
+   */
+  "African Christian University": {
+    name: "African Christian University",
+    code: "ACU",
+    type: "university",
+    services: [
+      {
+        id: "ACU-S001",
+        name: "Tuition Fees - Semester 1",
+        description: "Full semester tuition for undergraduate programs",
+        amount: 8500,
+        category: "tuition"
+      },
+      {
+        id: "ACU-S002",
+        name: "Tuition Fees - Semester 2",
+        description: "Full semester tuition for undergraduate programs",
+        amount: 8500,
+        category: "tuition"
+      },
+      {
+        id: "ACU-S003",
+        name: "Cafeteria Meal Plan",
+        description: "Campus cafeteria meal plan",
+        amount: 1200,
+        category: "meals",
+        paymentPeriods: [
+          { period: "term", amount: 1200, label: "Full Semester" },
+          { period: "week", amount: 120, label: "Per Week" },
+          { period: "day", amount: 25, label: "Per Day" }
+        ]
+      },
+      {
+        id: "ACU-S004",
+        name: "Campus Shuttle Service",
+        description: "Daily campus shuttle service",
+        amount: 600,
+        category: "transport",
+        routePricing: {
+          "City Center - Main Campus": 600,
+          "Chelston - Main Campus": 500,
+          "Kabulonga - Main Campus": 550,
+          "Meanwood - Main Campus": 650,
+          "Rhodes Park - Main Campus": 700
+        }
+      },
+      {
+        id: "ACU-S005",
+        name: "Student Accommodation",
+        description: "On-campus student housing",
+        amount: 2500,
+        category: "accommodation",
+        paymentPeriods: [
+          { period: "term", amount: 2500, label: "Per Semester" },
+          { period: "year", amount: 4800, label: "Academic Year (Discounted)" }
+        ]
+      },
+      {
+        id: "ACU-S006",
+        name: "Library & Resource Fee",
+        description: "Access to library resources and online databases",
+        amount: 400,
+        category: "other"
+      },
+      {
+        id: "ACU-S007",
+        name: "Student Union Fee",
+        description: "Student activities and union membership",
+        amount: 250,
+        category: "activities"
+      },
+      {
+        id: "ACU-S008",
+        name: "Laboratory Fees",
+        description: "Science and computer lab usage fees",
+        amount: 800,
+        category: "supplies"
+      },
+      {
+        id: "ACU-S009",
+        name: "Sports & Recreation",
+        description: "Access to gym and sports facilities",
+        amount: 300,
+        category: "activities",
+        paymentPeriods: [
+          { period: "term", amount: 300, label: "Per Semester" },
+          { period: "year", amount: 550, label: "Full Year (Discounted)" }
+        ]
+      },
+      {
+        id: "ACU-S010",
+        name: "Health Services",
+        description: "Campus health clinic and insurance",
+        amount: 500,
+        category: "other"
+      }
+    ],
+    parents: [
+      {
+        name: "Dr Michael Zulu",
+        phone: "955111000",
+        primarySchool: "African Christian University",
+        students: [
+          {
+            name: "Thandiwe Zulu",
+            id: "ACU001",
+            grade: "Year 2 - Business Administration",
+            balances: 1,
+            schoolName: "African Christian University"
+          }
+        ]
+      },
+      {
+        name: "Mrs Patricia Musonda",
+        phone: "966222111",
+        primarySchool: "African Christian University",
+        students: [
+          {
+            name: "Emmanuel Musonda",
+            id: "ACU002",
+            grade: "Year 3 - Computer Science",
+            balances: 2,
+            schoolName: "African Christian University"
+          },
+          {
+            name: "Ruth Musonda",
+            id: "ACU003",
+            grade: "Year 1 - Education",
+            balances: 1,
+            schoolName: "African Christian University"
+          }
+        ]
+      }
+    ]
   }
 };
 
@@ -863,6 +1008,10 @@ export const PHONE_USER_MAP: Record<string, string> = {
   // International Maarif School
   "977888999": "Mr Ahmed Hassan",
   "966222333": "Mrs Jennifer Sakala",
+  
+  // African Christian University
+  "955111000": "Dr Michael Zulu",
+  "966222111": "Mrs Patricia Musonda",
 };
 
 /**
@@ -889,6 +1038,10 @@ export const PHONE_SCHOOL_MAP: Record<string, string> = {
   // International Maarif School
   "977888999": "International Maarif School",
   "966222333": "International Maarif School",
+  
+  // African Christian University
+  "955111000": "African Christian University",
+  "966222111": "African Christian University",
 };
 
 /**
@@ -965,6 +1118,18 @@ export function getParentDataByPhone(phone: string): ParentData | null {
   }
   
   return null;
+}
+
+/**
+ * Get institution type by school name
+ * Determines if institution is a school or university
+ * 
+ * @param schoolName - Name of the institution
+ * @returns 'school' | 'university' or undefined if not found
+ */
+export function getInstitutionType(schoolName: string): 'school' | 'university' | undefined {
+  const schoolData = SCHOOL_DATABASE[schoolName];
+  return schoolData?.type;
 }
 
 /**

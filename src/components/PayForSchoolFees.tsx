@@ -56,11 +56,11 @@ function Logo() {
 
 function Header({ onBack }: { onBack: () => void }) {
   return (
-    <div className="h-[66px] w-full relative">
-      <div aria-hidden="true" className="absolute border-[#e6e6e6] border-[0px_0px_1px] border-solid inset-0 pointer-events-none" />
+    <div className="h-[66px] w-full relative bg-white/95 backdrop-blur-[20px]">
+      <div aria-hidden="true" className="absolute border-[#e5e7eb] border-[0px_0px_1.5px] border-solid inset-0 pointer-events-none" />
       <div className="absolute left-[94px] top-[17px] flex items-center gap-[16px]">
         <Logo />
-        <p className="font-['IBM_Plex_Sans_Devanagari:Bold',sans-serif] leading-[normal] not-italic text-[20px] text-black text-nowrap whitespace-pre">master-fees</p>
+        <p className="font-['IBM_Plex_Sans_Devanagari:Bold',sans-serif] leading-[normal] not-italic text-[20px] text-[#003630] text-nowrap whitespace-pre tracking-[-0.3px]">master-fees</p>
       </div>
     </div>
   );
@@ -169,23 +169,40 @@ function StudentCard({
   top: number;
 }) {
   return (
-    <button
+    <motion.button
       onClick={onToggle}
-      className={`absolute bg-neutral-100 box-border content-stretch flex gap-[9px] h-[77px] items-center left-[28px] overflow-clip p-[20px] rounded-[12px] w-[333px] touch-manipulation transition-colors ${
+      whileHover={{ scale: 1.01, y: -2 }}
+      whileTap={{ scale: 0.99 }}
+      className={`absolute box-border content-stretch flex gap-[9px] h-[77px] items-center left-[28px] overflow-clip p-[20px] rounded-[16px] w-[333px] touch-manipulation transition-all ${
         isSelected 
-          ? 'border border-[#d9d9d9] shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)]' 
-          : 'hover:bg-neutral-200 active:bg-neutral-300'
+          ? 'bg-white border-[1.5px] border-[#95e36c] shadow-[0px_8px_24px_rgba(149,227,108,0.25)]' 
+          : 'bg-white border-[1.5px] border-[#e5e7eb] hover:border-[#d1d5db] shadow-sm hover:shadow-md'
       }`}
       style={{ top: `${top}px` }}
     >
+      {/* Selection indicator */}
+      {isSelected && (
+        <motion.div
+          initial={{ scaleX: 0 }}
+          animate={{ scaleX: 1 }}
+          className="absolute left-0 top-0 bottom-0 w-[4px] bg-[#95e36c] rounded-l-[16px]"
+        />
+      )}
+      
       {isSelected ? (
-        <TickCircle />
+        <motion.div
+          initial={{ scale: 0 }}
+          animate={{ scale: 1 }}
+          transition={{ type: "spring", stiffness: 500, damping: 25 }}
+        >
+          <TickCircle />
+        </motion.div>
       ) : (
         <RadioBase isSelected={isSelected} />
       )}
       <Frame4 student={student} />
       <Frame8 balances={student.balances} />
-    </button>
+    </motion.button>
   );
 }
 
@@ -347,8 +364,8 @@ export default function PayForSchoolFees({
   };
 
   return (
-    <div className="bg-white min-h-screen w-full flex items-center justify-center" data-name="Pay for school fees page 1">
-      <div className="relative w-full max-w-[393px] md:max-w-[500px] lg:max-w-[600px] h-screen mx-auto bg-white flex flex-col overflow-hidden">
+    <div className="bg-gradient-to-br from-[#f9fafb] to-[#f5f7f9] min-h-screen w-full flex items-center justify-center" data-name="Pay for school fees page 1">
+      <div className="relative w-full max-w-[393px] md:max-w-[500px] lg:max-w-[600px] h-screen mx-auto bg-gradient-to-br from-[#f9fafb] to-[#f5f7f9] flex flex-col overflow-hidden">
         {/* Header - Fixed height */}
         <div className="flex-shrink-0">
           <Header onBack={onBack} />
@@ -356,15 +373,23 @@ export default function PayForSchoolFees({
         
         {/* Content - Scrollable area */}
         <div className="flex-1 flex flex-col min-h-0 overflow-hidden">
-          {/* Title and Instructions */}
-          <div className="flex-shrink-0 px-[28px] sm:px-[40px] pt-[16px] pb-[20px]">
-            <div className="font-['IBM_Plex_Sans_Devanagari:Medium',sans-serif] leading-[1.3] not-italic text-[18px] text-black tracking-[-0.18px] mb-[12px]">
-              <p className="mb-[4px]">Choose the account(s) you want to</p>
-              <p>pay for.</p>
-            </div>
-            <p className="font-['IBM_Plex_Sans_Devanagari:Regular',sans-serif] leading-[1.5] not-italic text-[#a7aaa7] text-[12px] tracking-[-0.12px]">
-              Tap the boxes to select the children you want to make a payment for.
-            </p>
+          {/* Title and Instructions - Premium */}
+          <div className="flex-shrink-0 px-[28px] sm:px-[40px] pt-[20px] pb-[24px]">
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4 }}
+            >
+              <div className="inline-flex items-center gap-[8px] mb-[16px]">
+                <div className="w-[3px] h-[24px] bg-gradient-to-b from-[#95e36c] to-[#003630] rounded-full" />
+                <h2 className="font-['IBM_Plex_Sans_Devanagari:Bold',sans-serif] text-[22px] text-[#003630] tracking-[-0.4px]">
+                  Select Accounts
+                </h2>
+              </div>
+              <p className="font-['IBM_Plex_Sans_Devanagari:Regular',sans-serif] leading-[1.5] text-[#6b7280] text-[13px] tracking-[-0.2px]">
+                Choose the students you want to make a payment for
+              </p>
+            </motion.div>
           </div>
 
           {/* Student Cards - Scrollable */}
@@ -377,38 +402,90 @@ export default function PayForSchoolFees({
             }}
           >
             {students.map((student) => (
-              <button
+              <motion.button
                 key={student.id}
                 onClick={() => toggleStudent(student.id)}
-                className={`bg-neutral-100 box-border content-stretch flex gap-[9px] min-h-[77px] items-center w-full overflow-clip p-[20px] rounded-[12px] touch-manipulation transition-colors ${
+                whileHover={{ scale: 1.01, y: -2 }}
+                whileTap={{ scale: 0.99 }}
+                className={`relative box-border content-stretch flex gap-[9px] min-h-[77px] items-center w-full overflow-clip p-[20px] rounded-[16px] touch-manipulation transition-all ${
                   selectedStudents.includes(student.id)
-                    ? 'border border-[#d9d9d9] shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)]' 
-                    : 'hover:bg-neutral-200 active:bg-neutral-300'
+                    ? 'bg-white border-[1.5px] border-[#95e36c] shadow-[0px_8px_24px_rgba(149,227,108,0.25)]' 
+                    : 'bg-white border-[1.5px] border-[#e5e7eb] hover:border-[#d1d5db] shadow-sm hover:shadow-md'
                 }`}
               >
+                {/* Selection indicator */}
+                {selectedStudents.includes(student.id) && (
+                  <motion.div
+                    initial={{ scaleX: 0 }}
+                    animate={{ scaleX: 1 }}
+                    className="absolute left-0 top-0 bottom-0 w-[4px] bg-[#95e36c] rounded-l-[16px]"
+                  />
+                )}
+                
                 {selectedStudents.includes(student.id) ? (
-                  <TickCircle />
+                  <motion.div
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    transition={{ type: "spring", stiffness: 500, damping: 25 }}
+                  >
+                    <TickCircle />
+                  </motion.div>
                 ) : (
                   <RadioBase isSelected={false} />
                 )}
                 <Frame4 student={student} />
                 <Frame8 balances={student.balances} />
-              </button>
+              </motion.button>
             ))}
           </div>
 
-          {/* Button - Fixed at bottom with safe area */}
+          {/* Premium Action Button - Fixed at bottom */}
           <div 
-            className="flex-shrink-0 px-[28px] sm:px-[36px] pb-[20px] pt-[16px] bg-white border-t border-transparent" 
+            className="flex-shrink-0 px-[28px] sm:px-[36px] pb-[20px] pt-[16px] bg-white/95 backdrop-blur-[20px] border-t-[1.5px] border-[#e5e7eb]" 
             style={{ paddingBottom: 'max(20px, env(safe-area-inset-bottom))' }}
           >
             <button 
               onClick={handleSelectServices}
               disabled={selectedStudents.length === 0}
-              className="bg-[#003630] w-full h-[55px] rounded-[12px] touch-manipulation active:scale-[0.98] transition-transform disabled:opacity-50 disabled:cursor-not-allowed disabled:active:scale-100 shadow-[0px_2px_8px_rgba(0,54,48,0.3)]" 
+              className={`relative w-full h-[56px] rounded-[16px] overflow-hidden touch-manipulation ${
+                selectedStudents.length === 0 ? 'cursor-not-allowed' : 'group'
+              }`}
               data-name="Button"
             >
-              <p className="font-['IBM_Plex_Sans_Devanagari:Bold',sans-serif] leading-[24px] not-italic text-[16px] text-nowrap text-white tracking-[-0.16px] whitespace-pre text-center">Select Services</p>
+              {/* Background */}
+              <div className={`absolute inset-0 transition-colors ${
+                selectedStudents.length === 0 
+                  ? 'bg-[#d1d5db]' 
+                  : 'bg-[#003630] group-hover:bg-[#004d45]'
+              }`} />
+              
+              {/* Shine Effect */}
+              {selectedStudents.length > 0 && (
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
+              )}
+              
+              {/* Shadow */}
+              <div className={`absolute inset-0 transition-shadow ${
+                selectedStudents.length === 0
+                  ? 'shadow-sm'
+                  : 'shadow-[0px_6px_20px_rgba(0,54,48,0.25)] group-active:shadow-[0px_2px_8px_rgba(0,54,48,0.2)]'
+              }`} />
+              
+              {/* Content */}
+              <div className={`relative z-10 flex items-center justify-center gap-[10px] h-full transition-transform ${
+                selectedStudents.length > 0 && 'group-active:scale-[0.97]'
+              }`}>
+                <p className={`font-['IBM_Plex_Sans_Devanagari:Bold',sans-serif] text-[16px] tracking-[-0.3px] ${
+                  selectedStudents.length === 0 ? 'text-white/60' : 'text-white'
+                }`}>
+                  Select Services
+                </p>
+                {selectedStudents.length > 0 && (
+                  <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                    <path d="M6.75 13.5L11.25 9L6.75 4.5" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                )}
+              </div>
             </button>
           </div>
         </div>

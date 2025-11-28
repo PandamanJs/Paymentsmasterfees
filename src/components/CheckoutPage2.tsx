@@ -121,9 +121,9 @@ function StudentServiceGroup({
 }) {
   return (
     <div className="w-full animate-fade-in" style={{ animationDelay: '100ms' }}>
-      <div className="mb-3 flex items-center gap-2">
-        <div className="h-[2px] w-[8px] bg-gradient-to-r from-[#95e36c] to-transparent rounded-full"></div>
-        <p className="font-['IBM_Plex_Sans_Devanagari:Medium',sans-serif] text-[10px] text-[#003630] tracking-wide uppercase">
+      <div className="mb-4 flex items-center gap-2 bg-gradient-to-br from-[#95e36c]/15 to-[#7dd054]/5 border-[1.5px] border-[#95e36c]/30 rounded-[12px] py-[8px] px-[12px] shadow-sm">
+        <div className="h-[12px] w-[3px] bg-gradient-to-b from-[#95e36c] to-[#7dd054] rounded-full"></div>
+        <p className="font-['IBM_Plex_Sans_Devanagari:Bold',sans-serif] text-[11px] text-[#003630] tracking-[-0.15px] uppercase">
           {studentName}
         </p>
       </div>
@@ -172,9 +172,9 @@ function StudentCarouselCard({
   return (
     <div className="w-full px-2">
       <div className="w-full animate-fade-in" style={{ animationDelay: '100ms' }}>
-        <div className="mb-3 flex items-center gap-2 justify-center">
-          <div className="h-[2px] w-[8px] bg-gradient-to-r from-[#95e36c] to-transparent rounded-full"></div>
-          <p className="font-['IBM_Plex_Sans_Devanagari:Medium',sans-serif] text-[12px] text-[#003630] tracking-wide uppercase">
+        <div className="mb-4 flex items-center gap-2 justify-center bg-gradient-to-br from-[#95e36c]/15 to-[#7dd054]/5 border-[1.5px] border-[#95e36c]/30 rounded-[12px] py-[10px] px-[16px] shadow-sm">
+          <div className="h-[14px] w-[3px] bg-gradient-to-b from-[#95e36c] to-[#7dd054] rounded-full"></div>
+          <p className="font-['IBM_Plex_Sans_Devanagari:Bold',sans-serif] text-[13px] text-[#003630] tracking-[-0.15px] uppercase">
             {studentName}
           </p>
         </div>
@@ -219,17 +219,17 @@ function Group({ total }: { total: number }) {
 function Frame20({ total }: { total: number }) {
   return (
     <div className="bg-[rgba(255,255,255,0.1)] rounded-[18px] w-full max-w-[327px] mx-auto">
-      <div className="box-border content-stretch flex flex-col gap-[10px] items-start overflow-clip pb-[20px] pt-[15px] px-[15px] relative rounded-[inherit]">
-        <div className="h-[25px] overflow-clip relative shrink-0 w-[24px]" data-name="Interface / Shopping_Bag_01">
+      <div className="box-border content-stretch flex flex-col gap-[12px] items-start overflow-clip pb-[24px] pt-[18px] px-[18px] relative rounded-[inherit] border-[1.5px] border-[#e5e7eb] bg-gradient-to-br from-[#f9fafb] via-white to-[#f3f4f6] shadow-[0px_4px_12px_rgba(0,54,48,0.08)]">
+        <div className="h-[28px] overflow-clip relative shrink-0 w-[28px] p-[4px] rounded-[8px] bg-gradient-to-br from-[#95e36c]/15 to-[#7dd054]/5 border-[1.5px] border-[#95e36c]/30" data-name="Interface / Shopping_Bag_01">
           <div className="absolute inset-[16.67%_12.5%]" data-name="Vector">
-            <div className="absolute inset-[-6%_-5.56%]" style={{ "--stroke-0": "rgba(0, 0, 0, 1)" } as React.CSSProperties}>
+            <div className="absolute inset-[-6%_-5.56%]" style={{ "--stroke-0": "rgba(0, 54, 48, 1)" } as React.CSSProperties}>
               <svg className="block size-full" fill="none" preserveAspectRatio="none" viewBox="0 0 20 19">
-                <path d={svgPaths.p2be3f780} id="Vector" stroke="var(--stroke-0, black)" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
+                <path d={svgPaths.p2be3f780} id="Vector" stroke="var(--stroke-0, #003630)" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" />
               </svg>
             </div>
           </div>
         </div>
-        <p className="font-['IBM_Plex_Sans_Devanagari:SemiBold',sans-serif] leading-[24px] min-w-full not-italic relative shrink-0 text-[16px] text-black tracking-[-0.16px] w-[min-content]">Credit Payment</p>
+        <p className="font-['IBM_Plex_Sans_Devanagari:Bold',sans-serif] leading-[24px] min-w-full not-italic relative shrink-0 text-[16px] text-[#003630] tracking-[-0.2px] w-[min-content]">Credit Payment</p>
         <Group total={total} />
         <div className="absolute flex h-[calc(1px*((var(--transform-inner-width)*0.9998781681060791)+(var(--transform-inner-height)*0.015611708164215088)))] items-center justify-center left-[190px] top-[-16px] w-[calc(1px*((var(--transform-inner-height)*0.9998781681060791)+(var(--transform-inner-width)*0.015611708164215088)))]" style={{ "--transform-inner-width": "77.734375", "--transform-inner-height": "39.03125" } as React.CSSProperties}>
           <div className="flex-none rotate-[270.895deg]">
@@ -366,8 +366,8 @@ function Group1({
           <div className="flex items-center justify-between mb-2">
             <p className="font-['IBM_Plex_Sans_Devanagari:Medium',sans-serif] text-[12px] text-black">Enter the amount you want to pay.</p>
             {totalStudents > 1 && (
-              <div className="flex items-center gap-1 bg-[#003630] px-2 py-1 rounded-full">
-                <span className="font-['IBM_Plex_Sans_Devanagari:Medium',sans-serif] text-[10px] text-white">
+              <div className="flex items-center gap-1 bg-gradient-to-r from-[#003630] to-[#004d45] px-[10px] py-[6px] rounded-[10px] shadow-[0px_2px_8px_rgba(0,54,48,0.2)] border-[1.5px] border-[#003630]">
+                <span className="font-['IBM_Plex_Sans_Devanagari:Bold',sans-serif] text-[11px] text-white tracking-[-0.1px]">
                   {currentSlide + 1}/{totalStudents}
                 </span>
               </div>
@@ -437,15 +437,15 @@ function Group1({
                 </div>
                 
                 {/* Pagination Dots */}
-                <div className="flex justify-center gap-2 mt-4 bg-[rgba(0,54,48,0.05)] rounded-full py-2 px-4 mx-auto w-fit">
+                <div className="flex justify-center gap-2 mt-4 bg-gradient-to-r from-[#f9fafb] via-[#f3f4f6] to-[#f9fafb] rounded-full py-[10px] px-[16px] mx-auto w-fit border-[1.5px] border-[#e5e7eb] shadow-sm">
                   {studentEntries.map((_, index) => (
                     <button
                       key={index}
                       onClick={() => goToSlide(index)}
-                      className={`h-2 rounded-full transition-all duration-300 ${
+                      className={`h-[6px] rounded-full transition-all duration-300 ${
                         index === currentSlide 
-                          ? 'w-8 bg-[#003630] shadow-md' 
-                          : 'w-2 bg-[#95e36c] hover:bg-[#003630]/50'
+                          ? 'w-[24px] bg-gradient-to-r from-[#003630] to-[#004d45] shadow-[0px_2px_6px_rgba(0,54,48,0.3)]' 
+                          : 'w-[6px] bg-[#95e36c] hover:bg-[#7dd054] active:scale-90'
                       }`}
                       aria-label={`Go to student ${index + 1}`}
                     />
@@ -471,24 +471,43 @@ function Group1({
       
       <button 
         onClick={onProceed}
-        className="relative h-[59px] w-full max-w-[327px] mx-auto rounded-[16px] overflow-hidden group touch-manipulation"
+        disabled={total <= 0}
+        className={`relative h-[59px] w-full max-w-[327px] mx-auto rounded-[16px] overflow-hidden touch-manipulation ${
+          total <= 0 ? 'cursor-not-allowed' : 'group'
+        }`}
         data-name="Button"
       >
         {/* Background */}
-        <div className="absolute inset-0 bg-[#003630] group-hover:bg-[#004d45] transition-colors" />
+        <div className={`absolute inset-0 transition-colors ${
+          total <= 0 
+            ? 'bg-[#d1d5db]' 
+            : 'bg-[#003630] group-hover:bg-[#004d45]'
+        }`} />
         
         {/* Shine Effect */}
-        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
+        {total > 0 && (
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
+        )}
         
         {/* Shadow */}
-        <div className="absolute inset-0 shadow-[0px_6px_20px_rgba(0,54,48,0.25)] group-active:shadow-[0px_2px_8px_rgba(0,54,48,0.2)] transition-shadow" />
+        <div className={`absolute inset-0 transition-shadow ${
+          total <= 0
+            ? 'shadow-sm'
+            : 'shadow-[0px_6px_20px_rgba(0,54,48,0.25)] group-active:shadow-[0px_2px_8px_rgba(0,54,48,0.2)]'
+        }`} />
         
         {/* Content */}
-        <div className="relative z-10 flex items-center justify-center gap-[10px] h-full group-active:scale-[0.97] transition-transform">
-          <p className="font-['IBM_Plex_Sans_Devanagari:Bold',sans-serif] text-[18px] text-white tracking-[-0.3px]">Proceed</p>
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-            <path d="M7.5 15L12.5 10L7.5 5" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
+        <div className={`relative z-10 flex items-center justify-center gap-[10px] h-full transition-transform ${
+          total > 0 && 'group-active:scale-[0.97]'
+        }`}>
+          <p className={`font-['IBM_Plex_Sans_Devanagari:Bold',sans-serif] text-[18px] tracking-[-0.3px] ${
+            total <= 0 ? 'text-white/60' : 'text-white'
+          }`}>Proceed</p>
+          {total > 0 && (
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+              <path d="M7.5 15L12.5 10L7.5 5" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          )}
         </div>
       </button>
     </div>
