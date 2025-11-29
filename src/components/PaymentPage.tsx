@@ -5,6 +5,7 @@ import svgPaths from "../imports/svg-ft8f5pz3nc";
 import headerSvgPaths from "../imports/svg-4boykq1z8d";
 import ExpandedMobileMoney from "../imports/Frame1707478923";
 import ExpandedCardPayment from "../imports/Frame1707478923-18-800";
+import { haptics } from "../utils/haptics";
 
 interface PaymentPageProps {
   onBack: () => void;
@@ -566,7 +567,12 @@ function Group1({
       <div className="flex-shrink-0 px-[24px] pb-[20px] pt-[16px] bg-white" style={{ paddingBottom: 'max(20px, env(safe-area-inset-bottom))' }}>
         <div className="flex flex-col items-center gap-[20px]">
           <button 
-            onClick={onPay}
+            onClick={() => {
+              if (!isPayDisabled) {
+                haptics.success();
+                onPay();
+              }
+            }}
             disabled={isPayDisabled}
             className={`relative h-[59px] w-full max-w-[296px] rounded-[16px] overflow-hidden touch-manipulation ${
               isPayDisabled ? 'cursor-not-allowed' : 'group'

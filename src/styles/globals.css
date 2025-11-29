@@ -5,8 +5,9 @@
    Refined typography, spacing, shadows, and interactions
    ============================================================ */
 
-/* Typography - SF Pro Display inspired */
+/* Typography - Apple SF Pro System Font */
 body {
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
@@ -61,11 +62,18 @@ h1, h2, h3, h4, h5, h6 {
   --space-12: 48px;
   --space-16: 64px;
   
-  /* Transitions */
+  /* Transitions - Apple's signature easing curves */
   --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
   --transition-base: 250ms cubic-bezier(0.4, 0, 0.2, 1);
   --transition-slow: 350ms cubic-bezier(0.4, 0, 0.2, 1);
   --transition-spring: 400ms cubic-bezier(0.34, 1.56, 0.64, 1);
+  
+  /* Apple-specific easing curves */
+  --ease-in-out-apple: cubic-bezier(0.42, 0, 0.58, 1);
+  --ease-out-apple: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --ease-in-apple: cubic-bezier(0.42, 0, 1, 1);
+  --spring-bouncy: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  --spring-smooth: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 /* ============================================================
@@ -94,7 +102,7 @@ select {
   border-radius: 2px;
 }
 
-/* Smooth scrolling */
+/* Smooth scrolling with iOS momentum */
 html {
   scroll-behavior: smooth;
   -webkit-text-size-adjust: 100%;
@@ -103,6 +111,28 @@ html {
 /* Prevent horizontal overflow */
 body {
   overflow-x: hidden;
+  /* iOS safe area insets for notched devices */
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
+}
+
+/* Native iOS momentum scrolling */
+* {
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Respect user's motion preferences (accessibility) */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 
 /* ============================================================
@@ -251,22 +281,65 @@ body {
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-md);
   border: 1px solid rgba(0, 0, 0, 0.06);
-  transition: all var(--transition-base);
+  transition: all 0.25s var(--ease-out-apple);
+  transform-origin: center center;
 }
 
-.card:hover {
-  box-shadow: var(--shadow-lg);
-  border-color: rgba(0, 0, 0, 0.08);
-  transform: translateY(-2px);
+/* Only apply hover effects on devices with hover capability */
+@media (hover: hover) and (pointer: fine) {
+  .card:hover {
+    box-shadow: var(--shadow-lg);
+    border-color: rgba(0, 0, 0, 0.08);
+    transform: translateY(-2px);
+  }
 }
 
 .card-interactive {
   cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .card-interactive:active {
-  transform: translateY(0) scale(0.98);
+  transform: translateY(0) scale(0.97);
   box-shadow: var(--shadow-sm);
+  transition: all 0.1s var(--ease-out-apple);
+}
+
+/* Enhanced card with subtle gradient border */
+.card-premium {
+  background: white;
+  border-radius: var(--radius-lg);
+  box-shadow: 
+    0 4px 6px -1px rgba(0, 0, 0, 0.08),
+    0 2px 4px -1px rgba(0, 0, 0, 0.04),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+  border: 1px solid transparent;
+  background-clip: padding-box;
+  position: relative;
+  transition: all 0.25s var(--ease-out-apple);
+}
+
+.card-premium::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: var(--radius-lg);
+  padding: 1px;
+  background: linear-gradient(135deg, rgba(149, 227, 108, 0.3), rgba(0, 54, 48, 0.1));
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .card-premium:hover {
+    box-shadow: 
+      0 10px 15px -3px rgba(0, 0, 0, 0.1),
+      0 4px 6px -2px rgba(0, 0, 0, 0.05),
+      inset 0 0 0 1px rgba(255, 255, 255, 0.15);
+    transform: translateY(-3px);
+  }
 }
 
 /* ============================================================
@@ -344,7 +417,7 @@ body {
 }
 
 /* ============================================================
-   DIVIDERS
+   DIVIDERS - iOS-STYLE INSET SEPARATORS
    Subtle separators with gradients
    ============================================================ */
 
@@ -366,6 +439,19 @@ body {
     rgba(0, 0, 0, 0.08) 50%,
     rgba(0, 0, 0, 0) 100%
   );
+}
+
+/* iOS-style inset separator (like in Settings app) */
+.separator-inset {
+  height: 0.5px;
+  background: rgba(60, 60, 67, 0.29);
+  margin-left: 16px; /* Inset from left */
+}
+
+/* Light mode separator */
+.separator-light {
+  height: 0.5px;
+  background: rgba(0, 0, 0, 0.04);
 }
 
 /* Breakpoints for xs (extra small) */
@@ -721,4 +807,306 @@ button:disabled::before {
     max-width: calc(100vw - 32px) !important;
     margin: 0 16px !important;
   }
+}
+
+/* ============================================================
+   SKELETON LOADING STATES - APPLE STYLE
+   Shimmer effect for content loading
+   ============================================================ */
+
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    rgba(0, 0, 0, 0.04) 0%,
+    rgba(0, 0, 0, 0.08) 50%,
+    rgba(0, 0, 0, 0.04) 100%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.5s ease-in-out infinite;
+  border-radius: var(--radius-sm);
+}
+
+@keyframes skeleton-shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+.skeleton-text {
+  height: 16px;
+  margin: 4px 0;
+}
+
+.skeleton-heading {
+  height: 24px;
+  margin: 8px 0;
+  width: 60%;
+}
+
+.skeleton-avatar {
+  border-radius: 50%;
+}
+
+.skeleton-button {
+  height: 44px;
+  border-radius: var(--radius-md);
+}
+
+.skeleton-card {
+  height: 120px;
+  border-radius: var(--radius-lg);
+}
+
+/* ============================================================
+   PULL-TO-REFRESH INDICATOR (iOS PATTERN)
+   ============================================================ */
+
+.pull-to-refresh {
+  position: absolute;
+  top: -60px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-base);
+}
+
+.pull-indicator {
+  width: 24px;
+  height: 24px;
+  border: 2px solid rgba(0, 54, 48, 0.2);
+  border-top-color: #003630;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ============================================================
+   SWIPE ACTIONS (iOS LIST SWIPE)
+   ============================================================ */
+
+.swipe-actions {
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  display: flex;
+  transform: translateX(100%);
+  transition: transform 0.3s var(--ease-out-apple);
+}
+
+.swipe-action-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 24px;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s var(--ease-out-apple);
+}
+
+.swipe-action-button:active {
+  filter: brightness(0.9);
+}
+
+.swipe-action-delete {
+  background: #ff3b30;
+}
+
+.swipe-action-archive {
+  background: #ff9500;
+}
+
+.swipe-action-more {
+  background: #c7c7cc;
+}
+
+/* ============================================================
+   BOTTOM SHEET MODAL (iOS PATTERN)
+   ============================================================ */
+
+.bottom-sheet {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: white;
+  border-radius: 16px 16px 0 0;
+  box-shadow: 
+    0 -10px 40px rgba(0, 0, 0, 0.1),
+    0 -1px 3px rgba(0, 0, 0, 0.05);
+  transform: translateY(100%);
+  transition: transform 0.4s var(--spring-smooth);
+  max-height: 90vh;
+  overflow-y: auto;
+  z-index: 1000;
+}
+
+.bottom-sheet.open {
+  transform: translateY(0);
+}
+
+.bottom-sheet-handle {
+  width: 36px;
+  height: 5px;
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 3px;
+  margin: 8px auto 16px;
+}
+
+.bottom-sheet-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 999;
+  pointer-events: none;
+}
+
+.bottom-sheet-overlay.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* ============================================================
+   TOUCH TARGETS (iOS HIG: Minimum 44pt)
+   ============================================================ */
+
+.touch-target {
+  min-height: 44px;
+  min-width: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ============================================================
+   HAPTIC-LIKE FEEDBACK (Visual simulation)
+   ============================================================ */
+
+.haptic-light:active {
+  transform: scale(0.97);
+  transition: transform 0.1s var(--ease-out-apple);
+}
+
+.haptic-medium:active {
+  transform: scale(0.95);
+  transition: transform 0.1s var(--ease-out-apple);
+}
+
+.haptic-heavy:active {
+  transform: scale(0.93);
+  transition: transform 0.1s var(--ease-out-apple);
+}
+
+/* ============================================================
+   BETTER FOCUS STATES (Accessibility & Keyboard Nav)
+   ============================================================ */
+
+*:focus-visible {
+  outline: 2px solid #95e36c;
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+button:focus-visible,
+a:focus-visible {
+  outline: 2px solid #95e36c;
+  outline-offset: 2px;
+}
+
+/* ============================================================
+   PAGE TRANSITIONS (iOS-LIKE SLIDE)
+   ============================================================ */
+
+.page-enter {
+  opacity: 0;
+  transform: translateX(100%);
+}
+
+.page-enter-active {
+  opacity: 1;
+  transform: translateX(0);
+  transition: all 0.35s var(--ease-out-apple);
+}
+
+.page-exit {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.page-exit-active {
+  opacity: 0;
+  transform: translateX(-30%);
+  transition: all 0.35s var(--ease-out-apple);
+}
+
+/* ============================================================
+   IMPROVED SHADOWS (More Apple-like depth)
+   ============================================================ */
+
+.shadow-apple-sm {
+  box-shadow: 
+    0 1px 2px 0 rgba(0, 0, 0, 0.06),
+    0 1px 3px 0 rgba(0, 0, 0, 0.1);
+}
+
+.shadow-apple-md {
+  box-shadow: 
+    0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.shadow-apple-lg {
+  box-shadow: 
+    0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.shadow-apple-xl {
+  box-shadow: 
+    0 20px 25px -5px rgba(0, 0, 0, 0.1),
+    0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+/* ============================================================
+   CONTEXTUAL BADGES (iOS-STYLE NOTIFICATION BADGES)
+   ============================================================ */
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  background: #ff3b30;
+  color: white;
+  font-size: 12px;
+  font-weight: 600;
+  border-radius: 10px;
+  border: 2px solid white;
+}
+
+.badge-green {
+  background: #95e36c;
+  color: #003630;
+}
+
+.badge-gray {
+  background: #8e8e93;
+  color: white;
 }

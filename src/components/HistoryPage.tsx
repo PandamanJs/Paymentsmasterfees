@@ -9,7 +9,11 @@ import { generateReceiptPDF } from "../utils/pdfGenerator";
 import { toast } from "sonner@2.0.3";
 import { Toaster } from "./ui/sonner";
 import { projectId, publicAnonKey } from "../utils/supabase/info";
-import { Filter, X } from "lucide-react";
+import { Filter, X, Trash2, FileText } from "lucide-react";
+import { SkeletonList } from "./SkeletonLoader";
+import SwipeableListItem from "./SwipeableListItem";
+import { haptics } from "../utils/haptics";
+import { ForceTouchMenu } from "../utils/force-touch";
 
 export interface PaymentReceipt {
   date: string;
@@ -938,7 +942,10 @@ export default function HistoryPage({ userName, userPhone, onBack, onViewAllRece
               Payment History
             </h1>
             <button
-              onClick={() => setShowFilterPopup(true)}
+              onClick={() => {
+                haptics.buttonPress();
+                setShowFilterPopup(true);
+              }}
               className="relative group touch-manipulation active:scale-95 transition-transform"
             >
               <div className={`
@@ -1044,20 +1051,30 @@ export default function HistoryPage({ userName, userPhone, onBack, onViewAllRece
             )}
           </AnimatePresence>
 
-          {/* Child Pills */}
-          <div className="flex gap-[15px] mb-[25px] overflow-x-auto overflow-y-hidden scrollbar-hide -mx-[21px] px-[21px] pb-[5px] touch-pan-x">
-            {students.map((student) => (
-              <ChildPill 
-                key={student.id}
-                name={student.name} 
-                id={student.id} 
-                isActive={selectedStudentId === student.id}
-                onClick={() => setSelectedStudentId(student.id)}
-              />
-            ))}
-          </div>
+          {/* Loading Skeleton */}
+          {isLoading ? (
+            <div className="space-y-6 animate-fade-in">
+              <SkeletonList count={6} />
+            </div>
+          ) : (
+            <>
+              {/* Child Pills */}
+              <div className="flex gap-[15px] mb-[25px] overflow-x-auto overflow-y-hidden scrollbar-hide -mx-[21px] px-[21px] pb-[5px] touch-pan-x">
+                {students.map((student) => (
+                  <ChildPill 
+                    key={student.id}
+                    name={student.name} 
+                    id={student.id} 
+                    isActive={selectedStudentId === student.id}
+                    onClick={() => {
+                      haptics.selection();
+                      setSelectedStudentId(student.id);
+                    }}
+                  />
+                ))}
+              </div>
 
-          {/* No Results Message for Filters - Unique Empty State */}
+              {/* No Results Message for Filters - Unique Empty State */}
           {(selectedTerm || selectedYear) && !hasAnyFilteredPayments && (
             <motion.div
               initial={{ opacity: 0, scale: 0.9 }}
@@ -1153,20 +1170,54 @@ export default function HistoryPage({ userName, userPhone, onBack, onViewAllRece
                       
                       return (
                         <div key={index}>
-                          {/* Main Invoice/Payment Item */}
-                          <PaymentItem
-                            date={payment.date}
-                            day={payment.day}
-                            title={payment.title}
-                            subtitle={payment.subtitle}
-                            amount={payment.amount}
-                            termInfo={payment.termInfo}
-                            currentBalance={payment.currentBalance}
-                            onMenuClick={() => {
-                              setOpenPopupId(paymentId);
-                              setSelectedPayment(payment);
-                            }}
-                          />
+                          {/* Main Invoice/Payment Item with Swipe & 3D Touch */}
+                          <ForceTouchMenu
+                            menuItems={[
+                              {
+                                label: "View Receipt",
+                                icon: <FileText size={18} />,
+                                onClick: () => {
+                                  haptics.selection();
+                                  handleViewReceipt();
+                                }
+                              },
+                              {
+                                label: "Delete",
+                                icon: <Trash2 size={18} />,
+                                onClick: () => {
+                                  haptics.delete();
+                                  toast.success("Payment deleted");
+                                },
+                                destructive: true
+                              }
+                            ]}
+                          >
+                            <div>
+                              <SwipeableListItem
+                                onDelete={() => {
+                                  haptics.delete();
+                                  toast.success("Payment deleted", {
+                                    description: `${payment.title} removed from history`
+                                  });
+                                }}
+                              >
+                                <PaymentItem
+                                  date={payment.date}
+                                  day={payment.day}
+                                  title={payment.title}
+                                  subtitle={payment.subtitle}
+                                  amount={payment.amount}
+                                  termInfo={payment.termInfo}
+                                  currentBalance={payment.currentBalance}
+                                  onMenuClick={() => {
+                                    haptics.buttonPress();
+                                    setOpenPopupId(paymentId);
+                                    setSelectedPayment(payment);
+                                  }}
+                                />
+                              </SwipeableListItem>
+                            </div>
+                          </ForceTouchMenu>
                           
                           {/* Receipt Sub-items with Tree Lines */}
                           {hasReceipts && payment.receipts!.map((receipt, receiptIndex) => (
@@ -1207,6 +1258,8 @@ export default function HistoryPage({ userName, userPhone, onBack, onViewAllRece
               </div>
             );
           })}
+            </>
+          )}
         </div>
 
         {/* Popup */}

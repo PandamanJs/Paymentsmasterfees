@@ -1,6 +1,7 @@
 import { useState, useMemo } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { Search, X, ChevronRight } from "lucide-react";
+import { haptics } from "../utils/haptics";
 
 interface School {
   id: number;
@@ -191,7 +192,10 @@ export default function SearchPage({ onProceed, selectedSchool, onSchoolSelect }
                     transition={{ duration: 0.3, delay: index * 0.05 }}
                     whileHover={{ scale: 1.01, y: -2 }}
                     whileTap={{ scale: 0.99 }}
-                    onClick={() => handleSchoolSelect(school.name)}
+                    onClick={() => {
+                      haptics.selection();
+                      handleSchoolSelect(school.name);
+                    }}
                     className={`
                       relative w-full rounded-[16px] p-4 border-[1.5px]
                       transition-all duration-300
@@ -348,7 +352,10 @@ export default function SearchPage({ onProceed, selectedSchool, onSchoolSelect }
             }}
           >
             <button
-              onClick={handleProceed}
+              onClick={() => {
+                haptics.buttonPress();
+                handleProceed();
+              }}
               className="relative w-full h-[56px] rounded-[16px] overflow-hidden group"
               style={{
                 touchAction: 'manipulation',

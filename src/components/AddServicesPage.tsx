@@ -6,6 +6,7 @@ import dropdownSvgPaths from "../imports/svg-g5tpckf1cs";
 import checkSvgPaths from "../imports/svg-ntb0im3s1u";
 import xIconSvgPaths from "../imports/svg-zhcira9im7";
 import AddOtherServicesPopup from "./AddOtherServicesPopup";
+import { haptics } from "../utils/haptics";
 
 interface Student {
   name: string;
@@ -817,7 +818,10 @@ export default function AddServicesPage({ selectedStudentIds, userPhone, schoolN
                     
                     {/* Secondary Action Button */}
                     <button 
-                      onClick={handleAddOtherServices}
+                      onClick={() => {
+                        haptics.buttonPress();
+                        handleAddOtherServices();
+                      }}
                       className="w-full h-[48px] bg-white border-[1.5px] border-[#e5e7eb] hover:border-[#d1d5db] rounded-[14px] transition-all touch-manipulation active:scale-[0.98] flex items-center justify-center shadow-sm group"
                     >
                       <span className="font-['IBM_Plex_Sans_Devanagari:SemiBold',sans-serif] text-[14px] text-[#003630] tracking-[-0.2px] group-hover:text-[#004d45] transition-colors">
@@ -846,7 +850,12 @@ export default function AddServicesPage({ selectedStudentIds, userPhone, schoolN
               </p>
             </div>
             <button 
-              onClick={handleNextOrCheckout}
+              onClick={() => {
+                if (hasServices) {
+                  haptics.buttonPress();
+                  handleNextOrCheckout();
+                }
+              }}
               disabled={!hasServices}
               className={`basis-0 grow h-[46px] min-h-px min-w-px relative rounded-[10px] shrink-0 overflow-hidden group ${
                 hasServices 

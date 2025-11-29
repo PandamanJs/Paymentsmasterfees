@@ -3,6 +3,7 @@ import { motion } from "motion/react";
 import svgPaths from "../imports/svg-rwvnsqykxb";
 import { getSchoolServices, getInstitutionType } from "../data/schoolData";
 import type { SchoolService } from "../data/schoolData";
+import { haptics } from "../utils/haptics";
 
 interface AddOtherServicesPopupProps {
   onClose: () => void;
@@ -701,6 +702,7 @@ export default function AddOtherServicesPopup({ onClose, onDone, schoolName }: A
   }, {} as Record<string, SchoolService[]>);
 
   const toggleService = (serviceId: string) => {
+    haptics.selection();
     setSelectedServiceIds(prev => {
       const newSet = new Set(prev);
       if (newSet.has(serviceId)) {
@@ -882,7 +884,10 @@ export default function AddOtherServicesPopup({ onClose, onDone, schoolName }: A
                 </p>
               </div>
               <button
-                onClick={onClose}
+                onClick={() => {
+                  haptics.selection();
+                  onClose();
+                }}
                 className="w-[32px] h-[32px] flex items-center justify-center rounded-full bg-[#f5f7f9]/70 backdrop-blur-sm border border-[#e5e7eb]/60 hover:bg-[#e5e7eb]/90 active:scale-90 transition-all touch-manipulation shadow-sm ml-[8px]"
               >
                 <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
@@ -1001,7 +1006,12 @@ export default function AddOtherServicesPopup({ onClose, onDone, schoolName }: A
             
             {/* Premium Action Button */}
             <button 
-              onClick={handleDone}
+              onClick={() => {
+                if (selectedCount > 0) {
+                  haptics.buttonPress();
+                  handleDone();
+                }
+              }}
               disabled={selectedCount === 0}
               className="relative w-full h-[48px] rounded-[12px] transition-all touch-manipulation disabled:cursor-not-allowed group overflow-hidden"
             >
