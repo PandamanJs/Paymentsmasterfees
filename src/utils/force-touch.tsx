@@ -4,6 +4,9 @@
  * Falls back gracefully on devices without force touch support
  */
 
+import { useEffect, useRef, useState, cloneElement, ReactElement, ReactNode } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
+
 type ForceTouchCallback = (force: number, maxForce: number) => void;
 type ForceTouchEndCallback = () => void;
 
@@ -112,8 +115,6 @@ export function attachForceTouch(
 /**
  * React hook for force touch
  */
-import { useEffect, useRef } from 'react';
-
 export function useForceTouch(options: ForceTouchOptions = {}) {
   const elementRef = useRef<HTMLElement>(null);
 
@@ -130,8 +131,6 @@ export function useForceTouch(options: ForceTouchOptions = {}) {
 /**
  * Higher-order component for adding force touch to any component
  */
-import { cloneElement, ReactElement } from 'react';
-
 interface ForceTouchWrapperProps {
   children: ReactElement;
   onDeepPress?: () => void;
@@ -175,9 +174,6 @@ interface ForceTouchMenuProps {
   }>;
   threshold?: number;
 }
-
-import { useState, ReactNode } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
 
 export function ForceTouchMenu({ 
   children, 
